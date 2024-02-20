@@ -1,8 +1,27 @@
-# Translation:
+# Discord Bot (社長) for Idol Games
+
+This repository currently contains only the parts that have been tidied up and do not include codes that connect to the API servers.
+
+## Error reports:
+
+If some commands trigger an error message that should not be there, errors will be sent to a channel that will be reviewed and fixed as soon as possible. Therefore, generally there are no needs to report errors. If errors are not fixed in a few days, feel free to submit an issue regarding those errors.
+
+- Errors refer to those red embeds with content as `No Information Available.`
+- If the content is not `No Information Available.`, they should have been handled probably.
+  - Exceptions like `DataUnavailableException` or `AssetNotExistException` really means that the requested information does not exist.
+  - Error handling can still be bugged that prevents the whole command from working. If that is the case, feel free to raise an issue. 
+
+## User contribution:
+
+Users can currently submit changes under the below categories via pull requests. They will be reviewed and add to the bot if approved as soon as possible. The contributors will be shown in the credit section on [twy.name](https://twy.name/contribution/) and bot commands.
+
+### Translation:
+
+Users can submit translations of available files via pull requests. If other translations are incorrect or inappropriate, please submit an issue.
 
 Notice that the language of translation is based on the locale of the discord User, followed by the guild locale (default to en_US by Discord, but **is ignored** if the guild is not discoverable).
 
-Both full locale (e.g. ja, en-US, zh-TW) and short locale (e.g. ja, en, zh) can be used to specify the translation. "-" should be replaced by "_" when specifying keys or arguments. The priority for locales with subtags is demostrated below:
+Both full locale (e.g. ja, en-US, zh-TW) and short locale (e.g. ja, en, zh) can be used to specify the translation. "-" should be replaced by "_" when specifying keys or arguments. The priorities for locales with subtags is demostrated below:
 
 - `ja`: `ja` → remain unchanged
 - `en-US`: `en_US` → `en` → remain unchanged
