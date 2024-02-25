@@ -324,30 +324,12 @@ trophy_description_translator = regex_lookup_translator_wrapper({
     },
 })
 
-def star_act_translator(description: str, message: MsgInt) -> str:
-    locales = user_locales(message)
-    for locale in locales:
-        if locale == "en":
-            description = description.replace(
-                "総演技力の[:score]倍のスコアを獲得",
-                "Gain a Score of [:score] Times the Total Status"
-            )
-            return description
-        elif locale == "zh":
-            description = description.replace(
-                "総演技力の[:score]倍のスコアを獲得",
-                "獲得總演技力 [:score] 倍的分數"
-            )
-            return description
-        """
-        elif locale == "<dummy>":
-            description = description.replace(
-                "総演技力の[:score]倍のスコアを獲得",
-                "総演技力の[:score]倍のスコアを獲得",
-            )
-            return description
-        """
-    return description
+star_act_translator = regex_lookup_translator_wrapper({
+    "総演技力の[:score]倍のスコアを獲得": {
+        "en": "Gain a Score of [:score] Times the Total Status",
+        "zh": "獲得總演技力 [:score] 倍的分數",
+    }
+})
 
 single_sense_translator = regex_lookup_translator_wrapper({
     "[:score]倍のスコアを獲得": {
