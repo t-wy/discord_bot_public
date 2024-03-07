@@ -356,6 +356,10 @@ single_sense_translator = regex_lookup_translator_wrapper({
         "en": "Gain Additional [:param11] Principal Gauge After Sense Activation",
         "zh": "Sense 發動後，追加獲得 [:param11] Principal Gauge",
     },
+    "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
+        "en": "Raise the Cap of Principal Gauge by [:param11] After Sense Activation",
+        "zh": "Sense 發動後，Principal Gauge 的上限提升 [:param11]",
+    },
 }, {
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
         "en": "When {actor} is Present, Sense will be Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
