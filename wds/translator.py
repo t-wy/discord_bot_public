@@ -156,7 +156,7 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "カミラ": {
         "en": "Kamira",
-        "zh": "卡蜜拉",
+        "zh": "卡蜜拉", # also known as "卡米拉"
     },
     "蕾": {
         "en": "Tsubomi",
