@@ -69,6 +69,8 @@ def regex_lookup_translator(
                             temp_dict["sense_star_act"] = sense_star_act_translator(temp_dict["sense_star_act"], locale)
                         if "sense_type" in temp_dict:
                             temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locale)
+                        if "status" in temp_dict:
+                            temp_dict["status"] = status_translator(temp_dict["status"], locale)
                         if "ordinal" in temp_dict:
                             temp_dict["ordinal"] = ordinal_translator(temp_dict["ordinal"], locale)
                         return translator.format(*match.groups(), **temp_dict)
@@ -205,6 +207,21 @@ sense_star_act_translator = regex_lookup_translator_wrapper({
     "スターアクト": {
         "en": "Star Act",
         "zh": "Star Act",
+    },
+})
+
+status_translator = regex_lookup_translator_wrapper({
+    "演技力": {
+        "en": "Total Status",
+    },
+    "歌唱力": {
+        "en": "Vocal Status",
+    },
+    "表現力": {
+        "en": "Expression Status",
+    },
+    "集中力": {
+        "en": "Concentration Status",
     },
 })
 
@@ -380,6 +397,10 @@ single_sense_translator = regex_lookup_translator_wrapper({
     r"(?P<company>.+)のアクターのCTを(\d+)秒短縮": {
         "en": "CT of {company} Actor Reduced by {1}s for the Next Sense",
         "zh": "{company}演員的 CT 縮短 {1} 秒",
+    },
+    r"センス発動直後、自身の(?P<status>.+)の\[:param11\]倍のスコアを獲得": {
+        "en": "Gain a Score of [:param11] Times the Actor's own {status} After Sense Activation",
+        "zh": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
     },
 })
 
