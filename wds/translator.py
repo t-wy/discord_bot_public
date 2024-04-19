@@ -341,12 +341,22 @@ trophy_description_translator = regex_lookup_translator_wrapper({
     },
 })
 
-star_act_translator = regex_lookup_translator_wrapper({
+single_star_act_translator = regex_lookup_translator_wrapper({
     "総演技力の[:score]倍のスコアを獲得": {
         "en": "Gain a Score of [:score] Times the Total Status",
         "zh": "獲得總演技力 [:score] 倍的分數",
     }
+}, {
+    r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
+        "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
+        "zh": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
+    }
 })
+
+def star_act_translator(description: str, message: MsgInt) -> str:
+    return "／".join([
+        single_star_act_translator(part, message)
+    for part in description.strip().split("／")])
 
 single_sense_translator = regex_lookup_translator_wrapper({
     "[:score]倍のスコアを獲得": {
@@ -398,6 +408,10 @@ single_sense_translator = regex_lookup_translator_wrapper({
         "en": "CT of {company} Actor Reduced by {1}s for the Next Sense",
         "zh": "{company}演員的 CT 縮短 {1} 秒",
     },
+    r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
+        "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
+        "zh": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
+    },
     r"センス発動直後、自身の(?P<status>.+)の\[:param11\]倍のスコアを獲得": {
         "en": "Gain a Score of [:param11] Times the Actor's own {status} After Sense Activation",
         "zh": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
@@ -407,7 +421,7 @@ single_sense_translator = regex_lookup_translator_wrapper({
 def sense_translator(description: str, message: MsgInt) -> str:
     return "／".join([
         single_sense_translator(part, message)
-    for part in description.split("／")])
+    for part in description.strip().split("／")])
 
 bloom_translator = regex_lookup_translator_wrapper({}, {
     r"演技力(\d+)％UP": {
