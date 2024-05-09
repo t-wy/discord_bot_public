@@ -363,8 +363,8 @@ single_star_act_translator = regex_lookup_translator_wrapper({
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
         "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
-        "en": "For each Stocked {sense_type} Light, Gain a Score of [:param11] Times the Total Status ({1} Times at Most)",
-        "zh": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 倍)",
+        "en": "For each Stocked {sense_type} Light, Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
+        "zh": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
     },
 })
 
