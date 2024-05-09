@@ -54,6 +54,7 @@ def regex_lookup_translator(
         return target
     else:
         import re
+        from .wds_const import sense_name_emote
         for regex in regex_lookup_dict:
             match = re.fullmatch(regex, target)
             if match:
@@ -68,7 +69,9 @@ def regex_lookup_translator(
                         if "sense_star_act" in temp_dict:
                             temp_dict["sense_star_act"] = sense_star_act_translator(temp_dict["sense_star_act"], locale)
                         if "sense_type" in temp_dict:
-                            temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locale)
+                            temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locale) + " ({})".format(
+                                sense_name_emote.get(sense_to_key.get(temp_dict["sense_type"]), "❓")
+                            )
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locale)
                         if "ordinal" in temp_dict:
@@ -198,6 +201,13 @@ sense_type_translator = regex_lookup_translator_wrapper({
         "en": "Special",
     },
 })
+
+sense_to_key = {
+    "支援": "Support",
+    "支配": "Control",
+    "増幅": "Amplification",
+    "特殊": "Special",
+}
 
 sense_star_act_translator = regex_lookup_translator_wrapper({
     "センス": {
@@ -350,7 +360,12 @@ single_star_act_translator = regex_lookup_translator_wrapper({
     r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
         "zh": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
-    }
+    },
+    r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
+        "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
+        "en": "For each Stocked {sense_type} Light, Gain a Score of [:param11] Times the Total Status ({1} Times at Most)",
+        "zh": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 倍)",
+    },
 })
 
 def star_act_translator(description: str, message: MsgInt) -> str:
@@ -449,6 +464,7 @@ bloom_translator = regex_lookup_translator_wrapper({}, {
         "zh": "公演報酬量提升 {}%",
     },
     r"スターアクト発動に必要な(?P<sense_type>.{2})の光の個数が(\d+)個減少": {
+        "ja": "スターアクト発動に必要な{sense_type}の光の個数が{1}個減少",
         "en": "Number of {sense_type} Lights Required to Trigger Star Act Reduced by {1}",
         "zh": "Star Act 發動所需的{sense_type}系光數量減少 {1} 個",
     },
