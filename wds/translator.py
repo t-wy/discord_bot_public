@@ -1,6 +1,6 @@
 from discord_msgint import MsgInt
-import discord
 from typing import *
+from .wds_const import sense_to_key
 
 # regex to select the 3rd field from an array entry:
 # \[(?:[^[,]+, ){2}"([^"]+)"
@@ -202,13 +202,6 @@ sense_type_translator = regex_lookup_translator_wrapper({
     },
 })
 
-sense_to_key = {
-    "支援": "Support",
-    "支配": "Control",
-    "増幅": "Amplification",
-    "特殊": "Special",
-}
-
 sense_star_act_translator = regex_lookup_translator_wrapper({
     "センス": {
         "en": "Sense",
@@ -232,6 +225,57 @@ status_translator = regex_lookup_translator_wrapper({
     },
     "集中力": {
         "en": "Concentration Status",
+    },
+})
+
+unlock_text_translator = regex_lookup_translator_wrapper({
+    "初期から所持": {
+        "en": "Owned Initially",
+        "zh": "從一開始就持有",
+    },
+    "ガチャで入手": {
+        "en": "Obtain via Gacha",
+        "zh": "從抽獎取得",
+    },
+    "ガチャ(期間限定)で入手": {
+        "en": "Obtain via Gacha (Time-Limited)",
+        "zh": "從抽獎 (期間限定) 取得",
+    },
+    "ガチャ(ユメフェス)で入手": {
+        "en": "Obtain via Gacha (Yume Fes)",
+        "zh": "從抽獎 (Yume Fes) 取得",
+    },
+    "ガチャ(コラボ限定)で入手": {
+        "en": "Obtain via Gacha (Collab-Limited)",
+        "zh": "從抽獎 (聯動限定) 取得",
+    },
+    "メインストーリー読了、/n、またはガチャで入手": {
+        "en": "Obtain by finishing reading Main Story,/nor via Gacha",
+        "zh": "閱畢主嫌劇情，/n或從抽獎取得",
+    },
+    "イベントで入手": {
+        "en": "Obtain via Event",
+        "zh": "從活動取得",
+    },
+    "イベント(コラボ)で入手": {
+        "en": "Obtain via Event (Collab)",
+        "zh": "從活動 (聯動) 取得",
+    },
+    "特別な方法で入手": {
+        "en": "Obtain via Special Method",
+        "zh": "從特殊方式取得",
+    },
+    "初心者ミッションで入手": {
+        "en": "Obtain via Beginner Missions",
+        "zh": "從新手任務取得",
+    },
+    "劇団ミッションで入手": {
+        "en": "Obtain via Troupe Missions",
+        "zh": "從劇團任務取得",
+    },
+    "メダル交換で入手": {
+        "en": "Obtain via Medal Exchange",
+        "zh": "透過交換獎章取得",
     },
 })
 
@@ -366,6 +410,11 @@ single_star_act_translator = regex_lookup_translator_wrapper({
         "en": "For each Stocked {sense_type} Light, Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
         "zh": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
     },
+    r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを追加で獲得\(最大(\d+)個\)": {
+        "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを追加で獲得(最大{1}個)",
+        "en": "For each Stocked {sense_type} Light, Gain an Additional Score of [:param11] Times the Total Status ({1} Lights at Most)",
+        "zh": "每儲藏 1 個{sense_type}系光，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+    },
 })
 
 def star_act_translator(description: str, message: MsgInt) -> str:
@@ -396,7 +445,7 @@ single_sense_translator = regex_lookup_translator_wrapper({
     },
     "センス発動後、追加で[:param11]のプリンシパルゲージを獲得": {
         "en": "Gain Additional [:param11] Principal Gauge After Sense Activation",
-        "zh": "Sense 發動後，追加獲得 [:param11] Principal Gauge",
+        "zh": "Sense 發動後，額外獲得 [:param11] Principal Gauge",
     },
     "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
         "en": "Raise the Cap of Principal Gauge by [:param11] After Sense Activation",
