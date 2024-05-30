@@ -39,6 +39,7 @@ class NoteType(Enum):
     CriticalHold = auto()
     ScratchHold = 110
     ScratchCriticalHold = auto()
+    BlueTap = 200
     HoldEighth = 900
 
 def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
@@ -159,6 +160,13 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             total += 1
         elif x.type == NoteType.Critical:
             single["archetype"] = "Sirius Critical Note"
+            single["data"].append({"name": "beat", "value": x.startTime})
+            single["data"].append({"name": "lane", "value": x.leftLane})
+            single["data"].append({"name": "laneLength", "value": x.laneLength})
+            addSyncLine(x.startTime, x.leftLane, x.laneLength)
+            total += 1
+        elif x.type == NoteType.BlueTap:
+            single["archetype"] = "Sirius Normal Note" # temporary fallback
             single["data"].append({"name": "beat", "value": x.startTime})
             single["data"].append({"name": "lane", "value": x.leftLane})
             single["data"].append({"name": "laneLength", "value": x.laneLength})
