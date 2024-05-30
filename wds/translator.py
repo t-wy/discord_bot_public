@@ -251,7 +251,7 @@ unlock_text_translator = regex_lookup_translator_wrapper({
     },
     "メインストーリー読了、/n、またはガチャで入手": {
         "en": "Obtain by finishing reading Main Story,/nor via Gacha",
-        "zh": "閱畢主嫌劇情，/n或從抽獎取得",
+        "zh": "閱畢主線劇情，/n或從抽獎取得",
     },
     "イベントで入手": {
         "en": "Obtain via Event",
