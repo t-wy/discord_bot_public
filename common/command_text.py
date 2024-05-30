@@ -1,5 +1,7 @@
 from discord.app_commands import locale_str as _
 
+# Common Texts used in App Commands (Command Names / Option Names)
+
 class description:
     accessory_name = _('Accessory name', zh="飾品名稱", ja="アクセサリー名")
     accessory_mode = _('The item to fetch', zh="飾品資訊", ja="アクセサリー情報")
@@ -24,9 +26,9 @@ class description:
     player_id = _('Player id', zh="玩家 ID", ja="プレイヤー ID")
     poster_name = _('Poster name', zh="海報名稱", ja="ポスター名")
     poster_mode = _('The item to fetch', zh="海報資訊", ja="ポスター情報")
-    recode_audio = _("Reencode the audio file so that it does not take up much space", zh="重新編碼音檔以使其能佔據較小空間")
-    recode_video = _("Reencode the video file so that it is preview-able", zh="重新編碼影片以使其能被預覽")
-    recode = _("Reencode the file so that it can be sent and viewed", zh="重新編碼內容以使其能被傳送及預覽")
+    reencode_audio = _("Reencode the audio file so that it does not take up much space", zh="重新編碼音檔以使其能佔據較小空間")
+    reencode_video = _("Reencode the video file so that it is preview-able", zh="重新編碼影片以使其能被預覽")
+    reencode = _("Reencode the file so that it can be sent and viewed", zh="重新編碼內容以使其能被傳送及預覽")
     score = _('Score', zh="分數", ja="スコア")
     secsep = _('No. of seconds per column (Default: 10)', zh="每行顯示秒數 (預設: 10)")
     show_name = _("Display player names", zh="顯示玩家名稱")
