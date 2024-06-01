@@ -166,7 +166,7 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             addSyncLine(x.startTime, x.leftLane, x.laneLength)
             total += 1
         elif x.type == NoteType.BlueTap:
-            single["archetype"] = "Sirius Normal Note" # temporary fallback
+            single["archetype"] = "Sirius Hold Start" # temporary fallback
             single["data"].append({"name": "beat", "value": x.startTime})
             single["data"].append({"name": "lane", "value": x.leftLane})
             single["data"].append({"name": "laneLength", "value": x.laneLength})
