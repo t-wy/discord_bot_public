@@ -35,6 +35,7 @@ def create_translator(default_locale: discord.Locale):
 _ = create_translator(discord.Locale.japanese)
 
 class GameNameGlossary:
+    PJSK = _("プロセカ", en="PJSK", zh="PJSK")
     WDS = _("ユメステ", en="WDS", zh="WDS")
 
 # categorized glossary lists
@@ -63,6 +64,7 @@ class CardGlossary:
 class EventGlossary:
     aggregate_period = _("集計期間", en="Aggregate Period", zh="結算時間")
     bonus_actors = _("対象アクター", en="Bonus Actors", zh="對象演員") # a variant of bonus_members
+    bonus_category = _("対象カテゴリ", en="Bonus Category", zh="對象分類") # bonus type, but used the term 属性 instead
     bonus_type = _("タイプボーナス", en="Bonus Type", zh="Bonus 類型", ko="타입 보너스")
     bonus_type_element = _("対象属性", en="Bonus Type", zh="對象屬性") # bonus type, but used the term 属性 instead
     bonus_members = _("キャラクターボーナス", en="Bonus Members", zh="Bonus 角色", ko="캐릭터 보너스") # actually referring to the character
@@ -86,6 +88,11 @@ class PlayerGlossary:
     rank = _("ランク", en="Rank", zh="等級")
     rate = _("レート", en="Rate", zh="Rate")
 
+class CircleGlossary:
+    circle_comment = _("サークル説明", en="Circle Comment", zh="社團說明")
+    circle_info = _("サークル情報", en="Circle Info")
+    circle_search = _("サークル検索", en="Circle Search", zh="社團搜尋")
+
 class RankingGlossary:
     unit_details = _("編成詳細", en="Unit Details", zh="詳細編成")
     unit_info = _("編成確認", en="Unit Info", zh="編成確認")
@@ -106,6 +113,7 @@ class SongGlossary:
     music = _("作曲", en="Music", zh="作曲") # refer to the composer(s) of the song
     pronunciation = _("読み方", en="Pronunciation", zh="讀法") # check also CardGlossary.pronunciation
     recent_song_list = _("最近楽曲リスト", en="Recent Song List", zh="最近歌曲列表")
+    recent_vocal_list = _("最近ボーカルリスト", en="Recent Vocal List", zh="最近 Vocal 列表")
     seconds = _("秒", en="s")
     song_duration = _("楽曲の長さ", en="Song Duration", zh="歌曲長度") # use this as column label, use "duration" instead as field
     song_info = _("楽曲情報", en="Song Information", zh="歌曲資訊"

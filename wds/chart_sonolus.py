@@ -3,7 +3,7 @@
 # used to host a sonolus server for testing official charts using the referenced engine
 # Code Source:
 # https://github.com/SonolusHaniwa/sonolus-sirius-engine/blob/master/convert.h#L120
-# up to commit 11be3447bb33e1ebe7f3e9d4fa2b11c75cffeefd
+# up to commit c50182d7bc1f2dafb76b08b805a6a0f3868ef60c
 
 class Note:
     def __init__(self):
@@ -124,6 +124,7 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
     })
 
     lastEighthTime = [[0 for _ in range(13)] for _ in range(13)]
+    lastType = [[0 for _ in range(13)] for _ in range(13)]
     total = 0
 
     for i, note in enumerate(notes):
@@ -138,7 +139,14 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
                 single["data"].append({"name": "lane", "value": x.leftLane})
                 single["data"].append({"name": "laneLength", "value": x.laneLength})
                 total += 1
-            else:
+            # elif x.type == NoteType.NontailHold or x.type == NoteType.NontailCriticalHold: # Not existing in game
+            #     single["archetype"] = "Sirius Nontail Hold End"
+            #     single["data"].append({"name": "beat", "value": x.endTime})
+            #     single["data"].append({"name": "stBeat", "value": x.startTime})
+            #     single["data"].append({"name": "lane", "value": x.leftLane})
+            #     single["data"].append({"name": "laneLength", "value": x.laneLength})
+            #     total += 1
+            elif x.type == NoteType.ScratchHold or x.type == NoteType.ScratchCriticalHold:
                 single["archetype"] = "Sirius Scratch Hold End"
                 single["data"].append({"name": "beat", "value": x.endTime})
                 single["data"].append({"name": "stBeat", "value": x.startTime})
@@ -146,7 +154,17 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
                 single["data"].append({"name": "laneLength", "value": x.laneLength})
                 single["data"].append({"name": "scratchLength", "value": x.scratchLength})
                 total += 1
+            else: # catch
+                single["archetype"] = "Sirius Nontail Scratch Hold End"
+                single["data"].append({"name": "beat", "value": x.endTime})
+                single["data"].append({"name": "stBeat", "value": x.startTime})
+                single["data"].append({"name": "lane", "value": x.leftLane})
+                single["data"].append({"name": "laneLength", "value": x.laneLength})
+                single["data"].append({"name": "scratchLength", "value": x.scratchLength})
+                total += 1
             res.append(single.copy())
+            # if x.type.value >= NoteType.NontailHold.value: # Not existing in game
+            #     continue
             addSyncLine(x.endTime, x.leftLane, x.laneLength)
         # 处理当前 Note
         x = note
@@ -165,13 +183,6 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             single["data"].append({"name": "laneLength", "value": x.laneLength})
             addSyncLine(x.startTime, x.leftLane, x.laneLength)
             total += 1
-        elif x.type == NoteType.BlueTap:
-            single["archetype"] = "Sirius Hold Start" # temporary fallback
-            single["data"].append({"name": "beat", "value": x.startTime})
-            single["data"].append({"name": "lane", "value": x.leftLane})
-            single["data"].append({"name": "laneLength", "value": x.laneLength})
-            addSyncLine(x.startTime, x.leftLane, x.laneLength)
-            total += 1
         elif x.type == NoteType.Flick:
             single["archetype"] = "Sirius Flick Note"
             single["data"].append({"name": "beat", "value": x.startTime})
@@ -180,7 +191,7 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             single["data"].append({"name": "scratchLength", "value": x.scratchLength})
             addSyncLine(x.startTime, x.leftLane, x.laneLength)
             total += 1
-        elif x.type == NoteType.HoldStart:
+        elif x.type == NoteType.HoldStart or x.type == NoteType.BlueTap:
             single["archetype"] = "Sirius Hold Start"
             single["data"].append({"name": "beat", "value": x.startTime})
             single["data"].append({"name": "lane", "value": x.leftLane})
@@ -209,6 +220,8 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             addSyncLine(x.startTime, x.leftLane, x.laneLength)
             total += 1
         elif x.type in [NoteType.Hold, NoteType.CriticalHold, NoteType.ScratchHold, NoteType.ScratchCriticalHold]:
+            # [NoteType.NontailHold, NoteType.NontailCriticalHold, NoteType.NontailScratchHold, NoteType.NontailScratchCriticalHold] # Not existing in game
+            lastType[x.leftLane][x.leftLane + x.laneLength - 1] = x.type
             holdEnd.append(x)
         elif x.type in [NoteType.Sound, NoteType.SoundPurple]:
             lastEighthTime[x.leftLane][x.leftLane + x.laneLength - 1] = x.startTime
@@ -216,7 +229,7 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             single["data"].append({"name": "beat", "value": x.startTime})
             single["data"].append({"name": "lane", "value": x.leftLane})
             single["data"].append({"name": "laneLength", "value": x.laneLength})
-            single["data"].append({"name": "holdType", "value": NoteType.Hold.value if x.type == NoteType.Sound else NoteType.ScratchHold.value})
+            single["data"].append({"name": "holdType", "value": lastType[x.leftLane][x.leftLane + x.laneLength - 1].value})
             total += 1
         elif x.type == NoteType.ScratchSound:
             lastEighthTime[x.leftLane][x.leftLane + x.laneLength - 1] = x.startTime
@@ -266,8 +279,24 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             single["data"].append({"name": "lane", "value": x.leftLane})
             single["data"].append({"name": "laneLength", "value": x.laneLength})
             total += 1
-        else:
+        # elif x.type == NoteType.NontailHold or x.type == NoteType.NontailCriticalHold: # Not existing in game
+        #     single["archetype"] = "Sirius Nontail Hold End"
+        #     single["data"].append({"name": "beat", "value": x.endTime})
+        #     single["data"].append({"name": "stBeat", "value": x.startTime})
+        #     single["data"].append({"name": "lane", "value": x.leftLane})
+        #     single["data"].append({"name": "laneLength", "value": x.laneLength})
+        #     single["data"].append({"name": "scratchLength", "value": x.scratchLength})
+        #     total += 1
+        elif x.type == NoteType.ScratchHold or x.type == NoteType.ScratchCriticalHold:
             single["archetype"] = "Sirius Scratch Hold End"
+            single["data"].append({"name": "beat", "value": x.endTime})
+            single["data"].append({"name": "stBeat", "value": x.startTime})
+            single["data"].append({"name": "lane", "value": x.leftLane})
+            single["data"].append({"name": "laneLength", "value": x.laneLength})
+            single["data"].append({"name": "scratchLength", "value": x.scratchLength})
+            total += 1
+        else:
+            single["archetype"] = "Sirius Nontail Scratch Hold End"
             single["data"].append({"name": "beat", "value": x.endTime})
             single["data"].append({"name": "stBeat", "value": x.startTime})
             single["data"].append({"name": "lane", "value": x.leftLane})
@@ -276,6 +305,8 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             total += 1
 
         res.append(single)
+        # if x.type.value >= NoteType.NontailHold.value: # Not existing in game
+        #     continue
         addSyncLine(x.endTime, x.leftLane, x.laneLength)
 
     add_log("[INFO] Total Note Number:", total)

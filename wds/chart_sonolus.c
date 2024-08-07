@@ -1,5 +1,5 @@
 // https://github.com/SonolusHaniwa/sonolus-sirius-engine/blob/master/convert.h#L120
-// up to commit 11be3447bb33e1ebe7f3e9d4fa2b11c75cffeefd
+// up to commit c50182d7bc1f2dafb76b08b805a6a0f3868ef60c
 
 string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
     // 谱面读取
@@ -53,8 +53,8 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
 	single["data"][0]["name"] = "#BEAT"; single["data"][0]["value"] = 0;
 	single["data"][1]["name"] = "#BPM"; single["data"][1]["value"] = 60;
 	res.append(single); 
-    double lastEighthTime[13][13]; int total = 0;
-    for (int i = 0; i < 13; i++) for (int j = 0; j < 13; j++) lastEighthTime[i][j] = 0;
+    double lastEighthTime[13][13]; int lastType[13][13], total = 0;
+    for (int i = 0; i < 13; i++) for (int j = 0; j < 13; j++) lastEighthTime[i][j] = 0, lastType[i][j] = 0;
     for (int i = 0; i < notes.size(); i++) {
         // 提前处理 Sirius HoldEnd;
         while (holdEnd.size() && (*holdEnd.begin()).endTime <= notes[i].startTime) {
@@ -66,7 +66,14 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
                 single["data"][2]["name"] = "lane"; single["data"][2]["value"] = x.leftLane;
                 single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
                 total++;
-            } else {
+            } else if (x.type == NontailHold || x.type == NontailCriticalHold) {
+                single["archetype"] = "Sirius Nontail Hold End";
+                single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.endTime;
+                single["data"][1]["name"] = "stBeat"; single["data"][1]["value"] = x.startTime;
+                single["data"][2]["name"] = "lane"; single["data"][2]["value"] = x.leftLane;
+                single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
+                total++;
+            } else if (x.type == ScratchHold || x.type == ScratchCriticalHold) {
                 single["archetype"] = "Sirius Scratch Hold End";
                 single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.endTime;
                 single["data"][1]["name"] = "stBeat"; single["data"][1]["value"] = x.startTime;
@@ -74,8 +81,16 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
                 single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
                 single["data"][4]["name"] = "scratchLength"; single["data"][4]["value"] = x.scratchLength;
                 total++;
-            }
-            res.append(single);
+            } else {
+                single["archetype"] = "Sirius Nontail Scratch Hold End";
+                single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.endTime;
+                single["data"][1]["name"] = "stBeat"; single["data"][1]["value"] = x.startTime;
+                single["data"][2]["name"] = "lane"; single["data"][2]["value"] = x.leftLane;
+                single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
+                single["data"][4]["name"] = "scratchLength"; single["data"][4]["value"] = x.scratchLength;
+                total++;
+            } res.append(single);
+            if (x.type >= NontailHold) continue;
 			addSyncLine(x.endTime, x.leftLane, x.laneLength);
         }
         // 处理当前 Note
@@ -107,7 +122,7 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
                 addSyncLine(x.startTime, x.leftLane, x.laneLength);
                 total++;
             } break;
-            case HoldStart: {
+            case HoldStart: case BlueTap: {
                 single["archetype"] = "Sirius Hold Start";
                 single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.startTime;
                 single["data"][1]["name"] = "lane"; single["data"][1]["value"] = x.leftLane;
@@ -139,7 +154,9 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
                 addSyncLine(x.startTime, x.leftLane, x.laneLength);
                 total++;
             } break;
-            case Hold: case CriticalHold: case ScratchHold: case ScratchCriticalHold: {
+            case Hold: case CriticalHold: case ScratchHold: case ScratchCriticalHold: 
+            case NontailHold: case NontailCriticalHold: case NontailScratchHold: case NontailScratchCriticalHold: {
+				lastType[x.leftLane][x.leftLane + x.laneLength - 1] = x.type;
                 holdEnd.insert(x);
             } break;
             case Sound: case ScratchSound: {
@@ -148,7 +165,7 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
                 single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.startTime;
                 single["data"][1]["name"] = "lane"; single["data"][1]["value"] = x.leftLane;
                 single["data"][2]["name"] = "laneLength"; single["data"][2]["value"] = x.laneLength;
-				single["data"][3]["name"] = "holdType"; single["data"][3]["value"] = Sound ? Hold : ScratchHold;
+				single["data"][3]["name"] = "holdType"; single["data"][3]["value"] = lastType[x.leftLane][x.leftLane + x.laneLength - 1];
                 total++;
             } break;
             case SoundPurple: {
@@ -199,7 +216,14 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
             single["data"][2]["name"] = "lane"; single["data"][2]["value"] = x.leftLane;
             single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
             total++;
-        } else {
+        } else if (x.type == NontailHold || x.type == NontailCriticalHold) {
+            single["archetype"] = "Sirius Nontail Hold End";
+            single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.endTime;
+            single["data"][1]["name"] = "stBeat"; single["data"][1]["value"] = x.startTime;
+            single["data"][2]["name"] = "lane"; single["data"][2]["value"] = x.leftLane;
+            single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
+            total++;
+        } else if (x.type == ScratchHold || x.type == ScratchCriticalHold) {
             single["archetype"] = "Sirius Scratch Hold End";
             single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.endTime;
             single["data"][1]["name"] = "stBeat"; single["data"][1]["value"] = x.startTime;
@@ -207,7 +231,16 @@ string fromSirius(string text, double chartOffset, double bgmOffset = 0) {
             single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
             single["data"][4]["name"] = "scratchLength"; single["data"][4]["value"] = x.scratchLength;
             total++;
+        } else {
+            single["archetype"] = "Sirius Nontail Scratch Hold End";
+            single["data"][0]["name"] = "beat"; single["data"][0]["value"] = x.endTime;
+            single["data"][1]["name"] = "stBeat"; single["data"][1]["value"] = x.startTime;
+            single["data"][2]["name"] = "lane"; single["data"][2]["value"] = x.leftLane;
+            single["data"][3]["name"] = "laneLength"; single["data"][3]["value"] = x.laneLength;
+            single["data"][4]["name"] = "scratchLength"; single["data"][4]["value"] = x.scratchLength;
+            total++;
         } res.append(single);
+        if (x.type >= NontailHold) continue;
         addSyncLine(x.endTime, x.leftLane, x.laneLength);
     }
 

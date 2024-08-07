@@ -74,6 +74,8 @@ def regex_lookup_translator(
                             )
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locale)
+                        if "status2" in temp_dict:
+                            temp_dict["status2"] = status_translator(temp_dict["status2"], locale)
                         if "ordinal" in temp_dict:
                             temp_dict["ordinal"] = ordinal_translator(temp_dict["ordinal"], locale)
                         return translator.format(*match.groups(), **temp_dict)
@@ -217,6 +219,10 @@ status_translator = regex_lookup_translator_wrapper({
     "演技力": {
         "en": "Total Status",
     },
+    "演技力上限が": {
+        "en": "Status Cap",
+        "zh": "演技力上限",
+    },
     "歌唱力": {
         "en": "Vocal Status",
     },
@@ -270,7 +276,7 @@ unlock_text_translator = regex_lookup_translator_wrapper({
         "zh": "從新手任務取得",
     },
     "劇団ミッションで入手": {
-        "en": "Obtain via Troupe Missions",
+        "en": "Obtain via Company Missions",
         "zh": "從劇團任務取得",
     },
     "メダル交換で入手": {
@@ -399,7 +405,11 @@ single_star_act_translator = regex_lookup_translator_wrapper({
     "総演技力の[:score]倍のスコアを獲得": {
         "en": "Gain a Score of [:score] Times the Total Status",
         "zh": "獲得總演技力 [:score] 倍的分數",
-    }
+    },
+    "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
+        "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
+        "zh" : "生命值愈多，分數獲得量 UP 愈多（最多 +[:pre1]%）",
+    },
 }, {
     r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
@@ -414,7 +424,7 @@ single_star_act_translator = regex_lookup_translator_wrapper({
         "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを追加で獲得(最大{1}個)",
         "en": "For each Stocked {sense_type} Light, Gain an Additional Score of [:param11] Times the Total Status ({1} Lights at Most)",
         "zh": "每儲藏 1 個{sense_type}系光，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
-    },
+    }
 })
 
 def star_act_translator(description: str, message: MsgInt) -> str:
@@ -450,6 +460,10 @@ single_sense_translator = regex_lookup_translator_wrapper({
     "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
         "en": "Raise the Cap of Principal Gauge by [:param11] After Sense Activation",
         "zh": "Sense 發動後，Principal Gauge 的上限提升 [:param11]",
+    },
+    "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
+        "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
+        "zh" : "生命值愈多，分數獲得量 UP 愈多（最多 +[:pre1]%）",
     },
 }, {
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
@@ -487,10 +501,38 @@ def sense_translator(description: str, message: MsgInt) -> str:
         single_sense_translator(part, message)
     for part in description.strip().split("／")])
 
+single_leader_sense_translator = regex_lookup_translator_wrapper({}, {
+    "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(\d+)[%％]上昇": {
+        "en": 'Category "{0}" {status} Increased by {2}%, {status2} Increased by {4}%',
+        "zh": "「{0}」分類的{status} 提升 {2}%・{status2} 提升 {4}%",
+    },
+    "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇": {
+        "en": 'Category "{0}" {status} Increased by {2}%',
+        "zh": "「{0}」分類的{status} 提升 {2}%",
+    },
+    "「(.+?)」カテゴリを持つアクターの数に応じて初期プリンシパルゲージが(\d+)上昇": {
+        "en": 'Initial Principal Gauge Increased by {1} for each actor having Category "{0}"',
+        "zh": "根據持有「{0}」分類的演員數量，初始 Principal Gauge 各提升 {1}",
+    },
+    "「(.+?)」カテゴリのCTを(\d+)秒短縮する": {
+        "en": 'Category "{0}" CT Reduced by {1}s',
+        "zh": "「{0}」分類的 CT 縮短 {1} 秒",
+    }
+})
+
+def leader_sense_translator(description: str, message: MsgInt) -> str:
+    return "\n".join([
+        single_leader_sense_translator(part, message)
+    for part in description.strip().replace("\t", "").replace("、「", "\n「").split("\n")])
+
 bloom_translator = regex_lookup_translator_wrapper({}, {
-    r"演技力(\d+)％UP": {
+    r"演技力(\d+)[%％]UP": {
         "en": "Status {}% UP",
         "zh": "演技力 {}% UP",
+    },
+    r"演技力上限が(\d+)%上昇": {
+        "en": "Status Cap increased by {}%",
+        "zh": "演技力上限提升 {}%",
     },
     r"センスのCTが(\d+)秒減少": {
         "en": "Sense CT Reduced by {}s",
@@ -516,5 +558,9 @@ bloom_translator = regex_lookup_translator_wrapper({}, {
         "ja": "スターアクト発動に必要な{sense_type}の光の個数が{1}個減少",
         "en": "Number of {sense_type} Lights Required to Trigger Star Act Reduced by {1}",
         "zh": "Star Act 發動所需的{sense_type}系光數量減少 {1} 個",
+    },
+    r"公演開始時、ライフガードを(\d+)付与": {
+        "en": "Attach {} Life Guard(s) at the Start of Performance",
+        "zh": "公演開始時，給予 {} 個 Life Guard",
     },
 })
