@@ -491,8 +491,13 @@ single_sense_translator = regex_lookup_translator_wrapper({
         "zh": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
     },
     r"センス発動直後、自身の(?P<status>.+)の\[:param11\]倍のスコアを獲得": {
-        "en": "Gain a Score of [:param11] Times the Actor's own {status} After Sense Activation",
+        "en": "Gain a Score of [:param11] Times the Actor's own {status} Right After Sense Activation",
         "zh": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
+    },
+    r"センス発動時、追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
+        "ja": "センス発動時、追加で「{sense_type}の光」を{1}個獲得する",
+        "en": 'When Sense Activates, Gain {1} Additional "{sense_type} Light(s)"',
+        "zh": "Sense 發動時，額外獲得{1}個「{sense_type}系光」",
     },
 })
 
