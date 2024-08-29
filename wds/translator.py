@@ -1,6 +1,9 @@
+"""
+This file is safe for hot reloading.
+"""
+
 from discord_msgint import MsgInt
 from typing import *
-from .wds_const import sense_to_key
 
 # regex to select the 3rd field from an array entry:
 # \[(?:[^[,]+, ){2}"([^"]+)"
@@ -54,7 +57,7 @@ def regex_lookup_translator(
         return target
     else:
         import re
-        from .wds_const import sense_name_emote
+        from .wds_const import sense_name_emote, sense_to_key
         for regex in regex_lookup_dict:
             match = re.fullmatch(regex, target)
             if match:
@@ -98,7 +101,7 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "静香": {
         "en": "Shizuka",
-        "zh": "靜香",
+        "zh_TW": "靜香",
     },
     "カトリナ": {
         "en": "Kathrina",
@@ -110,7 +113,8 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "ぱんだ": {
         "en": "Panda",
-        "zh": "潘達",
+        "zh_TW": "潘達",
+        "zh_CN": "潘达",
     },
     "知冴": {
         "en": "Chisa",
@@ -131,12 +135,14 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "しぐれ": {
         "en": "Shigure",
-        "zh": "時雨",
+        "zh_TW": "時雨",
+        "zh_CN": "时雨",
     },
 
     "暦": {
         "en": "Koyomi",
-        "zh": "曆",
+        "zh_TW": "曆",
+        "zh_CN": "历",
     },
     "ラモーナ": {
         "en": "Ramona",
@@ -147,7 +153,8 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "リリヤ": {
         "en": "Lilja",
-        "zh": "莉莉亞",
+        "zh_TW": "莉莉亞",
+        "zh_CN": "莉莉亚",
     },
     "緋花里": {
         "en": "Hikari",
@@ -155,7 +162,8 @@ actor_translator = regex_lookup_translator_wrapper({
 
     "いろは": {
         "en": "Iroha",
-        "zh": "伊呂波",
+        "zh_TW": "伊呂波",
+        "zh_CN": "伊吕波",
     },
     "美兎": {
         "en": "Mito",
@@ -170,7 +178,7 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "叶羽": {
         "en": "Towa",
-        "zh": "葉羽",
+        "zh_TW": "葉羽",
     },
 })
 
@@ -182,10 +190,12 @@ company_translator = regex_lookup_translator_wrapper({
     "Eden": {},
     "銀河座": {
         "en": "Gingaza",
+        "zh_CN": "银河座",
     },
     "劇団電姫": {
         "en": "Gekidan Denki",
-        "zh": "劇團電姬",
+        "zh_TW": "劇團電姬",
+        "zh_CN": "剧团电姬",
     },
 })
 
@@ -228,6 +238,7 @@ status_translator = regex_lookup_translator_wrapper({
     },
     "表現力": {
         "en": "Expression Status",
+        "zh_CN": "表现力",
     },
     "集中力": {
         "en": "Concentration Status",
@@ -237,51 +248,63 @@ status_translator = regex_lookup_translator_wrapper({
 unlock_text_translator = regex_lookup_translator_wrapper({
     "初期から所持": {
         "en": "Owned Initially",
-        "zh": "從一開始就持有",
+        "zh_TW": "從一開始就持有",
+        "zh_CN": "从一开始就持有",
     },
     "ガチャで入手": {
         "en": "Obtain via Gacha",
-        "zh": "從抽獎取得",
+        "zh_TW": "從抽獎取得",
+        "zh_CN": "从抽奖取得",
     },
     "ガチャ(期間限定)で入手": {
         "en": "Obtain via Gacha (Time-Limited)",
-        "zh": "從抽獎 (期間限定) 取得",
+        "zh_TW": "從抽獎 (期間限定) 取得",
+        "zh_CN": "从抽奖 (期间限定) 取得",
     },
     "ガチャ(ユメフェス)で入手": {
         "en": "Obtain via Gacha (Yume Fes)",
-        "zh": "從抽獎 (Yume Fes) 取得",
+        "zh_TW": "從抽獎 (Yume Fes) 取得",
+        "zh_CN": "从抽奖 (Yume Fes) 取得",
     },
     "ガチャ(コラボ限定)で入手": {
         "en": "Obtain via Gacha (Collab-Limited)",
-        "zh": "從抽獎 (聯動限定) 取得",
+        "zh_TW": "從抽獎 (聯動限定) 取得",
+        "zh_CN": "从抽奖 (联动限定) 取得",
     },
     "メインストーリー読了、/n、またはガチャで入手": {
         "en": "Obtain by finishing reading Main Story,/nor via Gacha",
-        "zh": "閱畢主線劇情，/n或從抽獎取得",
+        "zh_TW": "閱畢主線劇情，/n或從抽獎取得",
+        "zh_CN": "阅毕主线剧情，/n或从抽奖取得",
     },
     "イベントで入手": {
         "en": "Obtain via Event",
-        "zh": "從活動取得",
+        "zh_TW": "從活動取得",
+        "zh_CN": "从活动取得",
     },
     "イベント(コラボ)で入手": {
         "en": "Obtain via Event (Collab)",
-        "zh": "從活動 (聯動) 取得",
+        "zh_TW": "從活動 (聯動) 取得",
+        "zh_CN": "从活动 (联动) 取得",
     },
     "特別な方法で入手": {
         "en": "Obtain via Special Method",
-        "zh": "從特殊方式取得",
+        "zh_TW": "從特殊方式取得",
+        "zh_CN": "从特殊方式取得",
     },
     "初心者ミッションで入手": {
         "en": "Obtain via Beginner Missions",
-        "zh": "從新手任務取得",
+        "zh_TW": "從新手任務取得",
+        "zh_CN": "从新手任务取得",
     },
     "劇団ミッションで入手": {
         "en": "Obtain via Company Missions",
-        "zh": "從劇團任務取得",
+        "zh_TW": "從劇團任務取得",
+        "zh_TW": "从剧团任务取得",
     },
     "メダル交換で入手": {
         "en": "Obtain via Medal Exchange",
-        "zh": "透過交換獎章取得",
+        "zh_TW": "透過交換獎章取得",
+        "zh_TW": "透过交换奖章取得",
     },
 })
 
@@ -404,26 +427,31 @@ trophy_description_translator = regex_lookup_translator_wrapper({
 single_star_act_translator = regex_lookup_translator_wrapper({
     "総演技力の[:score]倍のスコアを獲得": {
         "en": "Gain a Score of [:score] Times the Total Status",
-        "zh": "獲得總演技力 [:score] 倍的分數",
+        "zh_TW": "獲得總演技力 [:score] 倍的分數",
+        "zh_CN": "获得总演技力 [:score] 倍的分数",
     },
     "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
         "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
-        "zh" : "生命值愈多，分數獲得量 UP 愈多（最多 +[:pre1]%）",
+        "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +[:pre1]%）",
+        "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +[:pre1]%）",
     },
 }, {
     r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
-        "zh": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
+        "zh_TW": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
+        "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
         "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
         "en": "For each Stocked {sense_type} Light, Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
-        "zh": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_TW": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_CN": "每储藏 1 个{sense_type}系光，获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを追加で獲得\(最大(\d+)個\)": {
         "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを追加で獲得(最大{1}個)",
         "en": "For each Stocked {sense_type} Light, Gain an Additional Score of [:param11] Times the Total Status ({1} Lights at Most)",
-        "zh": "每儲藏 1 個{sense_type}系光，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_TW": "每儲藏 1 個{sense_type}系光，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_CN": "每储藏 1 个{sense_type}系光，额外获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
     }
 })
 
@@ -435,15 +463,18 @@ def star_act_translator(description: str, message: MsgInt) -> str:
 single_sense_translator = regex_lookup_translator_wrapper({
     "[:score]倍のスコアを獲得": {
         "en": "Gain [:score]x Score",
-        "zh": "獲得 [:score] 倍的分數",
+        "zh_TW": "獲得 [:score] 倍的分數",
+        "zh_CN": "获得 [:score] 倍的分数",
     },
     "[:gauge]のプリンシパルゲージを獲得": {
         "en": "Gain [:gauge] Principal Gauge",
-        "zh": "獲得 [:gauge] Principal Gauge",
+        "zh_TW": "獲得 [:gauge] Principal Gauge",
+        "zh_CN": "获得 [:gauge] Principal Gauge",
     },
     "ライフを[:param11]回復": {
         "en": "Recover Life by [:param11]",
-        "zh": "回復 [:param11] 生命值",
+        "zh_TW": "回復 [:param11] 生命值",
+        "zh_CN": "回复 [:param11] 生命值",
     },
     "ライフを[:param11]": {
         "en": "Change Life by [:param11]",
@@ -451,19 +482,23 @@ single_sense_translator = regex_lookup_translator_wrapper({
     },
     "効果無し（所持している「光」は維持される）": {
         "en": "No Effect (Possessed \"Lights\" are Kept as is)",
-        "zh": "沒有效果 (所持的「光」得以保留)",
+        "zh_TW": "沒有效果 (所持的「光」得以保留)",
+        "zh_CN": "没有效果 (所持的「光」得以保留)",
     },
     "センス発動後、追加で[:param11]のプリンシパルゲージを獲得": {
         "en": "Gain Additional [:param11] Principal Gauge After Sense Activation",
-        "zh": "Sense 發動後，額外獲得 [:param11] Principal Gauge",
+        "zh_TW": "Sense 發動後，額外獲得 [:param11] Principal Gauge",
+        "zh_CN": "Sense 发动后，额外获得 [:param11] Principal Gauge",
     },
     "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
         "en": "Raise the Cap of Principal Gauge by [:param11] After Sense Activation",
-        "zh": "Sense 發動後，Principal Gauge 的上限提升 [:param11]",
+        "zh_TW": "Sense 發動後，Principal Gauge 的上限提升 [:param11]",
+        "zh_CN": "Sense 发动后，Principal Gauge 的上限提升 [:param11]",
     },
     "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
         "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
-        "zh" : "生命值愈多，分數獲得量 UP 愈多（最多 +[:pre1]%）",
+        "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +[:pre1]%）",
+        "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +[:pre1]%）",
     },
 }, {
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
@@ -472,32 +507,39 @@ single_sense_translator = regex_lookup_translator_wrapper({
     },
     r"ライフが多いほど(?P<actor>.+)のスコア獲得量UP（最大＋(\d+)％）": {
         "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
-        "zh" : "生命值愈多，{actor}的分數獲得量 UP 愈多（最多 +{1}%）",
+        "zh_TW" : "生命值愈多，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
+        "zh_CN" : "生命值愈多，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
     },
     r"ライフが少ないほど(?P<actor>.+)のスコア獲得量UP（最大＋(\d+)％）": {
         "en": "The Less the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
-        "zh": "生命值愈少，{actor}的分數獲得量 UP 愈多（最多 +{1}%）",
+        "zh_TW": "生命值愈少，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
+        "zh_CN": "生命值愈少，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
     },
     r"\[:sec\]秒間、(?P<company>.+)のアクターに(?P<sense_star_act>センス|スターアクト)スコア\[:param11\]％UP効果": {
         "en": "For [:sec] seconds, {company} Actors Gain [:param11]% UP Score from {sense_star_act}",
-        "zh": "[:sec]秒內，{company}演員附帶 {sense_star_act} 分數 [:param11]% UP 效果",
+        "zh_TW": "[:sec]秒內，{company}演員附帶 {sense_star_act} 分數 [:param11]% UP 效果",
+        "zh_CN": "[:sec]秒内，{company}演员附带 {sense_star_act} 分数 [:param11]% UP 效果",
     },
     r"(?P<company>.+)のアクターのCTを(\d+)秒短縮": {
         "en": "CT of {company} Actor Reduced by {1}s for the Next Sense",
-        "zh": "{company}演員的 CT 縮短 {1} 秒",
+        "zh_TW": "{company}演員的 CT 縮短 {1} 秒",
+        "zh_CN": "{company}演员的 CT 缩短 {1} 秒",
     },
     r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
-        "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
-        "zh": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
+        "en": "For each Attached Life Guard, Score Gain is Increased by {0}% (+{1}% at Most)",
+        "zh_TW": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
+        "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
     },
     r"センス発動直後、自身の(?P<status>.+)の\[:param11\]倍のスコアを獲得": {
-        "en": "Gain a Score of [:param11] Times the Actor's own {status} Right After Sense Activation",
-        "zh": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
+        "en": "Right After Sense Activation, Gain a Score of [:param11] Times the Actor's own {status}",
+        "zh_TW": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
+        "zh_CN": "Sense 发动后，获得自身{status} [:param11] 倍的分数",
     },
     r"センス発動時、追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
         "ja": "センス発動時、追加で「{sense_type}の光」を{1}個獲得する",
         "en": 'When Sense Activates, Gain {1} Additional "{sense_type} Light(s)"',
-        "zh": "Sense 發動時，額外獲得{1}個「{sense_type}系光」",
+        "zh_TW": "Sense 發動時，額外獲得{1}個「{sense_type}系光」",
+        "zh_CN": "Sense 发动时，额外获得{1}个「{sense_type}系光」",
     },
 })
 
@@ -509,19 +551,23 @@ def sense_translator(description: str, message: MsgInt) -> str:
 single_leader_sense_translator = regex_lookup_translator_wrapper({}, {
     "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(\d+)[%％]上昇": {
         "en": 'Category "{0}" {status} Increased by {2}%, {status2} Increased by {4}%',
-        "zh": "「{0}」分類的{status} 提升 {2}%・{status2} 提升 {4}%",
+        "zh_TW": "「{0}」分類的{status}提升 {2}%・{status2}提升 {4}%",
+        "zh_CN": "「{0}」分类的{status}提升 {2}%・{status2}提升 {4}%",
     },
     "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇": {
         "en": 'Category "{0}" {status} Increased by {2}%',
-        "zh": "「{0}」分類的{status} 提升 {2}%",
+        "zh_TW": "「{0}」分類的{status}提升 {2}%",
+        "zh_CN": "「{0}」分类的{status}提升 {2}%",
     },
     "「(.+?)」カテゴリを持つアクターの数に応じて初期プリンシパルゲージが(\d+)上昇": {
         "en": 'Initial Principal Gauge Increased by {1} for each actor having Category "{0}"',
-        "zh": "根據持有「{0}」分類的演員數量，初始 Principal Gauge 各提升 {1}",
+        "zh_TW": "根據持有「{0}」分類的演員數量，初始 Principal Gauge 各提升 {1}",
+        "zh_CN": "根据持有「{0}」分类的演员数量，初始 Principal Gauge 各提升 {1}",
     },
     "「(.+?)」カテゴリのCTを(\d+)秒短縮する": {
         "en": 'Category "{0}" CT Reduced by {1}s',
-        "zh": "「{0}」分類的 CT 縮短 {1} 秒",
+        "zh_TW": "「{0}」分類的 CT 縮短 {1} 秒",
+        "zh_CN": "「{0}」分类的 CT 缩短 {1} 秒",
     }
 })
 
@@ -530,7 +576,13 @@ def leader_sense_translator(description: str, message: MsgInt) -> str:
         single_leader_sense_translator(part, message)
     for part in description.strip().replace("\t", "").replace("、「", "\n「").split("\n")])
 
-bloom_translator = regex_lookup_translator_wrapper({}, {
+bloom_translator = regex_lookup_translator_wrapper({
+    "公演開始時に自身と同系統の光を獲得": {
+        "en": "When the Performance Starts, Gain a Light with the same System as oneself",
+        "zh_TW": "公演開始時，獲得與自身同系統的光",
+        "zh_CN": "公演开始时，获得与自身同系统的光",
+    }
+}, {
     r"演技力(\d+)[%％]UP": {
         "en": "Status {}% UP",
         "zh": "演技力 {}% UP",
@@ -545,7 +597,8 @@ bloom_translator = regex_lookup_translator_wrapper({}, {
     },
     r"基礎スコアが(\d+)％上昇": {
         "en": "Base Score Increased by {}%",
-        "zh": "基礎分數提升 {}%",
+        "zh_TW": "基礎分數提升 {}%",
+        "zh_CN": "基础分数提升 {}%",
     },
     r"初期ライフが(\d+)上昇": {
         "en": "Initial Life Increased by {}",
@@ -557,15 +610,18 @@ bloom_translator = regex_lookup_translator_wrapper({}, {
     },
     r"公演での報酬量が(\d+)％上昇": {
         "en": "Live Rewards Increased by {}%",
-        "zh": "公演報酬量提升 {}%",
+        "zh_TW": "公演報酬量提升 {}%",
+        "zh_CN": "公演报酬量提升 {}%",
     },
     r"スターアクト発動に必要な(?P<sense_type>.{2})の光の個数が(\d+)個減少": {
         "ja": "スターアクト発動に必要な{sense_type}の光の個数が{1}個減少",
         "en": "Number of {sense_type} Lights Required to Trigger Star Act Reduced by {1}",
-        "zh": "Star Act 發動所需的{sense_type}系光數量減少 {1} 個",
+        "zh_TW": "Star Act 發動所需的{sense_type}系光數量減少 {1} 個",
+        "zh_CN": "Star Act 发动所需的{sense_type}系光数量减少 {1} 个",
     },
     r"公演開始時、ライフガードを(\d+)付与": {
-        "en": "Attach {} Life Guard(s) at the Start of Performance",
-        "zh": "公演開始時，給予 {} 個 Life Guard",
+        "en": "When the Performance Starts, Attach {} Life Guard(s)",
+        "zh_TW": "公演開始時，給予 {} 個 Life Guard",
+        "zh_CN": "公演开始时，给予 {} 个 Life Guard",
     },
 })

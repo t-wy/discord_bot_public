@@ -34,6 +34,9 @@ def create_translator(default_locale: discord.Locale):
 
 _ = create_translator(discord.Locale.japanese)
 
+class GrammarGlossary:
+    connector = _("{0}{1}", en="{0} {1}")
+
 class GameNameGlossary:
     PJSK = _("プロセカ", en="PJSK", zh="PJSK")
     WDS = _("ユメステ", en="WDS", zh="WDS")
@@ -124,7 +127,7 @@ class SongGlossary:
 
 class WDSGlossary:
     recent_clears = _("直近クリア編成", en="Recent Clears", zh="最近通關編成")
-    sense_activation_timing = _("センス発動タイミング", en="Sense Activation Timing", zh="Sense 發動時間")
+    sense_activation_timing = _("センス発動タイミング", en="Sense Activation Timing", zh_TW="Sense 發動時間", zh_CN="Sense 发动时间")
     star_rank = _("スターランク", en="Star Rank", zh="Star Rank")
     status_bonus = _("演技力ボーナス：", en="Status Bonus: ", zh="演技力加成：")
     theater_league = _("演劇リーグ", en="Theater League", zh="演劇聯賽")
