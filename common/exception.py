@@ -1,3 +1,8 @@
+"""
+Current List of Exceptions. Can be translated.
+This file is currently not safe for hot reloading (as CustomException class may be used globally).
+"""
+
 class CustomException(Exception):
     pass
 
@@ -216,6 +221,13 @@ class UnreleasedContentException(CustomException):
     """
     def __init__(self):
         super().__init__("Unreleased Contents are Hidden in this Channel.")
+
+class VersionHashNotFoundException(CustomException):
+    """
+    The hash for the current version is not found.
+    """
+    def __init__(self):
+        super().__init__("The hash for the current version is not found.")
 
 class WorkInProgressException(CustomException):
     """
