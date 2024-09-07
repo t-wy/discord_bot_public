@@ -19,6 +19,12 @@ assignees: t-wy
 #### Entr(y/ies)
 
 <!-- Example: いろはのスターランクを100以上にしよう: Raise the Star Rank of Iroha to 100 or above -->
+<!--
+Python-style regex / format (0-based) is supported.
+Example: (?P<actor>.+)のスターランクを(\d+)以上にしよう: Raise the Star Rank of {actor} to {1} or above
+※ {actor} refer to the named capturing group, (?P<actor>.+)
+※ {1} refer to the 2nd group, (\d+)
+-->
 <!-- May use table for multiple languages, e.g.:
 ##### trophy_description_translator
 | Original | en | zh-TW |
