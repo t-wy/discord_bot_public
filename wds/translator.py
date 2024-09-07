@@ -75,6 +75,8 @@ def regex_lookup_translator(
                             temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locale) + " ({})".format(
                                 sense_name_emote.get(sense_to_key.get(temp_dict["sense_type"]), "❓")
                             )
+                        if "attribute" in temp_dict:
+                            temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locale)
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locale)
                         if "status2" in temp_dict:
@@ -86,15 +88,22 @@ def regex_lookup_translator(
                     return target
         return target
 
+available_translators = {}
+
 def regex_lookup_translator_wrapper(
+    label: str,
     lookup_dict: Dict[str, Dict[str, str]],
     regex_lookup_dict: Dict[str, Dict[str, str]] = {}
 ):
+    available_translators[label] = {
+        "simple": lookup_dict,
+        "regex": regex_lookup_dict
+    }
     def wrapper(target: str, message: Union[MsgInt, str]) -> str:
         return regex_lookup_translator(target, message, lookup_dict, regex_lookup_dict)
     return wrapper
 
-actor_translator = regex_lookup_translator_wrapper({
+actor_translator = regex_lookup_translator_wrapper("actor_translator", {
     "ここな": {
         "en": "Kokona",
         "zh": "心菜",
@@ -158,6 +167,7 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "緋花里": {
         "en": "Hikari",
+        "zh_CN": "绯花里",
     },
 
     "いろは": {
@@ -171,7 +181,8 @@ actor_translator = regex_lookup_translator_wrapper({
     },
     "カミラ": {
         "en": "Kamira",
-        "zh": "卡蜜拉", # also known as "卡米拉"
+        "zh_TW": "卡蜜拉",
+        "zh_CN": "卡米拉",
     },
     "蕾": {
         "en": "Tsubomi",
@@ -182,7 +193,7 @@ actor_translator = regex_lookup_translator_wrapper({
     },
 })
 
-company_translator = regex_lookup_translator_wrapper({
+company_translator = regex_lookup_translator_wrapper("company_translator", {
     "シリウス": {
         "en": "Sirius",
         "zh": "天狼星",
@@ -199,7 +210,7 @@ company_translator = regex_lookup_translator_wrapper({
     },
 })
 
-sense_type_translator = regex_lookup_translator_wrapper({
+sense_type_translator = regex_lookup_translator_wrapper("sense_type_translator", {
     "支援": {
         "en": "Support",
     },
@@ -208,13 +219,34 @@ sense_type_translator = regex_lookup_translator_wrapper({
     },
     "増幅": {
         "en": "Amplification",
+        "zh": "增幅",
     },
     "特殊": {
         "en": "Special",
     },
 })
 
-sense_star_act_translator = regex_lookup_translator_wrapper({
+attribute_translator = regex_lookup_translator_wrapper("attribute_translator", {
+    "憐": {
+        "en": "Cute",
+        "zh_CN": "怜",
+    },
+    "凛": {
+        "en": "Cool",
+        "zh_TW": "凜",
+        "zh_CN": "凛",
+    },
+    "彩": {
+        "en": "Colorful",
+        "zh_CN": "彩",
+    },
+    "陽": {
+        "en": "Cheerful",
+        "zh_CN": "阳",
+    },
+})
+
+sense_star_act_translator = regex_lookup_translator_wrapper("sense_star_act_translator", {
     "センス": {
         "en": "Sense",
         "zh": "Sense",
@@ -225,7 +257,7 @@ sense_star_act_translator = regex_lookup_translator_wrapper({
     },
 })
 
-status_translator = regex_lookup_translator_wrapper({
+status_translator = regex_lookup_translator_wrapper("status_translator", {
     "演技力": {
         "en": "Total Status",
     },
@@ -245,7 +277,7 @@ status_translator = regex_lookup_translator_wrapper({
     },
 })
 
-unlock_text_translator = regex_lookup_translator_wrapper({
+unlock_text_translator = regex_lookup_translator_wrapper("unlock_text_translator", {
     "初期から所持": {
         "en": "Owned Initially",
         "zh_TW": "從一開始就持有",
@@ -299,16 +331,16 @@ unlock_text_translator = regex_lookup_translator_wrapper({
     "劇団ミッションで入手": {
         "en": "Obtain via Company Missions",
         "zh_TW": "從劇團任務取得",
-        "zh_TW": "从剧团任务取得",
+        "zh_CN": "从剧团任务取得",
     },
     "メダル交換で入手": {
         "en": "Obtain via Medal Exchange",
         "zh_TW": "透過交換獎章取得",
-        "zh_TW": "透过交换奖章取得",
+        "zh_CN": "透过交换奖章取得",
     },
 })
 
-trophy_description_translator = regex_lookup_translator_wrapper({
+trophy_description_translator = regex_lookup_translator_wrapper("trophy_description_translator", {
     "スコアの下３桁が「７７７」で公演をクリアしよう": {
         "en": "Clear a Live with \"777\" as the Last 3 Digits of the Score",
         "zh": "以末 3 位為「777」的分數完成公演",
@@ -424,7 +456,7 @@ trophy_description_translator = regex_lookup_translator_wrapper({
     },
 })
 
-single_star_act_translator = regex_lookup_translator_wrapper({
+single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_translator", {
     "総演技力の[:score]倍のスコアを獲得": {
         "en": "Gain a Score of [:score] Times the Total Status",
         "zh_TW": "獲得總演技力 [:score] 倍的分數",
@@ -460,7 +492,7 @@ def star_act_translator(description: str, message: MsgInt) -> str:
         single_star_act_translator(part, message)
     for part in description.strip().split("／")])
 
-single_sense_translator = regex_lookup_translator_wrapper({
+single_sense_translator = regex_lookup_translator_wrapper("single_sense_translator", {
     "[:score]倍のスコアを獲得": {
         "en": "Gain [:score]x Score",
         "zh_TW": "獲得 [:score] 倍的分數",
@@ -503,7 +535,8 @@ single_sense_translator = regex_lookup_translator_wrapper({
 }, {
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
         "en": "When {actor} is Present, Sense will be Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
-        "zh": "當{actor}在隊伍時，{actor}代為發動 Sense，且{actor}獲得的分數 [:pre1]% UP",
+        "zh_TW": "當{actor}在隊伍時，{actor}代為發動 Sense，且{actor}獲得的分數 [:pre1]% UP",
+        "zh_CN": "当{actor}在队伍时，{actor}代为发动 Sense，且{actor}获得的分数 [:pre1]% UP",
     },
     r"ライフが多いほど(?P<actor>.+)のスコア獲得量UP（最大＋(\d+)％）": {
         "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
@@ -548,7 +581,7 @@ def sense_translator(description: str, message: MsgInt) -> str:
         single_sense_translator(part, message)
     for part in description.strip().split("／")])
 
-single_leader_sense_translator = regex_lookup_translator_wrapper({}, {
+single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_sense_translator", {}, {
     "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(\d+)[%％]上昇": {
         "en": 'Category "{0}" {status} Increased by {2}%, {status2} Increased by {4}%',
         "zh_TW": "「{0}」分類的{status}提升 {2}%・{status2}提升 {4}%",
@@ -576,7 +609,7 @@ def leader_sense_translator(description: str, message: MsgInt) -> str:
         single_leader_sense_translator(part, message)
     for part in description.strip().replace("\t", "").replace("、「", "\n「").split("\n")])
 
-bloom_translator = regex_lookup_translator_wrapper({
+bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
     "公演開始時に自身と同系統の光を獲得": {
         "en": "When the Performance Starts, Gain a Light with the same System as oneself",
         "zh_TW": "公演開始時，獲得與自身同系統的光",

@@ -75,7 +75,7 @@ class EventGlossary:
     distribution_of_ranking_rewards = _("報酬配布期間", en="Distribution of Ranking Rewards", zh_TW="報酬發送時間", zh_CN="报酬发送时间", ko="보상 지급 기간")
     elapsed_time = _("経過時間", en="Elapsed Time", zh_TW="經過時間", zh_CN="经过时间")
     event_duration = _("イベント期間", en="Event Duration", zh_TW="活動時數", zh_CN="活动时数")
-    event_period = _("開催期間", en="Event Period", zh_TW="活動時間", zh_CN="活动时间", ko="개최 기간")
+    event_period = _("開催期間", en="Event Period", zh_TW="舉辦時間", zh_CN="举办时间", ko="개최 기간")
     event_results = _("結果発表", en="Event Results", zh_TW="結果發表", zh_CN="结果发表", ko="결과 발표")
     new_event_characters = _("イベントで登場する新メンバー", en="New Event Characters", zh_TW="活動登場新成員", zh_CN="活动登场新成员", ko="이벤트에서 등장하는 신규 멤버")
     notice_period = _("予告期間", en="Notice Period", zh_TW="預告時間", zh_CN="预告时间")
