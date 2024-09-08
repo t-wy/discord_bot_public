@@ -1,7 +1,7 @@
 ---
 name: Translations
-about: To provide some translations.
-title: "[Translation]"
+about: To provide/fix some translations.
+title: "[Translation] "
 labels: translation
 assignees: t-wy
 
@@ -9,12 +9,12 @@ assignees: t-wy
 
 #### Target Language(s)
 
-<!-- Example: en, en-US, zh-TW, etc. -->
+<!-- Example: English, en, en-US, zh-TW, etc. -->
 
 #### Target Translator(s)
 
-<!-- Example: trophy_description_translator, common/exception.py, etc. -->
-<!-- For WDS, may Check https://twy.name/WDS/translation.html for Translator list -->
+<!-- Example: Sense, trophy_description_translator, common/exception.py, etc. -->
+<!-- For WDS, check https://twy.name/WDS/translation.html for a list of translators -->
 
 #### Entr(y/ies)
 
