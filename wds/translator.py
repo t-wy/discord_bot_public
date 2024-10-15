@@ -2,13 +2,13 @@
 This file is safe for hot reloading.
 """
 
-from discord_msgint import MsgInt
+from msgint import MsgInt
 from typing import *
 
 # regex to select the 3rd field from an array entry:
 # \[(?:[^[,]+, ){2}"([^"]+)"
 
-def user_locales(message: MsgInt) -> str:
+def user_locales(message: MsgInt) -> Tuple[str]:
     if message is None:
         return ()
     candidates = []
@@ -42,22 +42,27 @@ def ordinal_translator(target: str, message: Union[MsgInt, str]) -> str:
     return target
 
 def regex_lookup_translator(
-    target: str, message: Union[MsgInt, str],
+    target: str, message: Union[MsgInt, List[str], Tuple[str], str],
     lookup_dict: Dict[str, Dict[str, str]],
     regex_lookup_dict: Dict[str, Dict[str, str]] = {}
 ) -> str:
     if type(message) is str:
         locales = [message]
+    elif type(message) is list or type(message) is tuple:
+        locales = message
     else:
         locales = user_locales(message)
     if target in lookup_dict:
         for locale in locales:
             if locale in lookup_dict[target]:
                 return lookup_dict[target][locale]
+        if "*" in lookup_dict[target]:
+            return lookup_dict[target]["*"]
         return target
     else:
         import re
-        from .wds_const import sense_name_emote, sense_to_key
+        from .const import sense_name_emote, sense_to_key
+        from .const import wds_type_emoji, wds_type_names
         for regex in regex_lookup_dict:
             match = re.fullmatch(regex, target)
             if match:
@@ -66,25 +71,33 @@ def regex_lookup_translator(
                         translator = regex_lookup_dict[regex][locale]
                         temp_dict = match.groupdict()
                         if "company" in temp_dict:
-                            temp_dict["company"] = company_translator(temp_dict["company"], locale)
+                            temp_dict["company"] = company_translator(temp_dict["company"], locales)
                         if "actor" in temp_dict:
-                            temp_dict["actor"] = actor_translator(temp_dict["actor"], locale)
+                            temp_dict["actor"] = actor_translator(temp_dict["actor"], locales)
+                        if "actors" in temp_dict:
+                            temp_dict["actors"] = "・".join([actor_translator(actor, locales) for actor in temp_dict["actors"].split("・")])
                         if "sense_star_act" in temp_dict:
-                            temp_dict["sense_star_act"] = sense_star_act_translator(temp_dict["sense_star_act"], locale)
+                            temp_dict["sense_star_act"] = sense_star_act_translator(temp_dict["sense_star_act"], locales)
                         if "sense_type" in temp_dict:
-                            temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locale) + " ({})".format(
-                                sense_name_emote.get(sense_to_key.get(temp_dict["sense_type"]), "❓")
-                            )
+                            # handle emoji before translating text
+                            if "{sense_emoji}" in translator:
+                                temp_dict["sense_emoji"] = sense_name_emote.get(sense_to_key.get(temp_dict["sense_type"]), "❓")
+                            temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locales)
                         if "attribute" in temp_dict:
-                            temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locale)
+                            # handle emoji before translating text
+                            if "{attribute_emoji}" in translator:
+                                temp_dict["attribute_emoji"] = wds_type_emoji[wds_type_names.index(temp_dict["attribute"])] if temp_dict["attribute"] in wds_type_names else "❓"
+                            temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
                         if "status" in temp_dict:
-                            temp_dict["status"] = status_translator(temp_dict["status"], locale)
+                            temp_dict["status"] = status_translator(temp_dict["status"], locales)
                         if "status2" in temp_dict:
-                            temp_dict["status2"] = status_translator(temp_dict["status2"], locale)
+                            temp_dict["status2"] = status_translator(temp_dict["status2"], locales)
                         if "ordinal" in temp_dict:
-                            temp_dict["ordinal"] = ordinal_translator(temp_dict["ordinal"], locale)
+                            temp_dict["ordinal"] = ordinal_translator(temp_dict["ordinal"], locale) # need string or message
                         return translator.format(*match.groups(), **temp_dict)
                 else:
+                    if "*" in regex_lookup_dict[regex]:
+                        return regex_lookup_dict[regex]["*"]
                     return target
         return target
 
@@ -382,18 +395,27 @@ company_translator = regex_lookup_translator_wrapper("company_translator", {
         "en": "Sirius",
         "zh": "天狼星",
         "ko": "시리우스",
+        "ja": "シリウス",
+        "*": "Sirius",
     },
-    "Eden": {},
+    "Eden": {
+        "*": "Eden",
+    },
     "銀河座": {
         "en": "Gingaza",
+        "zh_TW": "銀河座",
         "zh_CN": "银河座",
         "ko": "은하자리",
+        "ja": "銀河座",
+        "*": "Gingaza",
     },
     "劇団電姫": {
         "en": "Gekidan Denki",
         "zh_TW": "劇團電姬",
         "zh_CN": "剧团电姬",
         "ko": "극단 전자공주",
+        "ja": "劇団電姫",
+        "*": "Gekidan Denki",
     },
 })
 
@@ -440,15 +462,16 @@ attribute_translator = regex_lookup_translator_wrapper("attribute_translator", {
 sense_star_act_translator = regex_lookup_translator_wrapper("sense_star_act_translator", {
     "センス": {
         "en": "Sense",
-        "zh": "Sense",
         "ko": "센스",
         "th": "เซนส์",
+        "ja": "センス",
+        "*": "Sense",
     },
     "スターアクト": {
         "en": "Star Act",
-        "zh": "Star Act",
         "ko": "스타 액트",
-        "th": "Star Act",
+        "ja": "スターアクト",
+        "*": "Star Act",
     },
 })
 
@@ -457,7 +480,7 @@ status_translator = regex_lookup_translator_wrapper("status_translator", {
         "en": "Total Status",
         "th": "ความสามารถการแสดง",
     },
-    "演技力上限が": {
+    "演技力上限": {
         "en": "Status Cap",
         "zh": "演技力上限",
         "th": "ความสามารถการแสดงสูงสุด",
@@ -575,11 +598,11 @@ trophy_description_translator = regex_lookup_translator_wrapper("trophy_descript
         "zh": "提升玩家等級到 {0} 或以上",
     },
     r"サークルメンバー4人で協力公演を(\d+)回クリアしよう": {
-        "en": "Clear {0} Multi-player Lives with 4 Players in the Circle",
+        "en": "Clear {0} Multi-player Performances with 4 Players in the Circle",
         "zh": "Circle 4 人完成 {0} 次協力公演",
     },
     r"協力公演で4人全員(.+)を達成しよう": {
-        "en": "Achieve {0} by all 4 Players in a Multi-player Live",
+        "en": "Achieve {0} by all 4 Players in a Multi-player Performance",
         "zh": "於協力公演中 4 人全都達成 {0}",
     },
     r"公演を(\d+)回クリアしよう": {
@@ -651,7 +674,7 @@ trophy_description_translator = regex_lookup_translator_wrapper("trophy_descript
         "zh": "閱讀 {0} 種類場景劇情",
     },
     r"(?P<company>.+)のメインストーリー(\d+)章を全て読もう": {
-        "en": "Read all of {company} Main Stories, Chapter {1}",
+        "en": "Read All of {company} Main Stories, Chapter {1}",
         "zh": "閱畢 {company} 主線劇情第 {1} 章",
     },
 })
@@ -664,7 +687,7 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "th": "ได้รับคะแนน [:score] เท่าของความสามารถการแสดงทั้งหมด",
     },
     "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
-        "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
+        "en": "The More the Life Value is, the More Score Gain UP is Resulted in from so (+[:pre1]% at Most)",
         "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +[:pre1]%）",
         "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +[:pre1]%）",
         "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +[:pre1]%)",
@@ -676,19 +699,26 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
         "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ของ Life Guard (สูงสุด {1}%)",
     },
+    r"ストックされている全ての光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
+        "ja": "ストックされている全ての光1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
+        "en": "For each Stocked Light, Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
+        "zh_TW": "每儲藏 1 個光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_CN": "每储藏 1 个光，获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
+        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของดาวแต่ละดวงสูงสุด {1} ดวง",
+    },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
-        "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
-        "en": "For each Stocked {sense_type} Light, Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
-        "zh_TW": "每儲藏 1 個{sense_type}系光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
-        "zh_CN": "每储藏 1 个{sense_type}系光，获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
-        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type}ดาวแต่ละดวงสูงสุด {1} ดวง",
+        "ja": "ストックされている{sense_type}系の光「{sense_emoji}」1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
+        "en": "For each Stocked {sense_type} Light ({sense_emoji}), Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
+        "zh_TW": "每儲藏 1 個{sense_type}系光「{sense_emoji}」，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_CN": "每储藏 1 个{sense_type}系光「{sense_emoji}」，获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
+        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) ดาวแต่ละดวงสูงสุด {1} ดวง",
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを追加で獲得\(最大(\d+)個\)": {
-        "ja": "ストックされている{sense_type}系の光1個につき総演技力の[:param11]倍のスコアを追加で獲得(最大{1}個)",
-        "en": "For each Stocked {sense_type} Light, Gain an Additional Score of [:param11] Times the Total Status ({1} Lights at Most)",
-        "zh_TW": "每儲藏 1 個{sense_type}系光，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
-        "zh_CN": "每储藏 1 个{sense_type}系光，额外获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
-        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type}ดาวแต่ละดวงสูงสุด {1} ดวง",
+        "ja": "ストックされている{sense_type}系の光「{sense_emoji}」1個につき総演技力の[:param11]倍のスコアを追加で獲得(最大{1}個)",
+        "en": "For each Stocked {sense_type} Light ({sense_emoji}), Gain an Additional Score of [:param11] Times the Total Status ({1} Lights at Most)",
+        "zh_TW": "每儲藏 1 個{sense_type}系光「{sense_emoji}」，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
+        "zh_CN": "每储藏 1 个{sense_type}系光「{sense_emoji}」，额外获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
+        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) ดาวแต่ละดวงสูงสุด {1} ดวง",
     }
 })
 
@@ -733,7 +763,7 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "th": "ได้รับ Principal gauge เพิ่มขึ้น [:param11] หลังจากเปิดใช้งานเซนส์",
     },
     "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
-        "en": "Raise the Cap of Principal Gauge by [:param11] After Sense Activation",
+        "en": "Increase Principal Gauge Cap by [:param11] After Sense Activation",
         "zh_TW": "Sense 發動後，Principal Gauge 的上限提升 [:param11]",
         "zh_CN": "Sense 发动后，Principal Gauge 的上限提升 [:param11]",
         "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น [:param11]",
@@ -746,7 +776,7 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
     },
 }, {
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
-        "en": "When {actor} is Present, Sense will be Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
+        "en": "When {actor} is Present, Sense is Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
         "zh_TW": "當{actor}在隊伍時，{actor}代為發動 Sense，且{actor}獲得的分數 [:pre1]% UP",
         "zh_CN": "当{actor}在队伍时，{actor}代为发动 Sense，且{actor}获得的分数 [:pre1]% UP",
         "th": "เมื่อ{actor}อยู่ในทีม {actor}จะเปิดใช้งานเซนส์แทนและคะแนนจะเพิ่มขึ้น [:pre1]%",
@@ -788,10 +818,10 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11] เท่าของ{status}",
     },
     r"センス発動時、追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
-        "ja": "センス発動時、追加で「{sense_type}の光」を{1}個獲得する",
-        "en": 'When Sense Activates, Gain {1} Additional "{sense_type} Light(s)"',
-        "zh_TW": "Sense 發動時，額外獲得{1}個「{sense_type}系光」",
-        "zh_CN": "Sense 发动时，额外获得{1}个「{sense_type}系光」",
+        "ja": "センス発動時、追加で「{sense_type}の光{sense_emoji}」を{1}個獲得する",
+        "en": 'When Sense Activates, Gain {1} Additional "{sense_type} Light(s){sense_emoji}"',
+        "zh_TW": "Sense 發動時，額外獲得{1}個「{sense_type}系光{sense_emoji}」",
+        "zh_CN": "Sense 发动时，额外获得{1}个「{sense_type}系光{sense_emoji}」",
     },
 })
 
@@ -803,15 +833,15 @@ def sense_translator(description: str, message: MsgInt) -> str:
     for part in description.strip().split("／")])
 
 single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_sense_translator", {}, {
-    "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(\d+)[%％]上昇": {
-        "en": 'Category "{0}" {status} Increased by {2}%, {status2} Increased by {4}%',
-        "zh_TW": "「{0}」分類的{status}提升 {2}%・{status2}提升 {4}%",
-        "zh_CN": "「{0}」分类的{status}提升 {2}%・{status2}提升 {4}%",
+    "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(が?)(\d+)[%％]上昇": {
+        "en": 'Category "{0}" {status} Increased by {2}%, {status2} Increased by {5}%',
+        "zh_TW": "「{0}」分類的{status}提升 {2}%・{status2}提升 {5}%",
+        "zh_CN": "「{0}」分类的{status}提升 {2}%・{status2}提升 {5}%",
     },
-    "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇": {
-        "en": 'Category "{0}" {status} Increased by {2}%',
-        "zh_TW": "「{0}」分類的{status}提升 {2}%",
-        "zh_CN": "「{0}」分类的{status}提升 {2}%",
+    "「(.+?)」カテゴリの(?P<status>.+?)(が?)(\d+)[%％]上昇": {
+        "en": 'Category "{0}" {status} Increased by {3}%',
+        "zh_TW": "「{0}」分類的{status}提升 {3}%",
+        "zh_CN": "「{0}」分类的{status}提升 {3}%",
     },
     "「(.+?)」カテゴリを持つアクターの数に応じて初期プリンシパルゲージが(\d+)上昇": {
         "en": 'Initial Principal Gauge Increased by {1} for each actor having Category "{0}"',
@@ -875,15 +905,271 @@ bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
         "th": "ดรอปไอเทมเพิ่มขึ้น {}%",
     },
     r"スターアクト発動に必要な(?P<sense_type>.{2})の光の個数が(\d+)個減少": {
-        "ja": "スターアクト発動に必要な{sense_type}の光の個数が{1}個減少",
-        "en": "Number of {sense_type} Lights Required to Trigger Star Act Reduced by {1}",
-        "zh_TW": "Star Act 發動所需的{sense_type}系光數量減少 {1} 個",
-        "zh_CN": "Star Act 发动所需的{sense_type}系光数量减少 {1} 个",
-        "th": "จำนวน{sense_type}ที่ใช้ในการเปิด Star Act ลดลง {1} ดวง",
+        "ja": "スターアクト発動に必要な{sense_type}の光「{sense_emoji}」の個数が{1}個減少",
+        "en": "Number of {sense_type} Lights ({sense_emoji}) Required to Trigger Star Act Reduced by {1}",
+        "zh_TW": "Star Act 發動所需的{sense_type}系光「{sense_emoji}」數量減少 {1} 個",
+        "zh_CN": "Star Act 发动所需的{sense_type}系光「{sense_emoji}」数量减少 {1} 个",
+        "th": "จำนวน{sense_type} ({sense_emoji}) ที่ใช้ในการเปิด Star Act ลดลง {1} ดวง",
     },
     r"公演開始時、ライフガードを(\d+)付与": {
         "en": "When the Performance Starts, Attach {} Life Guard(s)",
         "zh_TW": "公演開始時，給予 {} 個 Life Guard",
         "zh_CN": "公演开始时，给予 {} 个 Life Guard",
     },
+    r"(?P<sense_type>.{2})の光追加": {
+        "ja": "{sense_type}の光「{sense_emoji}」追加",
+        "en": "Additional {sense_type} ({sense_emoji}) Light",
+        "zh": "追加{sense_type}系光「{sense_emoji}」",
+    },
 })
+
+condition_text_translator = regex_lookup_translator_wrapper("condition_text_translator", {
+    "発動条件：": {
+        "en": "Activation Condition: ",
+        "zh_TW": "發動條件：",
+        "zh_CN": "发动条件：",
+    },
+})
+
+condition_translator = regex_lookup_translator_wrapper("condition_translator", {}, {
+    "(?P<company>.+)に所属するアクターが装備": {
+        "en": "Equipped by a(n) {company} actor",
+        "zh_TW": "由{company}演員裝備",
+        "zh_CN": "由{company}演员装备",
+    },
+    "<color=#(.{6})>(?P<attribute>.)属性<\/color>のアクターが装備": {
+        "ja": "{attribute_emoji} {attribute}属性のアクターが装備",
+        "en": "Equipped by an Actor of {attribute_emoji} {attribute} Attribute",
+        "zh_TW": "由 {attribute_emoji} {attribute}屬性演員裝備",
+        "zh_CN": "由 {attribute_emoji} {attribute}属性演员装备",
+    },
+    "<color=#(.{6})>(?P<attribute>.)属性<\/color>の(?P<actor>.+)が装備": {
+        "ja": "{attribute_emoji} {attribute}属性の{actor}が装備",
+        "en": "Equipped by {actor} of {attribute_emoji} {attribute} Attribute",
+        "zh_TW": "由 {attribute_emoji} {attribute}屬性{actor}裝備",
+        "zh_CN": "由 {attribute_emoji} {attribute}属性{actor}装备",
+    },
+    "(?P<actors>.+)が装備": {
+        "en": "Equipped by {actors}",
+        "zh_TW": "由{actors}裝備",
+        "zh_CN": "由{actors}装备",
+    },
+    "(?P<actor>.+)が装備かつ(?P<company>.+)に所属しているアクターのみで編成": {
+        "en": "Equipped by {actor}, and the Unit only Consists of {company} Actors",
+        "zh_TW": "由{actor}裝備且隊伍只由{company}所屬演員組成",
+        "zh_CN": "由{actor}装备且队伍只由{company}所属演员组成",
+    }
+})
+
+poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_translator", {
+    "センス発動直後、現在のスコアの[:param11]%のスコアを獲得": {
+        "en": "Right After Sense Activation, Gain a Score of [:param11]% 喔of the Current Score",
+        "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
+        "zh_CN": "Sense 发动后，獲得目前分数 [:param11]% 的分数",
+    },
+    "公演開始時、P.ゲージが[:param11]上昇": {
+        "en": "When the Performance Starts, P. Gauge Increased by [:param11]",
+        "zh_TW": "公演開始時，P. Gauge 提升 [:param11]",
+        "zh_CN": "公演开始时，P. Gauge 提升 [:param11]",
+    },
+    "センス発動直後、ライフを[:param11]回復": {
+        "en": "Right After Sense Activation, Life Value Recovered by [:param11]",
+        "zh_TW": "Sense 發動後，生命值回復 [:param11]",
+        "zh_CN": "Sense 发动后，生命值回复 [:param11]",
+    },
+    "公演開始時、ライフが[:param11]上昇": {
+        "en": "When the Performance Starts, Life Value Increased by [:param11]",
+        "zh_TW": "公演開始時，生命值提升 [:param11]",
+        "zh_CN": "公演开始时，生命值提升 [:param11]",
+    },
+    "公演開始時、Pゲージの上限が[:param11]上昇": {
+        "en": "When the Performance Starts, P. Gauge Cap Increased by [:param11]",
+        "zh_TW": "公演開始時，P. Gauge 的上限提升 [:param11]",
+        "zh_CN": "公演开始时，P. Gauge 的上限提升 [:param11]",
+    },
+    "センスを発動しなくなるが、自身の演技力が2倍": {
+        "en": 'Sense can no Longer Activate, but one\'s own Total Status doubled',
+        "zh_TW": "Sense 無法發動，但自身演技力 2 倍",
+        "zh_CN": "Sense 无法发动，但自身演技力 2 倍",
+    },
+    "センス発動時、SP光を追加で付与": {
+        "en": 'When Sense Activates, Gain an Additional SP Light',
+        "zh_TW": "Sense 發動時，額外獲得 SP 光",
+        "zh_CN": "Sense 发动时，额外获得 SP 光",
+    },
+    "センスで付与する「光」の付与数が[:param11]個増加": {
+        "en": "The Number of \"Lights\" Gained by Sense Increased by [:param11]",
+        "zh_TW": "自 Sense 獲得的「光」的數量增加 [:param11] 個",
+        "zh_CN": "自 Sense 获得的「光」的数量增加 [:param11] 个",
+    },
+    "公演開始時、ライフガードを[:param11]付与": {
+        "en": "When the Performance Starts, Attach [:param11] Life Guard(s)",
+        "zh_TW": "公演開始時，給予 [:param11] 個 Life Guard",
+        "zh_CN": "公演开始时，给予 [:param11] 个 Life Guard",
+    },
+}, {
+    r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]%上昇": {
+        "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]%上昇",
+        "en": "Total Status of Actors with {attribute_emoji} {attribute} Attribute Increased by [:param11]%",
+        "zh_TW": "{attribute_emoji} {attribute}屬性演員的演技力提升[:param11]%",
+        "zh_CN": "{attribute_emoji} {attribute}属性演员的演技力提升[:param11]%",
+    },
+    r"公演開始時、(?P<sense_type>.{2})系の光「<color=#.{6}>\*<\/color>」を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
+        "ja": "公演開始時、{sense_type}系の光「{sense_emoji}」を[:param11]{1}付与（効果は公演開始時1回のみ発動する）",
+        "en": "When the Performance Starts, Attach [:param11] {sense_type} Light(s) ({sense_emoji}) (The Effect only Activates once when the Performance Starts)",
+        "zh_TW": "公演開始時，給予 [:param11] 個{sense_type}系光「{sense_emoji}」（效果僅於公演開始時發動 1 次）",
+        "zh_CN": "公演开始时，给予 [:param11] 个{sense_type}系光「{sense_emoji}」（效果仅于公演开始时发动 1 次）",
+    },
+    r"公演開始時、SP光を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
+        "en": "When the Performance Starts, Attach [:param11] SP Light(s) (The Effect only Activates once when the Performance Starts)",
+        "zh_TW": "公演開始時，給予 [:param11] 個 SP 光（效果僅於公演開始時發動 1 次）",
+        "zh_CN": "公演开始时，给予 [:param11] 个 SP 光（效果仅于公演开始时发动 1 次）",
+    },
+    r"(?P<company>.+)に所属するアクターの演技力が\[:param11\][%％]上昇": {
+        "en": "Total Status of {company} Actors Increased by [:param11]%",
+        "zh_TW": "{company}演員的演技力提升[:param11]%",
+        "zh_CN": "{company}演员的演技力提升[:param11]%",
+    },
+    r"(?P<company>.+)に所属しているアクターのみで編成している場合、追加で全アクターの(?P<status>.+?)が\[:param11\]％上昇": {
+        "en": "When the Unit only Consists of {company} Actors, {status} of All Actors Increased Additionally by [:param11]%",
+        "zh_TW": "當隊伍只由{company}所屬演員組成時，全部演員的 {status} 額外提升[:param11]%",
+        "zh_CN": "当队伍只由{company}所属演员组成时，全部演员的 {status} 额外提升[:param11]%",
+    },
+    r"全アクターの演技力が\[:param11\][%％]上昇": {
+        "en": "Total Status of All Actors Increased by [:param11]%",
+        "zh_TW": "全部演員的演技力提升[:param11]%",
+        "zh_CN": "全部演员的演技力提升[:param11]%",
+    },
+    r"自身のセンスのCT[がを]\[:param11\]秒短縮": {
+        "en": "CT of one's Sense Reduced by [:param1]s",
+        "zh_TW": "自身的 Sense 的 CT 縮短 [:param1] 秒",
+        "zh_CN": "自身的 Sense 的 CT 缩短 [:param1] 秒",
+        "th": "CT ลดลง [:param1] วินาที",
+    },
+    r"自身の(?P<status>.+?)が\[:param11\][%％]上昇": {
+        "en": "One's {status} Increased by [:param11]%",
+        "zh": "自身的{status}提升 [:param11]%",
+    },
+    r"編成されている属性数が多いほど自身の(?P<status>.+?)が上昇（4属性：\[:param11\][%％]／3属性：\[:param21\][%％]／2属性：\[:param31\][%％]／1属性：\[:param41\][%％]）": {
+        "en": "The more Attributes there are in the Unit, the more One's {status} is Increased (4 Attributes: [:param11]% / 3 Attributes: [:param21]% / 2 Attributes: [:param31]% / 1 Attribute: [:param41]%)",
+        "zh_TW": "編成的屬性數量愈多，自身的{status}上升愈多（4屬性：[:param11]%／3屬性：[:param21]%／2屬性：[:param31]%／1屬性：[:param41]%）",
+        "zh_CN": "编成的属性数量愈多，自身的{status}上升愈多（4属性：[:param11]%／3属性：[:param21]%／2属性：[:param31]%／1属性：[:param41]%）",
+    },
+    r"編成されている属性数が少ないほど自身の(?P<status>.+?)が上昇（1属性：\[:param11\][%％]／2属性：\[:param21\][%％]／3属性：\[:param31\][%％]／4属性：\[:param41\][%％]）　*": {
+        "en": "The fewer Attributes there are in the Unit, the more One's {status} is Increased (1 Attribute: [:param11]% / 2 Attributes: [:param21]% / 3 Attributes: [:param31]% / 4 Attributes: [:param41]%)",
+        "zh_TW": "編成的屬性數量愈少，自身的{status}上升愈多（1屬性：[:param11]%／2屬性：[:param21]%／3屬性：[:param31]%／4屬性：[:param41]%）",
+        "zh_CN": "编成的属性数量愈少，自身的{status}上升愈多（1属性：[:param11]%／2属性：[:param21]%／3属性：[:param31]%／4属性：[:param41]%）",
+    },
+    r"公演開始時、ライフが(\d+)上昇": {
+        "en": "When the Performance Starts, Life Value Increased by {}",
+        "zh_TW": "公演開始時，生命值提升 {}",
+        "zh_CN": "公演开始时，生命值提升 {}",
+    },
+    r"公演開始時、ライフを(\d+)回復": {
+        "en": "When the Performance Starts, Life Value Recovered by {}",
+        "zh_TW": "公演開始時，生命值回復 {}",
+        "zh_CN": "公演开始时，生命值回复 {}",
+    },
+    r"公演開始時、ライフを(\d+)減少": {
+        "en": "When the Performance Starts, Life Value Reduced by {}",
+        "zh_TW": "公演開始時，生命值減少 {}",
+        "zh_CN": "公演开始时，生命值減少 {}",
+    },
+    r"センス発動直後、自身の(?P<status>.+?)の\[:param11\]倍のスコアを獲得": {
+        "en": "Right After Sense Activation, Gain a Score of [:param11] Times one's own {status}",
+        "zh_TW": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
+        "zh_CN": "Sense 发动后，獲得自身{status} [:param11] 倍的分数",
+    },
+    r"センス発動直後、P(\.?)ゲージを\[:param11\]獲得": {
+        "en": "Right After Sense Activation, Gain [:param11] P. Gauge",
+        "zh_TW": "Sense 發動後，獲得 [:param11] P. Gauge",
+        "zh_CN": "Sense 发动后，獲得 [:param11] P. Gauge",
+    },
+    r"プリンシパルゲージの上限を(\d+)上昇": {
+        "en": "Principal Gauge Cap Increased by {}",
+        "zh_TW": "Principal Gauge 的上限提升 {}",
+        "zh_CN": "Principal Gauge 的上限提升 {}",
+    },
+    r"センスによるP.ゲージの獲得量が\[:param11\][%％]UP": {
+        "en": "The Amount of P. Gauge Gained by Sense [:param11]% UP",
+        "zh_TW": "自 Sense 獲得的 P. Gauge 量 [:param1]%UP",
+        "zh_CN": "自 Sense 获得的 P. Gauge 量 [:param1]%UP",
+    },
+    r"公演開始時、ライフガード（(\d+)回）を付与": {
+        "en": "When the Performance Starts, Attach Life Guard(s) ({} Times)",
+        "zh_TW": "公演開始時，給予 Life Guard（{} 次）",
+        "zh_CN": "公演开始时，给予 Life Guard（{} 次）",
+    },
+    r"公演と協力公演の公演報酬が\[:param11\][%％]増加（アクセサリーを除く）": {
+        "en": "Rewards from Performances and Multi-player Performances Increased by [:param11]% (Except Accessories)",
+        "zh_TW": "公演及協力公演的公演報酬增加[:param11]%（飾品除外）",
+        "zh_CN": "公演及协力公演的公演报酬增加[:param11]%（饰品除外）",
+    },
+})
+
+accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_translator", {
+    "公演開始時、ライフが[:param1]上昇": {
+        "en": "When the Performance Starts, Life Value Increased by [:param1]",
+        "zh_TW": "公演開始時，生命值提升 [:param1]",
+        "zh_CN": "公演开始时，生命值提升 [:param1]",
+    },
+    "センス発動により光を付与するとき、同系統の光を追加で1個付与する。": {
+        "en": "When Lights are Attached by Sense Activation, Attach 1 additional Light of the same System",
+        "zh_TW": "當 Sense 發動給予光的時候，額外給予 1 個同系統的光",
+        "zh_CN": "当 Sense 发动给予光的时候，额外给予 1 个同系统的光",
+    },
+    "基礎スコアが[:param1]％上昇": {
+        "en": "Base Score Increased by [:param1]%",
+        "zh_TW": "基礎分數提升 [:param1]%",
+        "zh_CN": "基础分数提升 [:param1]%",
+    },
+}, {
+    r"自身の(?P<status>.+?)が?\[:param1\]上昇": {
+        "en": "One's {status} Increased by [:param1]",
+        "zh": "自身的{status}提升 [:param1]",
+    },
+    r"自身の(?P<status>.+?)が?\[:param1\][%％]上昇": {
+        "en": "One's {status} Increased by [:param1]%",
+        "zh": "自身的{status}提升 [:param1]%",
+    },
+    r"自身のセンスのCTが\[:param1\]秒短縮": {
+        "en": "CT of one's Sense Reduced by [:param1]s",
+        "zh_TW": "自身的 Sense 的 CT 縮短 [:param1] 秒",
+        "zh_CN": "自身的 Sense 的 CT 缩短 [:param1] 秒",
+        "th": "CT ลดลง [:param1] วินาที",
+    },
+    r"初期プリンシパルゲージが\[:param1\]上昇": {
+        "en": "Initial Principal Gauge Increased by [:param1]",
+        "zh": "起始 Principal Gauge 提升 [:param1]",
+        "th": "Principal gauge เริ่มต้นเพิ่มขึ้น [:param1]",
+    },
+    r"公演と協力公演の公演報酬が\[:param1\][%％]増加（アクセサリーを除く）": {
+        "en": "Rewards from Performances and Multi-player Performances Increased by [:param1]% (Except Accessories)",
+        "zh_TW": "公演及協力公演的公演報酬增加[:param1]%（飾品除外）",
+        "zh_CN": "公演及协力公演的公演报酬增加[:param1]%（饰品除外）",
+    },
+    r"公演開始時、「SP光」を\[:param1\]付与（SP光はどの系統の光としても扱われる）": {
+        "en": "When the Performance Starts, Attach [:param11] \"SP Light(s)\" (SP Light(s) can be treated as Light(s) of any system)",
+        "zh_TW": "公演開始時，給予 [:param11] 個「SP 光」（SP 光能被視為任何系統的光）",
+        "zh_CN": "公演开始时，给予 [:param11] 个「SP 光」（SP 光能被视为任何系统的光）",
+    },
+    r"センスによるP.ゲージの獲得量が\[:param1\][%％]UP": {
+        "en": "The Amount of P. Gauge Gained by Sense [:param1]% UP",
+        "zh_TW": "自 Sense 獲得的 P. Gauge 量 [:param1]%UP",
+        "zh_CN": "自 Sense 获得的 P. Gauge 量 [:param1]%UP",
+    },
+})
+
+def full_poster_ability_translator(description: str, message: MsgInt) -> str:
+    if "　◆発動条件：" in description:
+        effect_text, condition_text = description.split("　◆発動条件：")
+        return poster_ability_translator(effect_text, message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
+    else:
+        return poster_ability_translator(description, message)
+
+def full_accessory_effect_translator(description: str, message: MsgInt) -> str:
+    if "　◆発動条件：" in description:
+        effect_text, condition_text = description.split("　◆発動条件：")
+        return accessory_effect_translator(effect_text, message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
+    else:
+        return accessory_effect_translator(description, message)
