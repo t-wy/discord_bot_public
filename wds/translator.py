@@ -1188,10 +1188,10 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
         "th": "จำนวนไอเทมที่ได้รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param1] % ( ไม่รวม Accessory )",
     },
     r"公演開始時、「SP光」を\[:param1\]付与（SP光はどの系統の光としても扱われる）": {
-        "en": "When the Performance Starts, Attach [:param11] \"SP Light(s)\" (SP Light(s) can be treated as Light(s) of any system)",
-        "zh_TW": "公演開始時，給予 [:param11] 個「SP 光」（SP 光能被視為任何系統的光）",
-        "zh_CN": "公演开始时，给予 [:param11] 个「SP 光」（SP 光能被视为任何系统的光）",
-        "th": "มื่อเริ่มเพลงจะได้รับดาว SP สีไหนก็ได้ [:param11] ดวง",
+        "en": "When the Performance Starts, Attach [:param1] \"SP Light(s)\" (SP Light(s) can be treated as Light(s) of any system)",
+        "zh_TW": "公演開始時，給予 [:param1] 個「SP 光」（SP 光能被視為任何系統的光）",
+        "zh_CN": "公演开始时，给予 [:param1] 个「SP 光」（SP 光能被视为任何系统的光）",
+        "th": "มื่อเริ่มเพลงจะได้รับดาว SP สีไหนก็ได้ [:param1] ดวง",
     },
     r"センスによるP.ゲージの獲得量が\[:param1\][%％]UP": {
         "en": "The Amount of P. Gauge Gained by Sense [:param1]% UP",
