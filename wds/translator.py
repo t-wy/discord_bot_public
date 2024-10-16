@@ -965,7 +965,7 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
     "センス発動直後、現在のスコアの[:param11]%のスコアを獲得": {
         "en": "Right After Sense Activation, Gain a Score of [:param11]% 喔of the Current Score",
         "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
-        "zh_CN": "Sense 发动后，獲得目前分数 [:param11]% 的分数",
+        "zh_CN": "Sense 发动后，获得目前分数 [:param11]% 的分数",
     },
     "公演開始時、P.ゲージが[:param11]上昇": {
         "en": "When the Performance Starts, P. Gauge Increased by [:param11]",
