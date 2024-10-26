@@ -700,11 +700,10 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ของ Life Guard (สูงสุด {1}%)",
     },
     r"ストックされている全ての光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
-        "ja": "ストックされている全ての光1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
-        "en": "For each Stocked Light, Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
-        "zh_TW": "每儲藏 1 個光，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
-        "zh_CN": "每储藏 1 个光，获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
-        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของดาวแต่ละดวงสูงสุด {1} ดวง",
+        "en": "For each Stocked Light, Gain a Score of [:param11] Times the Total Status ({0} Lights at Most)",
+        "zh_TW": "每儲藏 1 個光，獲得總演技力 [:param11] 倍的分數 (最多 {0} 個)",
+        "zh_CN": "每储藏 1 个光，获得总演技力 [:param11] 倍的分数 (最多 {0} 个)",
+        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของดาวแต่ละดวงสูงสุด {0} ดวง",
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
         "ja": "ストックされている{sense_type}系の光「{sense_emoji}」1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
@@ -719,7 +718,12 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_TW": "每儲藏 1 個{sense_type}系光「{sense_emoji}」，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
         "zh_CN": "每储藏 1 个{sense_type}系光「{sense_emoji}」，额外获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
         "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) แต่ละดวงสูงสุด {1} ดวง",
-    }
+    },
+    r"プリンシパルゲージの上限を編成されている(?P<company>.+)アクターの人数×\[:param11\]上昇させる": {
+        "en": 'Principal Gauge Cap Increased by the Number of {company} Actors in Unit × [:param11]',
+        "zh_TW": "Principal Gauge 的上限值提升隊伍內{company}演員人數 × [:param11]",
+        "zh_CN": "Principal Gauge 的上限值提升队伍内{company}演员人数 × [:param11]",
+    },
 })
 
 def star_act_translator(description: str, message: MsgInt) -> str:
@@ -757,16 +761,26 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "没有效果 (所持的「光」得以保留)",
     },
     "センス発動後、追加で[:param11]のプリンシパルゲージを獲得": {
-        "en": "Gain Additional [:param11] Principal Gauge After Sense Activation",
+        "en": "After Sense Activation, Gain Additional [:param11] Principal Gauge",
         "zh_TW": "Sense 發動後，額外獲得 [:param11] Principal Gauge",
         "zh_CN": "Sense 发动后，额外获得 [:param11] Principal Gauge",
         "th": "ได้รับ Principal gauge เพิ่มขึ้น [:param11] หลังจากเปิดใช้งานเซนส์",
     },
     "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
-        "en": "Increase Principal Gauge Cap by [:param11] After Sense Activation",
-        "zh_TW": "Sense 發動後，Principal Gauge 的上限提升 [:param11]",
-        "zh_CN": "Sense 发动后，Principal Gauge 的上限提升 [:param11]",
+        "en": "After Sense Activation, Increase Principal Gauge Cap by [:param11]",
+        "zh_TW": "Sense 發動後，Principal Gauge 的上限值提升 [:param11]",
+        "zh_CN": "Sense 发动后，Principal Gauge 的上限值提升 [:param11]",
         "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น [:param11]",
+    },
+    "センス発動後、追加で獲得しているプリンシパルゲージ[:param11]%を獲得": {
+        "en": "After Sense Activation, Additionally Gain [:param11]% of the Amount of Gained Principal Gauge",
+        "zh_TW": "Sense 發動後，額外獲得已獲得的 Principal Gauge 的 [:param11]%",
+        "zh_CN": "Sense 发动后，额外获得已获得的 Principal Gauge 的 [:param11]%",
+    },
+    "センス発動後、現在のプリンシパルゲージ[:param11]%分のプリンシパルゲージを追加で獲得する": {
+        "en": "After Sense Activation, Gain Additional Principal Gauge of [:param11]% of the Current Principal Gauge",
+        "zh_TW": "Sense 發動後，額外獲得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
+        "zh_CN": "Sense 发动后，额外获得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
     },
     "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
         "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
@@ -828,6 +842,13 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
 
 
 def sense_translator(description: str, message: MsgInt) -> str:
+    import re
+    # remove size tag
+    description = re.sub(
+        r"<size=\d+[%％]?>(.+?)<\/size>",
+        r"\1",
+        description
+    )
     return "／".join([
         single_sense_translator(part, message)
     for part in description.strip().split("／")])
@@ -919,8 +940,14 @@ bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
     },
     r"(?P<sense_type>.{2})の光追加": {
         "ja": "{sense_type}の光「{sense_emoji}」追加",
-        "en": "Additional {sense_type} ({sense_emoji}) Light",
+        "en": "Additional {sense_type} Light ({sense_emoji})",
         "zh": "追加{sense_type}系光「{sense_emoji}」",
+    },
+    r"公演開始時に(?P<sense_type>.{2})の光を獲得": {
+        "ja": "公演開始時に{sense_type}の光「{sense_emoji}」を獲得",
+        "en": "When the Performance Starts, Gain {sense_type} Light ({sense_emoji})",
+        "zh_TW": "公演開始時，獲得{sense_type}系光「{sense_emoji}」",
+        "zh_CN": "公演开始时，获得{sense_type}系光「{sense_emoji}」",
     },
 })
 
@@ -995,8 +1022,8 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
     },
     "公演開始時、Pゲージの上限が[:param11]上昇": {
         "en": "When the Performance Starts, P. Gauge Cap Increased by [:param11]",
-        "zh_TW": "公演開始時，P. Gauge 的上限提升 [:param11]",
-        "zh_CN": "公演开始时，P. Gauge 的上限提升 [:param11]",
+        "zh_TW": "公演開始時，P. Gauge 的上限值提升 [:param11]",
+        "zh_CN": "公演开始时，P. Gauge 的上限值提升 [:param11]",
         "th": "เพิ่มขีดจำกัดของ P. Gauge เป็น [:param11]",
     },
     "センスを発動しなくなるが、自身の演技力が2倍": {
@@ -1116,8 +1143,8 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
     },
     r"プリンシパルゲージの上限を(\d+)上昇": {
         "en": "Principal Gauge Cap Increased by {}",
-        "zh_TW": "Principal Gauge 的上限提升 {}",
-        "zh_CN": "Principal Gauge 的上限提升 {}",
+        "zh_TW": "Principal Gauge 的上限值提升 {}",
+        "zh_CN": "Principal Gauge 的上限值提升 {}",
         "th": "เมื่อเริ่มเพลงปริมาณ Principal gauge สูงสุดจะเพิ่มขึ้น {}",
     },
     r"センスによるP.ゲージの獲得量が\[:param11\][%％]UP": {
