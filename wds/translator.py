@@ -976,22 +976,22 @@ def sense_translator(description: str, message: MsgInt) -> str:
     for part in description.strip().split("／")])
 
 single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_sense_translator", {}, {
-    "「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(が?)(\d+)[%％]上昇": {
+    r"「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(が?)(\d+)[%％]上昇": {
         "en": 'Category "{0}" {status} Increased by {2}%, {status2} Increased by {5}%',
         "zh_TW": "「{0}」分類的{status}提升 {2}%・{status2}提升 {5}%",
         "zh_CN": "「{0}」分类的{status}提升 {2}%・{status2}提升 {5}%",
     },
-    "「(.+?)」カテゴリの(?P<status>.+?)(が?)(\d+)[%％]上昇": {
+    r"「(.+?)」カテゴリの(?P<status>.+?)(が?)(\d+)[%％]上昇": {
         "en": 'Category "{0}" {status} Increased by {3}%',
         "zh_TW": "「{0}」分類的{status}提升 {3}%",
         "zh_CN": "「{0}」分类的{status}提升 {3}%",
     },
-    "「(.+?)」カテゴリを持つアクターの数に応じて初期プリンシパルゲージが(\d+)上昇": {
+    r"「(.+?)」カテゴリを持つアクターの数に応じて初期プリンシパルゲージが(\d+)上昇": {
         "en": 'Initial Principal Gauge Increased by {1} for each actor having Category "{0}"',
         "zh_TW": "根據持有「{0}」分類的演員數量，初始 Principal Gauge 各提升 {1}",
         "zh_CN": "根据持有「{0}」分类的演员数量，初始 Principal Gauge 各提升 {1}",
     },
-    "「(.+?)」カテゴリのCTを(\d+)秒短縮する": {
+    r"「(.+?)」カテゴリのCTを(\d+)秒短縮する": {
         "en": 'Category "{0}" CT Reduced by {1}s',
         "zh_TW": "「{0}」分類的 CT 縮短 {1} 秒",
         "zh_CN": "「{0}」分类的 CT 缩短 {1} 秒",
@@ -1095,7 +1095,7 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
         "zh_CN": "由{company}演员装备",
         "th": "นักแสดง {company} เท่านั้น",
     },
-    "<color=#(.{6})>(?P<attribute>.)属性<\/color>のアクターが装備": {
+    r"<color=#(.{6})>(?P<attribute>.)属性<\/color>のアクターが装備": {
         "ja": "{attribute_emoji} {attribute}属性のアクターが装備",
         "en": "Equipped by an Actor of {attribute_emoji} {attribute} Attribute",
         "zh_TW": "由 {attribute_emoji} {attribute}屬性演員裝備",
@@ -1109,7 +1109,7 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
         "zh_CN": "由 {attribute_emoji} {attribute}属性演员装备",
         "th": "นักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เท่านั้น",
     },
-    "<color=#(.{6})>(?P<attribute>.)属性<\/color>の(?P<actor>.+)が装備": {
+    r"<color=#(.{6})>(?P<attribute>.)属性<\/color>の(?P<actor>.+)が装備": {
         "ja": "{attribute_emoji} {attribute}属性の{actor}が装備",
         "en": "Equipped by {actor} of {attribute_emoji} {attribute} Attribute",
         "zh_TW": "由 {attribute_emoji} {attribute}屬性{actor}裝備",
@@ -1192,7 +1192,7 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
     },
 }, {
     r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]([%％])上昇": {
-        "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]{0}上昇",
+        "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]{1}上昇",
         "en": "Total Status of Actors with {attribute_emoji} {attribute} Attribute Increased by [:param11]%",
         "zh_TW": "{attribute_emoji} {attribute}屬性演員的演技力提升[:param11]%",
         "zh_CN": "{attribute_emoji} {attribute}属性演员的演技力提升[:param11]%",
