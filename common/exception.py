@@ -116,7 +116,7 @@ class FileSizeExceededException(CustomException):
         else:
             msg = "{} of the requested file(s) {} too large to be sent to this server.".format(count, "are" if count > 1 else "is")
         if guild is not ...:
-            from discord_utility import guild_filesize_limit
+            from basic_utility import guild_filesize_limit
             msg += " Maximum file size: {} MB".format(guild_filesize_limit(guild) >> 20)
         super().__init__(msg)
 
@@ -133,6 +133,17 @@ class HTTPException(CustomException):
     """
     def __init__(self, response_code):
         super().__init__("Error fetching data. Response code: {}".format(response_code))
+
+class InvalidArgumentException(CustomException):
+    """
+    Invalid argument specified.
+    """
+    def __init__(self):
+        super().__init__("Invalid argument specified.")
+
+class InvalidPayloadException(CustomException):
+    def __init__(self, lines):
+        super().__init__("\n".join(lines))
 
 class MasterDatabaseDownloadException(CustomException):
     """
@@ -161,19 +172,19 @@ class PermissionDeniedException(CustomException):
         else:
             super().__init__("Permission Denied. Required Permission: {}".format(perm))
 
-class PlayerNotFoundException(CustomException):
-    """
-    The specified player is not found.
-    """
-    def __init__(self):
-        super().__init__("The specified player is not found.")
-
 class RankNotFoundException(CustomException):
     """
     The specified rank is not found.
     """
     def __init__(self):
         super().__init__("The specified rank is not found.")
+
+class ReadonlyUserException(CustomException):
+    """
+    Other users can only perform read-only operations.
+    """
+    def __init__(self):
+        super().__init__("Other users can only perform read-only operations.")
 
 class SongDifficultyNotFoundException(CustomException):
     """
@@ -221,6 +232,13 @@ class UnreleasedContentException(CustomException):
     """
     def __init__(self):
         super().__init__("Unreleased Contents are Hidden in this Channel.")
+
+class UserNotFoundException(CustomException):
+    """
+    The specified user is not found.
+    """
+    def __init__(self):
+        super().__init__("The specified user is not found.")
 
 class VersionHashNotFoundException(CustomException):
     """

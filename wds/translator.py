@@ -246,6 +246,54 @@ actor_translator = regex_lookup_translator_wrapper("actor_translator", {
         "ko": "토와",
         "th": "โทวะ",
     },
+
+    "千歌": {
+        "en": "Chika",
+        "ko": "치카",
+        "th": "จิกะ",
+    },
+    "梨子": {
+        "en": "Riko",
+        "ko": "리코",
+        "th": "ริโกะ",
+    },
+    "果南": {
+        "en": "Kanan",
+        "ko": "카난",
+        "th": "คานัน",
+    },
+    "ダイヤ": {
+        "en": "Dia",
+        "zh": "黛雅",
+        "ko": "다이아",
+        "th": "ไดยะ",
+    },
+    "曜": {
+        "en": "You",
+        "ko": "요우",
+        "th": "โย",
+    },
+    "善子": {
+        "en": "Yoshiko",
+        "ko": "요시코",
+        "th": "โยชิโกะ",
+    },
+    "花丸": {
+        "en": "Hanamaru",
+        "ko": "하나마루",
+        "th": "ฮานะมารุ",
+    },
+    "鞠莉": {
+        "en": "Mari",
+        "ko": "마리",
+        "th": "มาริ",
+    },
+    "ルビィ": {
+        "en": "Ruby",
+        "zh": "露比",
+        "ko": "루비",
+        "th": "รูบี้",
+    },
 })
 
 actor_full_translator = regex_lookup_translator_wrapper("actor_full_translator", {
@@ -388,6 +436,62 @@ actor_full_translator = regex_lookup_translator_wrapper("actor_full_translator",
         "ko": "모토스 토와",
         "th": "โมโตสึ โทวะ",
     },
+
+    "高海千歌": {
+        "en": "Chika Takami",
+        "ko": "타카미 치카",
+        "th": "ทาคามิ จิกะ",
+    },
+    "桜内梨子": {
+        "en": "Riko Sakurauchi",
+        "zh_TW": "櫻內梨子",
+        "zh_CN": "樱内梨子",
+        "ko": "사쿠라우치 리코",
+        "th": "ซากุระอุจิ ริโกะ",
+    },
+    "松浦果南": {
+        "en": "Kanan Matsuura",
+        "ko": "마츠우라 카난",
+        "th": "มัตซึอุระ คานัน",
+    },
+    "黒澤ダイヤ": {
+        "en": "Dia Kurosawa",
+        "zh_TW": "黑澤黛雅",
+        "zh_CN": "黑泽黛雅",
+        "ko": "쿠로사와 다이아",
+        "th": "คุโรซาว่า ไดยะ",
+    },
+    "渡辺曜": {
+        "en": "You Watanabe",
+        "zh_TW": "渡邊曜",
+        "zh_CN": "渡边曜",
+        "ko": "쿠로사와 요우",
+        "th": "วาตานาเบะ โย",
+    },
+    "津島善子": {
+        "en": "Yoshiko Tsushima",
+        "zh_CN": "津岛善子",
+        "ko": "츠시마 요시코",
+        "th": "ซึชิมะ โยชิโกะ",
+    },
+    "国木田花丸": {
+        "en": "Hanamaru Kunikida",
+        "zh_TW": "國木田花丸",
+        "ko": "쿠니키타 하나마루",
+        "th": "คุนิคิดะ ฮานามารุ",
+    },
+    "小原鞠莉": {
+        "en": "Mari Ohara",
+        "ko": "오하라 마리",
+        "th": "โอฮาระ มาริ",
+    },
+    "黒澤ルビィ": {
+        "en": "Ruby Kurosawa",
+        "zh_TW": "黑澤露比",
+        "zh_CN": "黑泽露比",
+        "ko": "쿠로사와 루비",
+        "th": "คุโรซาว่า รูบี้",
+    },
 })
 
 company_translator = regex_lookup_translator_wrapper("company_translator", {
@@ -417,6 +521,12 @@ company_translator = regex_lookup_translator_wrapper("company_translator", {
         "ja": "劇団電姫",
         "*": "Gekidan Denki",
     },
+    "ラブライブサンシャイン": {
+        "ja": "ラブライブサンシャイン",
+        "ko": "러브 라이브 선샤인",
+        "th": "เลิฟไลฟ์ ซันไชน์",
+        "*": "LoveLive Sunshine",
+    }
 })
 
 sense_type_translator = regex_lookup_translator_wrapper("sense_type_translator", {
@@ -699,6 +809,12 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
         "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ของ Life Guard (สูงสุด {1}%)",
     },
+    r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
+        "en": "For each Attribute there is in the Unit, Score Gain is Increased by {0}% (+{1}% at Most)",
+        "zh_TW": "每 1 個編成的屬性能使分數獲得量增加{0}%（最多 +{1}%）",
+        "zh_CN": "每 1 个编成的属性能使分数获得量增加{0}%（最多 +{1}%）",
+        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
+    },
     r"ストックされている全ての光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
         "en": "For each Stocked Light, Gain a Score of [:param11] Times the Total Status ({0} Lights at Most)",
         "zh_TW": "每儲藏 1 個光，獲得總演技力 [:param11] 倍的分數 (最多 {0} 個)",
@@ -825,6 +941,12 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
         "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ของ Life Guard (สูงสุด {1}%)",
     },
+    r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
+        "en": "For each Attribute there is in the Unit, Score Gain is Increased by {0}% (+{1}% at Most)",
+        "zh_TW": "每 1 個編成的屬性能使分數獲得量增加{0}%（最多 +{1}%）",
+        "zh_CN": "每 1 个编成的属性能使分数获得量增加{0}%（最多 +{1}%）",
+        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
+    },
     r"センス発動直後、自身の(?P<status>.+)の\[:param11\]倍のスコアを獲得": {
         "en": "Right After Sense Activation, Gain a Score of [:param11] Times the Actor's own {status}",
         "zh_TW": "Sense 發動後，獲得自身{status} [:param11] 倍的分數",
@@ -907,7 +1029,13 @@ bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
         "en": "Base Score Increased by {}%",
         "zh_TW": "基礎分數提升 {}%",
         "zh_CN": "基础分数提升 {}%",
-        "th": "ความสามารถพื้นฐานเพิ่มขึ้น {}%",
+        "th": "คะแนนพื้นฐานเพิ่มขึ้น {}%",
+    },
+    r"基礎ステータスの(?P<status>.+)が(\d+)上昇": {
+        "en": "Base {status} Increased by {1}",
+        "zh_TW": "基礎{status}提升 {1}",
+        "zh_CN": "基础{status}提升 {1}",
+        "th": "สถานะ{status}พื้นฐานเพิ่มขึ้น {1}",
     },
     r"初期ライフが(\d+)上昇": {
         "en": "Initial Life Increased by {}",
@@ -974,6 +1102,13 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
         "zh_CN": "由 {attribute_emoji} {attribute}属性演员装备",
         "th": "นักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เท่านั้น",
     },
+    "(?P<attribute>.)属性のアクターが装備": {
+        "ja": "{attribute_emoji} {attribute}属性のアクターが装備",
+        "en": "Equipped by an Actor of {attribute_emoji} {attribute} Attribute",
+        "zh_TW": "由 {attribute_emoji} {attribute}屬性演員裝備",
+        "zh_CN": "由 {attribute_emoji} {attribute}属性演员装备",
+        "th": "นักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เท่านั้น",
+    },
     "<color=#(.{6})>(?P<attribute>.)属性<\/color>の(?P<actor>.+)が装備": {
         "ja": "{attribute_emoji} {attribute}属性の{actor}が装備",
         "en": "Equipped by {actor} of {attribute_emoji} {attribute} Attribute",
@@ -997,7 +1132,7 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
 
 poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_translator", {
     "センス発動直後、現在のスコアの[:param11]%のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param11]% 喔of the Current Score",
+        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Current Score",
         "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
         "zh_CN": "Sense 发动后，获得目前分数 [:param11]% 的分数",
         "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11]%",
@@ -1006,7 +1141,7 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "en": "When the Performance Starts, P. Gauge Increased by [:param11]",
         "zh_TW": "公演開始時，P. Gauge 提升 [:param11]",
         "zh_CN": "公演开始时，P. Gauge 提升 [:param11]",
-        "th": "ในช่วงเริ่มเพลง เพิ่มขีดจำกัดของ Principal gauge จะเพิ่มขึ้น [:param11]",
+        "th": "ในช่วงเริ่มเพลงเพิ่มขีดจำกัดของ Principal gauge จะเพิ่มขึ้น [:param11]",
     },
     "センス発動直後、ライフを[:param11]回復": {
         "en": "Right After Sense Activation, Life Value Recovered by [:param11]",
@@ -1024,13 +1159,19 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "en": "When the Performance Starts, P. Gauge Cap Increased by [:param11]",
         "zh_TW": "公演開始時，P. Gauge 的上限值提升 [:param11]",
         "zh_CN": "公演开始时，P. Gauge 的上限值提升 [:param11]",
+        "th": "เมื่อเริ่มเพลงเพิ่มขีดจำกัดของ P. Gauge เป็น [:param11]",
+    },
+    "P.ゲージの上限が[:param11]上昇": {
+        "en": "P. Gauge Cap Increased by [:param11]",
+        "zh_TW": "P. Gauge 的上限值提升 [:param11]",
+        "zh_CN": "P. Gauge 的上限值提升 [:param11]",
         "th": "เพิ่มขีดจำกัดของ P. Gauge เป็น [:param11]",
     },
     "センスを発動しなくなるが、自身の演技力が2倍": {
         "en": 'Sense can no Longer Activate, but one\'s own Total Status doubled',
         "zh_TW": "Sense 無法發動，但自身演技力 2 倍",
         "zh_CN": "Sense 无法发动，但自身演技力 2 倍",
-        "th": "เซนส์จะไม่ถูกเปิดใช้งาน แต่ความสามารถการแสดงจะเพิ่มเป็น 2 เท่า",
+        "th": "เซนส์จะไม่ถูกเปิดใช้งานแต่ความสามารถการแสดงจะเพิ่มเป็น 2 เท่า",
     },
     "センス発動時、SP光を追加で付与": {
         "en": 'When Sense Activates, Gain an Additional SP Light',
@@ -1050,8 +1191,8 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "th": "เมื่อเริ่มเพลงจะได้ Life Guard [:param11] ครั้ง",
     },
 }, {
-    r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]%上昇": {
-        "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]%上昇",
+    r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]([%％])上昇": {
+        "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]{0}上昇",
         "en": "Total Status of Actors with {attribute_emoji} {attribute} Attribute Increased by [:param11]%",
         "zh_TW": "{attribute_emoji} {attribute}屬性演員的演技力提升[:param11]%",
         "zh_CN": "{attribute_emoji} {attribute}属性演员的演技力提升[:param11]%",
@@ -1184,7 +1325,7 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
         "en": "Base Score Increased by [:param1]%",
         "zh_TW": "基礎分數提升 [:param1]%",
         "zh_CN": "基础分数提升 [:param1]%",
-        "th": "ความสามารถพื้นฐานเพิ่มขึ้น [:param1]%",
+        "th": "คะแนนพื้นฐานเพิ่มขึ้น [:param1]%",
     },
 }, {
     r"自身の(?P<status>.+?)が?\[:param1\]上昇": {
