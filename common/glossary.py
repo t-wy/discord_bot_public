@@ -5,7 +5,7 @@ import discord
 from locale_str import locale_str_ex as _
 
 class GrammarGlossary:
-    connector = _("{0} {1}", ja="{0}{1}")
+    connector = _("{0} {1}", ja="{0}{1}", zh="{0}{1}", th="{0}{1}")
 
 class GameNameGlossary:
     CGSS = _("CGSS", ja="デレステ")
