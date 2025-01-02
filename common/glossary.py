@@ -16,6 +16,15 @@ class GameNameGlossary:
     SFP = _("SFP", ja="シャニソン")
     WDS = _("WDS", ja="ユメステ")
 
+class GameColor:
+    CGSS = 0x848ac4
+    MLTD = 0xffc20b
+    PJSK = 0x39c5bb
+    RST = 0xee2288
+    SC = 0x8adfff
+    SFP = 0x8adfff
+    WDS = 0xee5f5f
+
 # categorized glossary lists
 
 class BasicGlossary:
@@ -102,7 +111,7 @@ class SongGlossary:
     base_consumption = _("Base Consumption", ja="ベース消費", zh_TW="基礎消耗", zh_CN="基础消耗")
 
     cover_song = _("Cover Song", ja="カバー楽曲", zh="翻唱歌曲")
-    """use 〇 / ○ / × as the value"""
+    """use ○ / × as the value"""
 
     duration = _("Duration", ja="長さ", zh_TW="長度", zh_CN="长度")
     """長さ\n\nrefer to the duration of the music file"""
