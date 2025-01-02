@@ -62,7 +62,7 @@ def regex_lookup_translator(
     else:
         import re
         from .const import sense_name_emote, sense_to_key
-        from .const import wds_type_emoji, wds_type_names
+        from .const import type_emotes, type_names
         for regex in regex_lookup_dict:
             match = re.fullmatch(regex, target)
             if match:
@@ -86,7 +86,7 @@ def regex_lookup_translator(
                         if "attribute" in temp_dict:
                             # handle emoji before translating text
                             if "{attribute_emoji}" in translator:
-                                temp_dict["attribute_emoji"] = wds_type_emoji[wds_type_names.index(temp_dict["attribute"])] if temp_dict["attribute"] in wds_type_names else "❓"
+                                temp_dict["attribute_emoji"] = type_emotes[type_names.index(temp_dict["attribute"])] if temp_dict["attribute"] in type_names else "❓"
                             temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locales)
@@ -807,7 +807,7 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "en": "Score Gain is Increased by {0}% for each Attached Life Guard (+{1}% at Most)",
         "zh_TW": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ของ Life Guard (สูงสุด {1}%)",
+        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
     },
     r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Attribute there is in the Unit, Score Gain is Increased by {0}% (+{1}% at Most)",
@@ -939,7 +939,13 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": "For each Attached Life Guard, Score Gain is Increased by {0}% (+{1}% at Most)",
         "zh_TW": "附帶 Life Guard 每剩餘 1 次，分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "附带 Life Guard 每剩余 1 次，分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ของ Life Guard (สูงสุด {1}%)",
+        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
+    },
+    r"付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
+        "en": "Increase Principal Gauge Cap by {0} for each Attached Life Guard (+{1} at Most)",
+        "zh_TW": "附帶 Life Guard 每剩餘 1 次，Principal Gauge 的上限值提升{0}（最多 +{1}）",
+        "zh_CN": "附带 Life Guard 每剩余 1 次，Principal Gauge 的上限值提升{0}（最多 +{1}）",
+        "th": "Principal gauge สูงสุดจะเพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
     },
     r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Attribute there is in the Unit, Score Gain is Increased by {0}% (+{1}% at Most)",
@@ -1135,7 +1141,13 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Current Score",
         "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
         "zh_CN": "Sense 发动后，获得目前分数 [:param11]% 的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11]%",
+        "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11]% ของคะแนนปัจจุบัน",
+    },
+    "センス発動直後、その時のスコアの[:param11]％のスコアを獲得": {
+        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Score at That Moment",
+        "zh_TW": "Sense 發動後，獲得當時分數 [:param11]% 的分數",
+        "zh_CN": "Sense 发动后，获得当时分数 [:param11]% 的分数",
+        "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
     },
     "公演開始時、P.ゲージが[:param11]上昇": {
         "en": "When the Performance Starts, P. Gauge Increased by [:param11]",
