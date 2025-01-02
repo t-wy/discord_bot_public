@@ -1,10 +1,12 @@
 """
 Current List of Exceptions. Can be translated.
-This file is currently not safe for hot reloading (as CustomException class may be used globally).
 """
 
-class CustomException(Exception):
-    pass
+if "CustomException" in globals(): # don't define the class again if it is being hot reloaded
+    CustomException = globals()['CustomException'] # nop, just to fool linter
+else:
+    class CustomException(Exception):
+        pass
 
 class APIFailException(CustomException):
     """
@@ -81,6 +83,13 @@ class DataUnavailableException(CustomException):
     """
     def __init__(self):
         super().__init__("The requested data is not available.")
+
+class DataNotExistException(CustomException):
+    """
+    There are no such entry.
+    """
+    def __init__(self):
+        super().__init__("There is no such entry.")
 
 class EventNotFoundException(CustomException):
     """
