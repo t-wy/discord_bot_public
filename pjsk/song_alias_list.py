@@ -22,6 +22,9 @@ song_alias_list: Dict[int, List[str]] = {
     132: [ # 「１」
         "1"
     ],
+    187: [ # ロウワー
+        "Lower", # EN name: Lower one's eyes (Lost One's Weeping steal the best match)
+    ],
     193: [ # ワールドワイドワンダー
         "World Wide Wonder", # as Worldwide is a single word in Japanese
     ],
