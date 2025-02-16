@@ -1,6 +1,7 @@
 # Put translated FULL name here if it is not the best match
 # We have variant character (異[体體]字) matching, so probably need not handle CJK variants (i.e. Japanese Kanji / Korean Hanja / Trad. Chi. / Simp. Chi.)
 # Take care of katakana songs which EN version is not yet released.
+# "of" reversal may be considered if the Japanese title appears like "AのB" or compound noun "AB" but is translated as "B of A" in EN version (not for JP song with it's original title already in English)
 # Reload pjsk.song after reload this file to refresh the cache if needed
 from typing import *
 song_alias_list: Dict[int, List[str]] = {
@@ -15,21 +16,50 @@ song_alias_list: Dict[int, List[str]] = {
         "世界第一的公主殿下", # Supercell Album Taiwan Title
         "世界屬於我", # Supercell Album China Official Title
     ],
+    49: [ # 初音ミクの消失 (THE END OF HATSUNE MIKU)
+        "DEAD END" # as in the subtitle of "初音ミクの消失 -DEAD END-"
+        "Hatsune Miku's end", # processive noun "of" reversal
+        "The Disappearance of Hatsune Miku", # alternative title
+        "Hatsune Miku's Disappearance", # processive noun "of" reversal
+    ],
     74: [ # 独りんぼエンヴィー
         "孑然妒火",
         "充滿嫉妒的一人捉迷藏",
     ],
-    132: [ # 「１」
+    75: [ # ウミユリ海底譚 (Tale of the Deep-sea Lily)
+        "Deep-sea Lily Tale", # compound noun "of" reversal
+    ],
+    131: [ # 初音ミクの激唱 (The Intense Voice of Hatsune Miku)
+        "Hatsune Miku's Intense Voice", # processive noun "of" reversal
+    ],
+    132: [ # 「１」 (One)
         "1"
     ],
-    187: [ # ロウワー
+    173: [ # 流星のパルス (Pulse of the Meteor)
+        "Meteor Pulse", # compound noun "of" reversal
+    ],
+    178: [ # にっこり^^調査隊のテーマ (Theme of Niccori Survey Team)
+        "Niccori Survey Team Theme", # compound noun "of" reversal
+        "Niccori", # short match
+        "Nikkori", # short match
+    ],
+    187: [ # ロウワー (Lower)
         "Lower", # EN name: Lower one's eyes (Lost One's Weeping steal the best match)
+    ],
+    190: [ # 悪ノ娘 (The Daughter of Evil)
+        "The Evil Daughter", # processive noun "of" reversal
+    ],
+    191: [ # 悪ノ召使 (The Servant of Evil)
+        "The Evil Servant", # processive noun "of" reversal
+    ],
+    192: [ # 去り人達のワルツ (Waltz of the Deceased)
+        "the Deceased's Waltz", # processive noun "of" reversal
     ],
     193: [ # ワールドワイドワンダー
         "World Wide Wonder", # as Worldwide is a single word in Japanese
     ],
     194: [ # 妄想感傷代償連盟
-        "Delusion Sentiment Compensation Federation",
+        "Delusion Sentiment Compensation Federation", # Only DSCF in EN Server
     ],
     198: [ # グッバイ宣言
         "再見宣言",
@@ -56,11 +86,25 @@ song_alias_list: Dict[int, List[str]] = {
     275: [ # パラジクロロベンゼン
         "Benzene", # Paradichlorobenzene is too long that Benzene get matched to Bad End Night (BEN)
     ],
+    285: [ # ÅMARA(大未来電脳)
+        "AMARA", # without bracket or character modifiers
+        "大未来電脳", # only bracket contents
+    ],
     290: [ # どんな結末がお望みだい？ (Removed)
         "どんな結末がお望みだい？",
         "どんなけつまつがおのぞみだい?",
         "Donna Ketsu Matu ga Onozomidai?",
         "What Sort of Ending Are You Wishing For?"
+    ],
+    347: [ # 円尾坂の仕立屋 (The Tailor of Enbizaka)
+        "The Enbizaka's Tailor", # processive noun "of" reversal
+    ],
+    348: [ # 悪徳のジャッジメント (Judgment of Corruption)
+        "悪徳のJudgment",
+        "Corruption's Judgment", # processive noun "of" reversal
+        "Judgement of Corruption", # Accepted spelling in British English
+        "悪徳のJudgement", # ^
+        "Corruption's Judgement", # ^
     ],
     354: [ # セツナトリップ
         "剎那旅程",
@@ -68,6 +112,9 @@ song_alias_list: Dict[int, List[str]] = {
     365: [ # 恋は戦争
         "戀愛是場戰爭", # Supercell Album Taiwan Title
         "愛是戰爭", # Supercell Album China Official Title
+    ],
+    388: [ # 初音ミクの激唱 (FULL) (The Intense Voice of Hatsune Miku (FULL))
+        "Hatsune Miku's Intense Voice (FULL)",
     ],
     391: [ # キュートなカノジョ
         "Cute Girlfriend",
@@ -170,8 +217,14 @@ song_alias_list: Dict[int, List[str]] = {
     523: [ # きみとぼくのレゾナンス
         "きみとぼくのResonance",
     ],
+    525: [ # アンテナ39
+        "Antenna 39",
+    ],
     529: [ # カルチャ
         "Culture",
+    ],
+    530: [ # キャットフード
+        "Cat Food",
     ],
     531: [ # メズマライザー
         "Mesmeriser",
@@ -179,6 +232,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     532: [ # レイヤーノート
         "Layer Note",
+    ],
+    534: [ # ワールド・ランプシェード [reunion]
+        "reunion", # the only English substring
+        "World Lampshade [reunion]",
     ],
     541: [ # メインキャラクター
         "Main Character",
@@ -191,5 +248,37 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     553: [ # パリィ
         "Parry",
-    ]
+    ],
+    555: [ # フュージョン
+        "Fusion",
+    ],
+    561: [ # プロトディスコ 
+        "Proto Disco",
+    ],
+    562: [ # アンヘル
+        "Ángel", # Spanish
+        "Angel",
+    ],
+    566: [ # パンダヒーロー
+        "Panda Hero",
+    ],
+    569: [ # シークレット・シーカー
+        "Secret Seeker",
+    ],
+    576: [ # ファイアダンス
+        "Fire Dance",
+    ],
+    577: [ # スマイル*シンフォニー
+        "Smile* Symphony",
+    ],
+    578: [ # ハローセカイ
+        "Hello Sekai",
+    ],
+    582: [ # アンチユー
+        "Antiyou",
+    ],
+    587: [ # ルルブ
+        "Rule Book",
+        "法則書", # as appearing in Lyrics corr. to the song name
+    ],
 }
