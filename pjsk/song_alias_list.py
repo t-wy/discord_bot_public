@@ -17,7 +17,7 @@ song_alias_list: Dict[int, List[str]] = {
         "世界屬於我", # Supercell Album China Official Title
     ],
     49: [ # 初音ミクの消失 (THE END OF HATSUNE MIKU)
-        "DEAD END" # as in the subtitle of "初音ミクの消失 -DEAD END-"
+        "DEAD END", # as in the subtitle of "初音ミクの消失 -DEAD END-"
         "Hatsune Miku's end", # processive noun "of" reversal
         "The Disappearance of Hatsune Miku", # alternative title
         "Hatsune Miku's Disappearance", # processive noun "of" reversal
@@ -33,7 +33,7 @@ song_alias_list: Dict[int, List[str]] = {
         "Hatsune Miku's Intense Voice", # processive noun "of" reversal
     ],
     132: [ # 「１」 (One)
-        "1"
+        "1",
     ],
     173: [ # 流星のパルス (Pulse of the Meteor)
         "Meteor Pulse", # compound noun "of" reversal
