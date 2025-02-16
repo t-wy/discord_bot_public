@@ -595,6 +595,11 @@ status_translator = regex_lookup_translator_wrapper("status_translator", {
         "zh": "演技力上限",
         "th": "ความสามารถการแสดงสูงสุด",
     },
+    "演技力の上限": {
+        "en": "Status Cap",
+        "zh": "演技力的上限",
+        "th": "ความสามารถการแสดงสูงสุด",
+    },
     "歌唱力": {
         "en": "Vocal Status",
         "th": "การร้องเพลง",
@@ -840,6 +845,11 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_TW": "Principal Gauge 的上限值提升隊伍內{company}演員人數 × [:param11]",
         "zh_CN": "Principal Gauge 的上限值提升队伍内{company}演员人数 × [:param11]",
     },
+    r"編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\1アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
+        "en": "The {status} and {status2} of each {company} Actor in the Unit Increased by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
+        "zh_TW": "{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {3}% (此效果可疊加)",
+        "zh_CN": "{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {3}% (此效果可叠加)",
+    },
 })
 
 def star_act_translator(description: str, message: MsgInt) -> str:
@@ -964,6 +974,11 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": 'When Sense Activates, Gain {1} Additional "{sense_type} Light(s){sense_emoji}"',
         "zh_TW": "Sense 發動時，額外獲得{1}個「{sense_type}系光{sense_emoji}」",
         "zh_CN": "Sense 发动时，额外获得{1}个「{sense_type}系光{sense_emoji}」",
+    },
+    r"センス発動時、編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\1アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
+        "en": "When Sense Activates, the {status} and {status2} of each {company} Actor in the Unit Increased by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
+        "zh_TW": "Sense 發動時，{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {3}% (此效果可疊加)",
+        "zh_CN": "Sense 發動時，{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {3}% (此效果可叠加)",
     },
 })
 
@@ -1137,12 +1152,6 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
 })
 
 poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_translator", {
-    "センス発動直後、現在のスコアの[:param11]%のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Current Score",
-        "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
-        "zh_CN": "Sense 发动后，获得目前分数 [:param11]% 的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11]% ของคะแนนปัจจุบัน",
-    },
     "センス発動直後、その時のスコアの[:param11]％のスコアを獲得": {
         "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Score at That Moment",
         "zh_TW": "Sense 發動後，獲得當時分數 [:param11]% 的分數",
@@ -1203,6 +1212,12 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "th": "เมื่อเริ่มเพลงจะได้ Life Guard [:param11] ครั้ง",
     },
 }, {
+    r"センス発動直後、現在のスコアの\[:param11\][%％]のスコアを獲得": {
+        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Current Score",
+        "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
+        "zh_CN": "Sense 发动后，获得目前分数 [:param11]% 的分数",
+        "th": "หลังจากเปิดใช้งานเซนส์จะได้รับคะแนน [:param11]% ของคะแนนปัจจุบัน",
+    },
     r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]([%％])上昇": {
         "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]{1}上昇",
         "en": "Total Status of Actors with {attribute_emoji} {attribute} Attribute Increased by [:param11]%",
@@ -1234,6 +1249,12 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_TW": "當隊伍只由{company}所屬演員組成時，全部演員的 {status} 額外提升[:param11]%",
         "zh_CN": "当队伍只由{company}所属演员组成时，全部演员的 {status} 额外提升[:param11]%",
         "th": "หากจัดทีมด้วย {company} เท่านั้น {status}ทุกคนจะเพิ่มขึ้น [:param11]%",
+    },
+    r"(?P<company>.+)に所属しているアクターのみで編成している場合、追加で(?P<status>.+?)が\[:param11\]％上昇": {
+        "en": "When the Unit only Consists of {company} Actors, {status} Increased Additionally by [:param11]%",
+        "zh_TW": "當隊伍只由{company}所屬演員組成時，{status} 額外提升[:param11]%",
+        "zh_CN": "当队伍只由{company}所属演员组成时，{status} 额外提升[:param11]%",
+        "th": "หากจัดทีมด้วย {company} เท่านั้น {status}จะเพิ่มขึ้น [:param11]%",
     },
     r"全アクターの演技力が\[:param11\][%％]上昇": {
         "en": "Total Status of All Actors Increased by [:param11]%",
@@ -1382,15 +1403,15 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
 })
 
 def full_poster_ability_translator(description: str, message: MsgInt) -> str:
-    if "　◆発動条件：" in description:
-        effect_text, condition_text = description.split("　◆発動条件：")
-        return poster_ability_translator(effect_text, message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
+    if "◆発動条件：" in description:
+        effect_text, condition_text = description.split("◆発動条件：")
+        return poster_ability_translator(effect_text.rstrip("　"), message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
     else:
         return poster_ability_translator(description, message)
 
 def full_accessory_effect_translator(description: str, message: MsgInt) -> str:
-    if "　◆発動条件：" in description:
-        effect_text, condition_text = description.split("　◆発動条件：")
-        return accessory_effect_translator(effect_text, message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
+    if "◆発動条件：" in description:
+        effect_text, condition_text = description.split("◆発動条件：")
+        return accessory_effect_translator(effect_text.rstrip("　"), message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
     else:
         return accessory_effect_translator(description, message)
