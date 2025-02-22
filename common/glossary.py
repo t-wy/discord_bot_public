@@ -6,6 +6,8 @@ from locale_str import locale_str_ex as _
 
 class GrammarGlossary:
     connector = _("{0} {1}", ja="{0}{1}", zh="{0}{1}", th="{0}{1}")
+    colon = _(": ", ja="：", zh="：")
+    tilde = _(" ~ ", ja="〜", zh="〜")
 
 class GameNameGlossary:
     CGSS = _("CGSS", ja="デレステ")
@@ -36,16 +38,16 @@ class CardGlossary:
     ability = _("Ability", ja="アビリティ", zh="能力")
     abilities = _("Abilit(y/ies)", ja="アビリティ", zh="能力")
     """allow plural"""
-    accessory_search = _("Accessory Search", ja="アクセサリー検索", zh_TW="飾品搜尋", zh_CN="饰品搜寻")
+    accessory_search = _("Accessory Search", ja="アクセサリー検索", zh_TW="飾品搜尋", zh_CN="饰品搜索")
     """used as embed title"""
     additional_ability = _("Additional Ability", ja="追加アビリティ", zh="追加能力")
     appearing_actors = _("Appearing Actors", ja="登場アクター", zh_TW="登場演員", zh_CN="登场演员")
     available_from = _("Available From", ja="登場日時", zh_TW="登場日期", zh_CN="登场日期")
-    card_search = _("Card Search", ja="カード検索", zh_TW="卡片搜尋", zh_CN="卡片搜寻")
+    card_search = _("Card Search", ja="カード検索", zh_TW="卡片搜尋", zh_CN="卡片搜索")
     """used as embed title"""
     leader_abilities = _("Leader Abilit(y/ies)", ja="リーダーアビリティ", zh_TW="隊長能力", zh_CN="队长能力")
     main_acquisition_method = _("Main Acquisition Method", ja="主な獲得条件", zh="主要取得方式")
-    poster_search = _("Poster Search", ja="ポスター検索", zh_TW="海報搜尋", zh_CN="海报搜寻")
+    poster_search = _("Poster Search", ja="ポスター検索", zh_TW="海報搜尋", zh_CN="海报搜索")
     """used as embed title"""
     pronunciation = _("Pronunciation", ja="読み方", zh_TW="讀法", zh_CN="读法")
     """check also SongGlossary.pronunciation"""
@@ -81,14 +83,14 @@ class PlayerGlossary:
     basic_info = _("Basic Info", ja="基本情報", zh_CN="基本情报")
     comment = _("Comment", ja="コメント", zh="留言")
     last_login = _("Last Login", ja="最終ログイン", zh="最近登入")
-    player_search = _("Player Search", ja="プレーヤー検索", zh_TW="玩家搜尋", zh_CN="玩家搜寻")
+    player_search = _("Player Search", ja="プレーヤー検索", zh_TW="玩家搜尋", zh_CN="玩家搜索")
     rank = _("Rank", ja="ランク", zh_TW="等級", zh_CN="等级")
     rate = _("Rate", ja="レート", zh_TW="Rate", zh_CN="Rate")
 
 class CircleGlossary:
     circle_comment = _("Circle Comment", ja="サークル説明", zh_TW="社團說明", zh_CN="社团说明")
     circle_info = _("Circle Info", ja="サークル情報", zh_TW="社團情報", zh_CN="社团情报")
-    circle_search = _("Circle Search", ja="サークル検索", zh_TW="社團搜尋", zh_CN="社团搜寻")
+    circle_search = _("Circle Search", ja="サークル検索", zh_TW="社團搜尋", zh_CN="社团搜索")
 
 class RankingGlossary:
     unit_details = _("Unit Details", ja="編成詳細", zh_TW="詳細編成", zh_CN="详细编成")
@@ -105,6 +107,9 @@ class ReleaseGlossary:
     "投稿日時"
 
 class SongGlossary:
+    artist = _("Artist", ja="アーティスト", zh="演出者")
+    """アーティスト\n\nrefer to the artist(s) featured in the song"""
+
     arrangement = _("Arrangement", ja="編曲", zh_TW="編曲", zh_CN="编曲", ko="편곡")
     """編曲\n\nrefer to the arranger(s) of the song"""
 
@@ -147,6 +152,10 @@ class SongGlossary:
     stated_duration = _("Stated Duration", ja="記載の長さ", zh_TW="標示長度", zh_CN="标示长度")
     """記載の長さ\n\nused when the data source provides some rounded value for the duration"""
 
+    target_score = _("Target Score", ja="目標スコア", zh_TW="目標分數", zh_CN="目标分数") 
+
+    reward_multiplier = _("Reward Multiplier", ja="報酬倍率", zh_TW="報酬倍率", zh_CN="报酬倍率") 
+
     unit = _("Unit", ja="ユニット", zh_TW="團體", zh_CN="团体")
 
 # game-specific glossary
@@ -160,3 +169,7 @@ class WDSGlossary:
 
 class RSTGlossary:
     maker = _("Chart Maker", ja="譜面メーカー", zh_TW="譜面製作器", zh_CN="谱面制作器")
+
+class SFPGlossary:
+    focus_camera = _("Focus Mode", ja="フォーカスモード")
+    song_parts = _("歌い分け", ja="歌い分け")

@@ -972,8 +972,8 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
     r"センス発動時、追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
         "ja": "センス発動時、追加で「{sense_type}の光{sense_emoji}」を{1}個獲得する",
         "en": 'When Sense Activates, Gain {1} Additional "{sense_type} Light(s){sense_emoji}"',
-        "zh_TW": "Sense 發動時，額外獲得{1}個「{sense_type}系光{sense_emoji}」",
-        "zh_CN": "Sense 发动时，额外获得{1}个「{sense_type}系光{sense_emoji}」",
+        "zh_TW": "Sense 發動時，額外獲得 {1} 個「{sense_type}系光{sense_emoji}」",
+        "zh_CN": "Sense 发动时，额外获得 {1} 个「{sense_type}系光{sense_emoji}」",
     },
     r"センス発動時、編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\1アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
         "en": "When Sense Activates, the {status} and {status2} of each {company} Actor in the Unit Increased by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
@@ -1237,6 +1237,12 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_TW": "公演開始時，給予 [:param11] 個 SP 光（效果僅於公演開始時發動 1 次）",
         "zh_CN": "公演开始时，给予 [:param11] 个 SP 光（效果仅于公演开始时发动 1 次）",
         "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
+    },
+    r"センス発動時、(?P<sense_type>.{2})系の光「<color=#.{6}>\*<\/color>」を追加で\[:param11\]個付与": {
+        "ja": "センス発動時、{sense_type}系の光「{sense_emoji}」を追加で[:param11]個付与",
+        "en": 'When Sense Activates, Gain [:param11] Additional "{sense_type} Light(s){sense_emoji}"',
+        "zh_TW": "Sense 發動時，獲得額外 [:param11] 個「{sense_type}系光{sense_emoji}」",
+        "zh_CN": "Sense 发动时，获得额外 [:param11] 个「{sense_type}系光{sense_emoji}」",
     },
     r"(?P<company>.+)に所属するアクターの演技力が\[:param11\][%％]上昇": {
         "en": "Total Status of {company} Actors Increased by [:param11]%",
