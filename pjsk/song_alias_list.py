@@ -17,6 +17,7 @@ song_alias_list: Dict[int, List[str]] = {
         "世界屬於我", # Supercell Album China Official Title
     ],
     49: [ # 初音ミクの消失 (THE END OF HATSUNE MIKU)
+        "初音ミクの消失 -DEAD END-", # don't let the full name loses similarity score
         "DEAD END", # as in the subtitle of "初音ミクの消失 -DEAD END-"
         "Hatsune Miku's end", # processive noun "of" reversal
         "The Disappearance of Hatsune Miku", # alternative title
