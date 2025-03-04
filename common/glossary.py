@@ -114,6 +114,9 @@ class SongGlossary:
     """編曲\n\nrefer to the arranger(s) of the song"""
 
     base_consumption = _("Base Consumption", ja="ベース消費", zh_TW="基礎消耗", zh_CN="基础消耗")
+    
+    chart_search = _("Chart Search", ja="譜面検索", zh_TW="譜面搜尋", zh_CN="谱面搜索")
+    """譜面検索\n\nused as embed title"""
 
     cover_song = _("Cover Song", ja="カバー楽曲", zh="翻唱歌曲")
     """use ○ / × as the value"""
@@ -121,14 +124,32 @@ class SongGlossary:
     duration = _("Duration", ja="長さ", zh_TW="長度", zh_CN="长度")
     """長さ\n\nrefer to the duration of the music file"""
 
+    difficulty = _("Difficulty", ja="難易度", zh_TW="難度", zh_CN="难度")
+    """難易度\n\nrefer to the difficulty name of the chart"""
+
+    duration_song = _("Duration (Song)", ja="長さ（楽曲）", zh_TW="長度（歌曲）", zh_CN="长度（歌曲）")
+    """長さ（楽曲）\n\nrefer to the duration of the music file, shown in song difficulty"""
+
+    duration_last_note = _("Duration (Last Note)", ja="長さ（最後のノート）", zh_TW="長度（最後的 Note）", zh_CN="长度（最后的 Note）")
+    """長さ（最後のノート）\n\nrefer to the time of the last note of the chart, shown in song difficulty"""
+
     efficient_songs = _("Efficient Songs", ja="効率曲", zh="效率曲")
-    menu_time = _("Menu Time", ja="曲間の時間", zh_TW="過場時間", zh_CN="过场时间")
+
+    event_p_coef = _("Event P Coef.", ja="イベントP係数", zh_TW="活動P係數", zh_CN="活动P系数")
+
+    live = _("Live", ja="ライブ", zh="公演")
+    """ライブ\n\nNaming of a specific entry with charts of different difficulties"""
 
     lyrics = _("Lyrics", ja="作詞", zh_TW="作詞", zh_CN="作词", ko="작사")
     """作詞\n\nrefer to the lyricist(s) of the song"""
 
+    menu_time = _("Menu Time", ja="曲間の時間", zh_TW="過場時間", zh_CN="过场时间")
+
     music = _("Music", ja="作曲", zh="作曲", ko="작곡")
     """作曲\n\nrefer to the composer(s) of the song"""
+
+    note_count = _("Note Count", ja="ノーツ数", zh_TW="Note 數", zh_CN="Note 数")
+    """ノーツ数"""
 
     original = _("Orig.", ja="原曲", zh="原曲", ko="원곡")
     """原曲\n\nrefer to the video URL to the song"""
@@ -148,6 +169,12 @@ class SongGlossary:
 
     song_info = _("Song Information", ja="楽曲情報", zh_TW="歌曲資訊", zh_CN="歌曲资讯")
     """楽曲情報"""
+
+    song_level = _("Song Lv.", ja="楽曲 Lv.", zh="歌曲 Lv.")
+    """楽曲 Lv.\n\nrefer to the difficulty level of the chart"""
+
+    song_name = _("Song Name", ja="曲名", zh="歌名")
+    """曲名\n\nrefer to the song name"""
 
     stated_duration = _("Stated Duration", ja="記載の長さ", zh_TW="標示長度", zh_CN="标示长度")
     """記載の長さ\n\nused when the data source provides some rounded value for the duration"""

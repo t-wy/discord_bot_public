@@ -1,6 +1,9 @@
 """
 Current List of Exceptions. Can be translated.
 """
+_no_unload_subclasses = True # Don't unload subclasses
+from locale_str import locale_str_ex as _ # use _ as translation wrapper
+from typing import *
 
 if "CustomException" in globals(): # don't define the class again if it is being hot reloaded
     CustomException = globals()['CustomException'] # nop, just to fool linter
@@ -97,6 +100,13 @@ class EventNotFoundException(CustomException):
     """
     def __init__(self):
         super().__init__("Event not found.")
+
+class EventNotInProgressException(CustomException):
+    """
+    Event not in progress.
+    """
+    def __init__(self):
+        super().__init__("Event not in progress.")
 
 class EventRankingModeNotExistException(CustomException):
     """
@@ -206,8 +216,25 @@ class SongNotFoundException(CustomException):
     """
     Song not found.
     """
+    def __init__(self, suggestions: Optional[List[str]] = None):
+        if suggestions is None:
+            super().__init__("Song not found.")
+        else:
+            char_count = 0
+            all_suggestions = []
+            for entry in suggestions:
+                if char_count + len(entry) > 2000:
+                    break
+                all_suggestions.append(entry)
+                char_count += len(entry) + 1
+            super().__init__("Song not found. Do you mean ...\n\n" + "\n".join(all_suggestions))
+
+class SongVocalNotFoundException(CustomException):
+    """
+    Song Vocal not found.
+    """
     def __init__(self):
-        super().__init__("Song not found.")
+        super().__init__("Song Vocal not found.")
 
 class TableNotFoundException(CustomException):
     """
