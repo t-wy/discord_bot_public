@@ -218,6 +218,7 @@ class locale:
     score_approx = _('approx_score', zh_TW="預測分數", zh_CN="预测分数", ja="想定スコア")
     search = _('search', zh_TW="搜尋", zh_CN="搜索", ja="検索")
     secsep = _('secsep', zh_TW="秒數分隔", zh_CN="秒数分隔")
+    size = _("size", zh_TW="尺寸", zh_CN="尺寸", ja="サイズ")
     show_character = _("show_character", zh_TW="顯示角色", zh_CN="显示角色")
     show_count = _('show_count', zh_TW="顯示數量", zh_CN="显示数量")
     show_distance = _("show_distance", zh_TW="顯示距離", zh_CN="显示距离")
@@ -243,10 +244,14 @@ class locale:
     zipped = _("zipped", zh_TW="壓縮", zh_CN="压缩", ja="圧縮")
 
 class gamename:
+    """
+    Used for command group name
+    For game name in outputs, check GameNameGlossary
+    """
     cgss = _("cgss", zh="cgss", ja="デレステ")
     mltd = _("mltd", zh="mltd", ja="ミリシタ")
     mobamas = _("mobamas", zh="cg走路工", ja="デレマス")
-    pjsk = _("pjsk", zh="pjsk", ja="プロセカ")
+    pjsk = _("pjsk", zh="pjsk", ja="プロセカ", ko="프로세카")
     pjsk_ = _("pjsk_", zh="pjsk_", ja="プロセカ_")
     rst = _("rst", zh="rst", ja="リステップ")
     rst_ = _("rst_", zh="rst_", ja="リステップ_")

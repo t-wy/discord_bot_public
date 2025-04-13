@@ -2,15 +2,15 @@ from msgint import MsgInt
 import discord
 from typing import *
 
-async def wds_efficient_song(message: MsgInt, unreleased: bool = False, ver="production"):
-    from .file import wds_master, wds_song_duration
+async def serve_efficient_song(message: MsgInt, unreleased: bool = False, ver="production"):
+    from .file import get_master, get_song_duration
     from .master_models import MusicMaster
     from common.rate_limiter import rate_limiter
     from basic_utility import progress_bar
     from common.glossary import SongGlossary
-    music_master: List[MusicMaster] = await wds_master("MusicMaster", as_array=True, ver=ver)
+    music_master: List[MusicMaster] = await get_master("MusicMaster", as_array=True, ver=ver)
     reply_message = await message.reply("Calculating... Please Wait...")
-    callback = rate_limiter(lambda index: reply_message.edit(content="Calculating Songs...\n" + progress_bar((index + 1) / len(music_master))))
+    callback = rate_limiter(lambda index: reply_message.edit(content="Calculating Songs...\n" + progress_bar((index + 1) / len(music_master), message.platform)))
     stamina_best = {}
     if not unreleased:
         from datetime import datetime
@@ -18,7 +18,7 @@ async def wds_efficient_song(message: MsgInt, unreleased: bool = False, ver="pro
     # O(n), with k unique elements
     for index, entry in enumerate(music_master):
         if (unreleased or current_time.timestamp() >= entry.releasedAt.timestamp()) and entry.id < 1000:
-            duration = await wds_song_duration(entry.id, ver=ver)
+            duration = await get_song_duration(entry.id, ver=ver)
             qualified = True
             if entry.staminaConsumption in stamina_best:
                 if duration >= stamina_best[entry.staminaConsumption][1]:

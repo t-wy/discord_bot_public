@@ -60,11 +60,14 @@ class CardNotFoundException(CustomException):
     """
     The specified card is not found.
     """
-    def __init__(self, category="card", card_name=None):
+    def __init__(self, category: str="card", card_name: Optional[str]=None, message: Optional[str]=None):
+        suffix = ""
+        if message is not None:
+            suffix = "\n\n" + message
         if card_name is None:
-            super().__init__("The specified {} is not found.".format(category.lower()))
+            super().__init__("The specified {} is not found.".format(category.lower()) + suffix)
         else:
-            super().__init__("The specified {} ({}) is not found.".format(category.lower(), card_name))
+            super().__init__("The specified {} ({}) is not found.".format(category.lower(), card_name) + suffix)
 
 class CircleNotFoundException(CustomException):
     """
@@ -122,6 +125,13 @@ class FileEncryptedException(CustomException):
     def __init__(self):
         super().__init__("The requested file is encrypted and the decrypt method is unknown.")
 
+class FileNotExistException(CustomException):
+    """
+    The requested file is not found.
+    """
+    def __init__(self):
+        super().__init__("The requested file is not found.")
+
 class FileSizeExceededException(CustomException):
     """
     The requested file is too large to be sent to this server.
@@ -157,11 +167,21 @@ class InvalidArgumentException(CustomException):
     """
     Invalid argument specified.
     """
-    def __init__(self):
-        super().__init__("Invalid argument specified.")
+    def __init__(self, message: Optional[str]=None):
+        if message is None:
+            super().__init__("Invalid argument specified.")
+        else:
+            super().__init__("Invalid argument specified.\n\n" + message)
+
+class InvalidPlayerIDException(CustomException):
+    """
+    Invalid Player ID specified.
+    """
+    def __init__(self, category: str="player"):
+        super().__init__(f"Invalid {category.title()} ID specified.")
 
 class InvalidPayloadException(CustomException):
-    def __init__(self, lines):
+    def __init__(self, lines: List[str]):
         super().__init__("\n".join(lines))
 
 class MasterDatabaseDownloadException(CustomException):
@@ -205,12 +225,21 @@ class ReadonlyUserException(CustomException):
     def __init__(self):
         super().__init__("Other users can only perform read-only operations.")
 
+class RoomNotFoundException(CustomException):
+    """
+    The specified room is not found.
+    """
+    def __init__(self):
+        super().__init__("The specified room is not found.")
+
 class SongDifficultyNotFoundException(CustomException):
     """
     The difficulty is not found for the song.
     """
-    def __init__(self):
-        super().__init__("The difficulty is not found for the song.")
+    def __init__(self, difficulty: Optional[str] = None, song_name: Optional[str] = None):
+        difficulty_text = "" if difficulty is None else f" ({difficulty})"
+        song_name_text = "" if song_name is None else f" ({song_name})"
+        super().__init__(f"The difficulty{difficulty_text} is not found for the song{song_name_text}.")
 
 class SongNotFoundException(CustomException):
     """
@@ -229,12 +258,19 @@ class SongNotFoundException(CustomException):
                 char_count += len(entry) + 1
             super().__init__("Song not found. Do you mean ...\n\n" + "\n".join(all_suggestions))
 
-class SongVocalNotFoundException(CustomException):
+class SongTrackNotFoundException(CustomException):
     """
-    Song Vocal not found.
+    Song Track not found.
     """
     def __init__(self):
-        super().__init__("Song Vocal not found.")
+        super().__init__("Song Track not found.")
+
+class StampNotFoundException(CustomException):
+    """
+    Stamp not found.
+    """
+    def __init__(self):
+        super().__init__("Stamp not found.")
 
 class TableNotFoundException(CustomException):
     """
@@ -267,7 +303,7 @@ class UnreleasedContentException(CustomException):
     Unreleased Contents are Hidden in this Channel.
     """
     def __init__(self):
-        super().__init__("Unreleased Contents are Hidden in this Channel.")
+        super().__init__("Unreleased Contents are Hidden in this Channel.\n(Consider using the command without the trailing '_' in the game name if the bot is installed in a server.)")
 
 class UserNotFoundException(CustomException):
     """

@@ -7,12 +7,18 @@ from locale_str import locale_str_ex as _
 class GrammarGlossary:
     connector = _("{0} {1}", ja="{0}{1}", zh="{0}{1}", th="{0}{1}")
     colon = _(": ", ja="：", zh="：")
+    comma = _(", ", ja="、", zh="，")
     tilde = _(" ~ ", ja="〜", zh="〜")
+    bracket = _(" ({})", ja="（{}）", zh="（{}）")
 
 class GameNameGlossary:
+    """
+    Used for game name in outputs
+    For command group name, check command_text.gamename
+    """
     CGSS = _("CGSS", ja="デレステ")
     MLTD = _("MLTD", ja="ミリシタ")
-    PJSK = _("PJSK", ja="プロセカ")
+    PJSK = _("PJSK", ja="プロセカ", ko="프로세카")
     RST = _("RST", ja="リステップ")
     SC = _("SC", ja="シャニマス")
     SFP = _("SFP", ja="シャニソン")
@@ -33,6 +39,10 @@ class BasicGlossary:
     hidden = _("Hidden", ja="非表示", zh_TW="隱藏", zh_CN="隐藏")
     titles = _("Title(s)", ja="称号", zh_TW="稱號", zh_CN="称号")
     none = _("None", ja="なし", zh_TW="無", zh_CN="无")
+    label = _("Label", ja="ラベル", zh_TW="標籤", zh_CN="标签")
+    stated = _("Stated", ja="記載", zh_TW="標示", zh_CN="标示")
+    actual = _("Actual", ja="実際", zh_TW="實際", zh_CN="实际")
+    guessed = _("Guessed", ja="推測", zh_TW="猜測", zh_CN="猜测")
 
 class CardGlossary:
     ability = _("Ability", ja="アビリティ", zh="能力")
@@ -55,12 +65,36 @@ class CardGlossary:
     unlock_at_level = _("(🔒 Unlock at Lv. {})\n", ja="（🔒 レベル{}で解放）\n", zh_TW="（🔒 於 Lv. {} 解鎖）\n", zh_CN="（🔒 于 Lv. {} 解锁）\n")
     using_items_to_unlock_levels = _("Using Items to Unlock Levels", ja="アイテムを使用して上限解放", zh="使用物品解放上限")
 
+class CharacterGlossary:
+    age = _("Age", ja="年齢", zh_TW="年齡", zh_CN="年龄")
+    birthplace = _("Birthplace", ja="出身地", zh="出生地") # Notice the meaning between 出生地 (place of birth) vs 出身地 (hometown) in Japanese
+    blood_type = _("Blood Type", ja="血液型", zh="血型")
+    dislikes = _("Dislikes", ja="苦手", zh_TW="不擅長、害怕", zh_CN="不擅长、害怕", ko="싫어하는 것")
+    dominant_hand = _("Dominant Hand", ja="利き手", zh_TW="慣用手", zh_CN="惯用手") # aka. Handedness
+    dob = _("DOB", ja="誕生日", zh="生日", ko="생일")
+    favorite_food = _("Favorite Food", en_GB = "Favourite Food", ja="好きな食べ物", zh_TW="喜歡的食物", zh="喜欢的食物", ko="좋아하는 음식")
+    height = _("Height", ja="身長", zh="身高", ko="키")
+    hobbies = _("Hobbies", ja="趣味", zh_TW="興趣", zh_CN="兴趣", ko="취미")
+    introduction = _("Introduction", ja="紹介", zh_TW="介紹", zh_CN="介绍", ko="소개")
+    least_favorite_food = _("Least Favorite Food", en_GB = "Least Favourite Food", ja="嫌いな食べ物", zh_TW="討厭的食物", zh_CN="讨厌的食物", ko="싫어하는 음식")
+    profiles = _("Profiles", ja = "プロフィール", zh_TW = "角色個人資料", zh_CN = "角色个人资料", ko = "캐릭터 프로필")
+    pronunciation = _("Pronunciation", ja="読み方", zh_TW="讀法", zh_CN="读法")
+    school = _("School", ja="学校", zh_TW="學校", zh_CN="学校", ko="학교")
+    school_year = _("School Year", ja="学年", zh_TW="年級", zh_CN="年级", ko="학년")
+    speciality = _("Speciality", ja="特技", zh="特技", ko="특기")
+    unit = _("Unit", ja = "ユニット")
+    va = _("VA", ja="CV", zh="CV", ko="CV")
+    weight = _("Weight", ja="体重", zh_TW="體重", zh_CN="体重", ko="체중")
+    zodiac_sign = _("Zodiac Sign", ja="星座", zh="星座")
+
 class EventGlossary:
     aggregate_period = _("Aggregate Period", ja="集計期間", zh_TW="結算時間", zh_CN="结算时间")
     bonus_actors = _("Bonus Actors", ja="対象アクター", zh_TW="對象演員", zh_CN="对象演员")
     """a variant of bonus_members"""
     bonus_category = _("Bonus Category", ja="対象カテゴリ", zh_TW="對象分類", zh_CN="对象分类")
     """bonus type, but used the term 属性 instead"""
+    bonus_posters = _("Bonus Posters", ja="対象ポスター", zh_TW="對象海報", zh_CN="对象海报")
+    
     bonus_type = _("Bonus Type", ja="タイプボーナス", zh_TW="Bonus 類型", zh_CN="Bonus 类型", ko="타입 보너스")
     bonus_type_element = _("Bonus Type", ja="対象属性", zh_TW="對象屬性", zh_CN="对象属性")
     """bonus type, but used the term 属性 instead"""
@@ -114,6 +148,11 @@ class SongGlossary:
     """編曲\n\nrefer to the arranger(s) of the song"""
 
     base_consumption = _("Base Consumption", ja="ベース消費", zh_TW="基礎消耗", zh_CN="基础消耗")
+
+    category = _("Categor(y/ies)", ja="カテゴリ", zh_TW="類別", zh_CN="类别")
+    
+    chart = _("Chart", ja="譜面", zh_TW="譜面", zh_CN="谱面")
+    """譜面\n\nused as embed field text"""
     
     chart_search = _("Chart Search", ja="譜面検索", zh_TW="譜面搜尋", zh_CN="谱面搜索")
     """譜面検索\n\nused as embed title"""
@@ -127,11 +166,16 @@ class SongGlossary:
     difficulty = _("Difficulty", ja="難易度", zh_TW="難度", zh_CN="难度")
     """難易度\n\nrefer to the difficulty name of the chart"""
 
+    difficulties = _("Difficulties", ja="難易度", zh_TW="難度", zh_CN="难度")
+    """難易度\n\nrefer to the difficulty list of the song"""
+
     duration_song = _("Duration (Song)", ja="長さ（楽曲）", zh_TW="長度（歌曲）", zh_CN="长度（歌曲）")
     """長さ（楽曲）\n\nrefer to the duration of the music file, shown in song difficulty"""
 
     duration_last_note = _("Duration (Last Note)", ja="長さ（最後のノート）", zh_TW="長度（最後的 Note）", zh_CN="长度（最后的 Note）")
     """長さ（最後のノート）\n\nrefer to the time of the last note of the chart, shown in song difficulty"""
+
+    efficiency_coef = _("Efficiency Coef.", ja="効率係数", zh="效率係數", zh_CN="效率P系数")
 
     efficient_songs = _("Efficient Songs", ja="効率曲", zh="效率曲")
 
@@ -181,9 +225,14 @@ class SongGlossary:
 
     target_score = _("Target Score", ja="目標スコア", zh_TW="目標分數", zh_CN="目标分数") 
 
-    reward_multiplier = _("Reward Multiplier", ja="報酬倍率", zh_TW="報酬倍率", zh_CN="报酬倍率") 
+    reward_multiplier = _("Reward Multiplier", ja="報酬倍率", zh_TW="報酬倍率", zh_CN="报酬倍率")
 
     unit = _("Unit", ja="ユニット", zh_TW="團體", zh_CN="团体")
+
+    versions = _("Version(s)", ja="バージョン", zh="版本")
+    """
+    Refer to different soundtracks of the same song
+    """
 
 # game-specific glossary
 

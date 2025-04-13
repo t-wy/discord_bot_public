@@ -72,6 +72,10 @@ def regex_lookup_translator(
                         temp_dict = match.groupdict()
                         if "company" in temp_dict:
                             temp_dict["company"] = company_translator(temp_dict["company"], locales)
+                        if "company2" in temp_dict:
+                            temp_dict["company2"] = company_translator(temp_dict["company2"], locales)
+                        if "companies" in temp_dict:
+                            temp_dict["companies"] = "・".join([company_translator(company, locales) for company in temp_dict["companies"].split("・")])
                         if "actor" in temp_dict:
                             temp_dict["actor"] = actor_translator(temp_dict["actor"], locales)
                         if "actors" in temp_dict:
@@ -853,6 +857,13 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
 })
 
 def star_act_translator(description: str, message: MsgInt) -> str:
+    import re
+    # remove size tag
+    description = re.sub(
+        r"<size=\d+[%％]?>(.+?)<\/size>",
+        r"\1",
+        description
+    )
     return "／".join([
         single_star_act_translator(part, message)
     for part in description.strip().split("／")])
@@ -1110,11 +1121,11 @@ condition_text_translator = regex_lookup_translator_wrapper("condition_text_tran
 })
 
 condition_translator = regex_lookup_translator_wrapper("condition_translator", {}, {
-    "(?P<company>.+)に所属するアクターが装備": {
-        "en": "Equipped by a(n) {company} actor",
-        "zh_TW": "由{company}演員裝備",
-        "zh_CN": "由{company}演员装备",
-        "th": "นักแสดง {company} เท่านั้น",
+    "(?P<companies>.+)に所属するアクターが装備": {
+        "en": "Equipped by a(n) {companies} actor",
+        "zh_TW": "由{companies}演員裝備",
+        "zh_CN": "由{companies}演员装备",
+        "th": "นักแสดง {companies} เท่านั้น",
     },
     r"<color=#(.{6})>(?P<attribute>.)属性<\/color>のアクターが装備": {
         "ja": "{attribute_emoji} {attribute}属性のアクターが装備",
@@ -1180,13 +1191,19 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "en": "When the Performance Starts, P. Gauge Cap Increased by [:param11]",
         "zh_TW": "公演開始時，P. Gauge 的上限值提升 [:param11]",
         "zh_CN": "公演开始时，P. Gauge 的上限值提升 [:param11]",
-        "th": "เมื่อเริ่มเพลงเพิ่มขีดจำกัดของ P. Gauge เป็น [:param11]",
+        "th": "เมื่อเริ่มเพลงเพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
     },
     "P.ゲージの上限が[:param11]上昇": {
         "en": "P. Gauge Cap Increased by [:param11]",
         "zh_TW": "P. Gauge 的上限值提升 [:param11]",
         "zh_CN": "P. Gauge 的上限值提升 [:param11]",
-        "th": "เพิ่มขีดจำกัดของ P. Gauge เป็น [:param11]",
+        "th": "เพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
+    },
+    "センス発動直後、P.ゲージの上限が[:param11]上昇": {
+        "en": "Right After Sense Activation, P. Gauge Cap Increased by [:param11]",
+        "zh_TW": "Sense 發動後，P. Gauge 的上限值提升 [:param11]",
+        "zh_CN": "Sense 发动后，P. Gauge 的上限值提升 [:param11]",
+        "th": "หลังจากเปิดใช้งานเซนส์จะเพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
     },
     "センスを発動しなくなるが、自身の演技力が2倍": {
         "en": 'Sense can no Longer Activate, but one\'s own Total Status doubled',
@@ -1232,6 +1249,12 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_CN": "公演开始时，给予 [:param11] 个{sense_type}系光「{sense_emoji}」（效果仅于公演开始时发动 1 次）",
         "th": "เมื่อเริ่มเพลงจะได้รับ{sense_type} ({sense_emoji}) [:param11] ดวง",
     },
+    r"公演開始時、SP光を\[:param11\](個?)付与": {
+        "en": "When the Performance Starts, Attach [:param11] SP Light(s)",
+        "zh_TW": "公演開始時，給予 [:param11] 個 SP 光",
+        "zh_CN": "公演开始时，给予 [:param11] 个 SP 光",
+        "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
+    },
     r"公演開始時、SP光を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
         "en": "When the Performance Starts, Attach [:param11] SP Light(s) (The Effect only Activates once when the Performance Starts)",
         "zh_TW": "公演開始時，給予 [:param11] 個 SP 光（效果僅於公演開始時發動 1 次）",
@@ -1244,11 +1267,17 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_TW": "Sense 發動時，獲得額外 [:param11] 個「{sense_type}系光{sense_emoji}」",
         "zh_CN": "Sense 发动时，获得额外 [:param11] 个「{sense_type}系光{sense_emoji}」",
     },
-    r"(?P<company>.+)に所属するアクターの演技力が\[:param11\][%％]上昇": {
-        "en": "Total Status of {company} Actors Increased by [:param11]%",
-        "zh_TW": "{company}演員的演技力提升[:param11]%",
-        "zh_CN": "{company}演员的演技力提升[:param11]%",
-        "th": "การแสดงของ {company} เพิ่มขึ้น [:param11] %",
+    r"(?P<company>.+)または(?P<company2>.+)に所属するアクターの(?P<status>.+?)が\[:param11\][%％]上昇": {
+        "en": "{status} of {company} or {company2} Actors Increased by [:param11]%",
+        "zh_TW": "{company} 或 {company2} 演員的 {status} 提升[:param11]%",
+        "zh_CN": "{company} 或 {company2} 演员的 {status} 提升[:param11]%",
+        "th": "{status} {company} หรือ {company2} เพิ่มขึ้น [:param11] %",
+    },
+    r"(?P<company>.+)に所属するアクターの(?P<status>.+?)が\[:param11\][%％]上昇": {
+        "en": "{status} of {company} Actors Increased by [:param11]%",
+        "zh_TW": "{company}演員的 {status} 提升[:param11]%",
+        "zh_CN": "{company}演员的 {status} 提升[:param11]%",
+        "th": "{status} {company} เพิ่มขึ้น [:param11] %",
     },
     r"(?P<company>.+)に所属しているアクターのみで編成している場合、追加で全アクターの(?P<status>.+?)が\[:param11\]％上昇": {
         "en": "When the Unit only Consists of {company} Actors, {status} of All Actors Increased Additionally by [:param11]%",

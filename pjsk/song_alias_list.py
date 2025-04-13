@@ -125,7 +125,7 @@ song_alias_list: Dict[int, List[str]] = {
         "東京Teddy Bear",
     ],
     400: [ # 我らステインバスターズ！
-        "我らSteinbusters！"
+        "我らStain Busters！"
     ],
     402: [ # エンヴィーベイビー
         "Envy Baby",
