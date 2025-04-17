@@ -94,11 +94,14 @@ You may contribute to the file `song_alias_list.py` if a name is an unlisted off
 
 ### Song BPM:
 
-The following games do not include BPM information in their chart files:
+The following games have special status regarding BPM information in their chart files:
 
 - CGSS
   - Only the overall BPM is stated.
     - Problem may arise if the BPM changes throughout the song.
+- PJSK
+  - The chart provides full BPM Info.
+  - However, they forcefully set all measures to be 4/4, even for 3/4 songs like `去り人達のワルツ`.
 - WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py))
   - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
