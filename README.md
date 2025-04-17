@@ -104,7 +104,7 @@ The following games do not include BPM information in their chart files:
     - The extracted BPM sequence is then 159→152→123→148→115→123→172.
     ![A Sample BPM Chart](README_images/bpm_chart.png)
     - The following auto-generated values are used in generating the chart:
-      ```
+      ```py
       [
         (BPM(bpm=159.0, time=0.0), (4, 4)),
         (BPM(bpm=152.0, time=27.169811320754718), (4, 4)),
