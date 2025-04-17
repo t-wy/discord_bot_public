@@ -69,9 +69,9 @@ Utilities:
 - zip_handler.py (Easily create zip files to be sent to the specified platform channels)
 
 Bot related:
-- command_text.py (All those texts used in command description or fields)
-- exception.py (All those common exception to be raised for different cases)
-- glossary.py (Pre-translated vocabularies to be used in bot outputs)
+- [command_text.py](common/command_text.py) (All those texts used in command description or fields)
+- [exception.py](common/exception.py) (All those common exception to be raised for different cases)
+- [glossary.py](common/glossary.py) (Pre-translated vocabularies to be used in bot outputs)
 - guess.py (Handle all classes and modals responsible for the flow of the guessing game)
 - profile_view.py (Handle the drop down box from ranking commands that allow picking players to show extra information like player profile, mission clear details, best units, or etc.)
 - story_viewer.py (All logics regarding the story viewer that allows users to view story by choosing the category, subcategory, and then the specified entry to view)
@@ -90,6 +90,8 @@ Currently the bot does not maintain a user-submitted song/character alias list.
 
 You may contribute to the file `song_alias_list.py` if a name is an unlisted officially translated title or titles with all the Katakana replaced with the borrowed term (in English or the source language) that is significantly different from the Romaji that makes the bot underestimate the name similarity.
 
+- PJSK ([song_alias_list.py](pjsk/song_alias_list.py))
+
 ### Song BPM:
 
 The following games do not include BPM information in their chart files:
@@ -97,7 +99,7 @@ The following games do not include BPM information in their chart files:
 - CGSS
   - Only the overall BPM is stated.
     - Problem may arise if the BPM changes throughout the song.
-- WDS
+- WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py))
   - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
   - The following chart is from the song `Stellarium Collection Vol.1`:
@@ -123,6 +125,13 @@ Feel free to edit the corresponding `song_chart_known_bpm.py` file when the auto
 
 Users can submit translations of available files via pull requests. If other translations are incorrect or inappropriate, please submit an issue.
 
+- Common
+  - [command_text.py](common/command_text.py)
+  - [exception.py](common/exception.py)
+  - [glossary.py](common/glossary.py)
+- WDS
+  - [translator.py](wds/translator.py)
+
 Notice that the language of translation is based on the locale of the discord User, followed by the guild locale (default to en_US by Discord, but **is ignored** if the guild is not discoverable).
 
 Both full locale (e.g. ja, en-US, zh-TW) and short locale (e.g. ja, en, zh) can be used to specify the translation. "-" should be replaced by "_" when specifying keys or arguments. The priorities for locales with subtags is demostrated below:
@@ -130,8 +139,6 @@ Both full locale (e.g. ja, en-US, zh-TW) and short locale (e.g. ja, en, zh) can 
 - `ja`: `ja` → remain unchanged
 - `en-US`: `en_US` → `en` → remain unchanged
 - `zh-TW`: `zh_TW` → `zh` → remain unchanged
-
-Null (`\0`) is sometimes used as a fallback match that prevents the translator from checking the next available locale. It is used when certain entries do not need to be translated if not specified.
 
 All languages supported by Discord are listed below [Link](https://discord.com/developers/docs/reference#locales):
 
