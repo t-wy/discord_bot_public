@@ -95,6 +95,8 @@ You may contribute to the file `song_alias_list.py` if a name is an unlisted off
 The following games do not include BPM information in their chart files:
 
 - CGSS
+  - Only the overall BPM is stated.
+    - Problem may arise if the BPM changes throughout the song.
 - WDS
   - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
