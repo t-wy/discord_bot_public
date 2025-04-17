@@ -17,7 +17,6 @@ Currently there are also wrappers that simulates discord interactions on Guilded
   - Therefore `mb#help` can be used like `/help` to display the command list.
 - The public guess for guessing games can be done simply by replying to the "question" with your answer. (Given that the bot has the access to read messages in that channel)
 - Due to Discord's cache mechanism, the "Question Audio/Image" link in guessing games only remain available when the bot can access the channel (so that the question can be backed up completely).
-- Currently the bot does not maintain a user-submitted song/character alias list. You may contribute to the file `song_alias_list.py` if that name is a officially translated title or title with all the Katakana replaced with the borrowed term (in English or the source language) that is significantly different from the Romaji that makes the bot underestimate the name similarity.
 
 
 ## Error reports:
@@ -84,6 +83,39 @@ Deprecating:
 Planned to be added:
 - card.py (Basic "card" class with tags for serving card / poster / accessory information)
 - gacha.py (Logics regarding the "spark" characters / probability rates / gacha description / etc.)
+
+### Song Aliases:
+
+Currently the bot does not maintain a user-submitted song/character alias list.
+
+You may contribute to the file `song_alias_list.py` if a name is an unlisted officially translated title or titles with all the Katakana replaced with the borrowed term (in English or the source language) that is significantly different from the Romaji that makes the bot underestimate the name similarity.
+
+### Song BPM:
+
+The following games do not include BPM information in their chart files:
+
+- CGSS
+- WDS
+  - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
+  - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
+  - The following chart is from the song `Stellarium Collection Vol.1`:
+    - The extracted BPM sequence is then 159→152→123→148→115→123→172.
+    ![A Sample BPM Chart](README_images/bpm_chart.png)
+    - The following auto-generated values are used in generating the chart:
+      ```
+      [
+        (BPM(bpm=159.0, time=0.0), (4, 4)),
+        (BPM(bpm=152.0, time=27.169811320754718), (4, 4)),
+        (BPM(bpm=123.0, time=52.43296921549156), (4, 4)),
+        (BPM(bpm=148.0, time=75.84760336183302), (4, 4)),
+        (BPM(bpm=115.0, time=83.95571146994114), (4, 4)),
+        (BPM(bpm=123.0, time=100.65136364385418), (4, 4)),
+        (BPM(bpm=172.0, time=108.45624169263468), (4, 4))
+      ]
+      ```
+- etc.
+
+Feel free to edit the corresponding `song_chart_known_bpm.py` file when the auto-generated result differs from the actual BPM / time signature.
 
 ### Translation:
 

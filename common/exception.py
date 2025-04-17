@@ -5,6 +5,9 @@ _no_unload_subclasses = True # Don't unload subclasses
 from locale_str import locale_str_ex as _ # use _ as translation wrapper
 from typing import *
 
+if TYPE_CHECKING:
+    from msgint import MsgInt
+
 if "CustomException" in globals(): # don't define the class again if it is being hot reloaded
     CustomException = globals()['CustomException'] # nop, just to fool linter
 else:
@@ -15,7 +18,7 @@ class APIFailException(CustomException):
     """
     API call fails. Please try again later.
     """
-    def __init__(self, message=None, code=None):
+    def __init__(self, message: Optional[str]=None, code: Optional[int]=None):
         self.code = code
         if message is None:
             if code is not None:
@@ -134,19 +137,20 @@ class FileNotExistException(CustomException):
 
 class FileSizeExceededException(CustomException):
     """
-    The requested file is too large to be sent to this server.
+    The requested file is too large to be sent.
     """
-    def __init__(self, guild=..., count=..., filename=...):
+    def __init__(self, message: 'MsgInt'=..., count: int=..., filename: int=...):
         if count is ...:
             if filename is ...:
-                msg = "The requested file is too large to be sent to this server."
+                msg = "The requested file is too large to be sent."
             else:
-                msg = "The requested file ({}) is too large to be sent to this server.".format(filename)
+                msg = "The requested file ({}) is too large to be sent.".format(filename)
         else:
-            msg = "{} of the requested file(s) {} too large to be sent to this server.".format(count, "are" if count > 1 else "is")
-        if guild is not ...:
-            from basic_utility import guild_filesize_limit
-            msg += " Maximum file size: {} MB".format(guild_filesize_limit(guild) >> 20)
+            msg = "{} of the requested file(s) {} too large to be sent.".format(count, "are" if count > 1 else "is")
+        if message is not ...:
+            msg += " Maximum file size: {} MB".format(message.filesize_limit >> 20)
+        # additonal message
+        msg += "\n\n※ The size limit depends on the server boost level and the user's nitro status (only for Interactions like Commands / Buttons / etc.), whatever gives the higher."
         super().__init__(msg)
 
 class FormatException(CustomException):
