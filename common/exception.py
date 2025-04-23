@@ -195,6 +195,13 @@ class MasterDatabaseDownloadException(CustomException):
     def __init__(self):
         super().__init__("Master Database for the current version cannot be downloaded.")
 
+class MessageNotFoundException(CustomException):
+    """
+    The message is not found.
+    """
+    def __init__(self):
+        super().__init__("The message is not found.\n\nMaybe the message was deleted or the bot does have access to read messages in this channel.")
+
 class PayloadTooLargeException(CustomException):
     """
     The provided payload is too large to be sent.

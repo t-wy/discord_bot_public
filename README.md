@@ -15,7 +15,9 @@ Currently there are also wrappers that simulates discord interactions on Guilded
 - On platform that only allows alphabetical names, this bot may be named "Tsukasa Kiryu". (The name of the character in the bot's thumbnail.)
 - Notice that text commands are supported by the default prefix `mb#` (the original name "Misc Bot") or by tagging the bot before the command.
   - Therefore `mb#help` can be used like `/help` to display the command list.
-- The public guess for guessing games can be done simply by replying to the "question" with your answer. (Given that the bot has the access to read messages in that channel)
+- If the bot has access to messages in the channel:
+  - The public guess for guessing games can be done simply by replying to the "question" with your answer.
+  - Messages can be deleted by the caller via the ❌ emoji.
 - Due to Discord's cache mechanism, the "Question Audio/Image" link in guessing games only remain available when the bot can access the channel (so that the question can be backed up completely).
 
 
