@@ -122,6 +122,11 @@ The following games have special status regarding BPM information in their chart
         (BPM(bpm=172.0, time=108.45624169263468), (4, 4))
       ]
       ```
+- SFP ([song_chart_known_bpm.py](sfp/song_chart_known_bpm.py))
+  - The case is similar to WDS.
+  - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
+  - However, they tend to use far less sliders (NoteLines) and thus less Eighth Ticks are availble in the charts.
+  - Therefore, expect some 0.5x, 1.5x and 2x BPM to be manually fixed.
 - etc.
 
 Feel free to edit the corresponding `song_chart_known_bpm.py` file when the auto-generated result differs from the actual BPM / time signature.
