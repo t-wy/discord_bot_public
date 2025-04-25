@@ -122,6 +122,7 @@ The following games have special status regarding BPM information in their chart
         (BPM(bpm=172.0, time=108.45624169263468), (4, 4))
       ]
       ```
+    - Pink ones are based on the note distances, while the blue ones are based on Eighth Notes.
 - SFP ([song_chart_known_bpm.py](sfp/song_chart_known_bpm.py))
   - The case is similar to WDS.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
