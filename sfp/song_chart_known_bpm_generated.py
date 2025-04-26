@@ -1,4 +1,4 @@
-# This file was automatically generated at 2025-04-26 11:46:09
+# This file was automatically generated at 2025-04-26 14:13:56
 # If there is any issue, please edit song_chart_known_bpm.py instead of this file.
 
 from common.chart_factory import BPM
@@ -323,9 +323,9 @@ known_bpms: Dict[int, List[Union[
     157: [ # Midnight parade!(アニメ ver.) (Auto)
         (BPM(80.0124, 0.0000), (6, 8)),
         (BPM(154, 7.1286), (3, 4), True),
-        (BPM(154, 7.1286), (4, 4)),
-        (BPM(142.1219, 8.6870), (7, 4)),
-        (BPM(142.1219, 11.6423), (12, 8)),
+        (BPM(154, 8.2974), (1, 4)),
+        (BPM(142.1219, 8.6870), (1, 4)),
+        (BPM(142.1219, 9.1092), (12, 8)),
         (BPM(148.8899, 11.7462), (9, 8), True),
         (BPM(148.8899, 13.5596), (7, 8)),
         (BPM(74.0750, 14.9701), (3, 4)),
