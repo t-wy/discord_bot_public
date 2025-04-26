@@ -104,7 +104,7 @@ The following games have special status regarding BPM information in their chart
 - PJSK
   - The chart provides full BPM Info.
   - However, they forcefully set all measures to be 4/4, even for 3/4 songs like `去り人達のワルツ`.
-- WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py))
+- WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py), [song_chart_known_bpm_generated.py](wds/song_chart_known_bpm_generated.py))
   - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
   - The following chart is from the song `Stellarium Collection Vol.1`:
@@ -123,14 +123,15 @@ The following games have special status regarding BPM information in their chart
       ]
       ```
     - Pink ones are based on the note distances, while the blue ones are based on Eighth Notes.
-- SFP ([song_chart_known_bpm.py](sfp/song_chart_known_bpm.py))
+- SFP ([song_chart_known_bpm.py](sfp/song_chart_known_bpm.py), [song_chart_known_bpm_generated.py](sfp/song_chart_known_bpm_generated.py))
   - The case is similar to WDS.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
   - However, they tend to use far less sliders (NoteLines) and thus less Eighth Ticks are availble in the charts.
   - Therefore, expect some 0.5x, 1.5x and 2x BPM to be manually fixed.
 - etc.
 
-Feel free to edit the corresponding `song_chart_known_bpm.py` file when the auto-generated result differs from the actual BPM / time signature.
+Feel free to edit the corresponding `song_chart_known_bpm.py` file (not `song_chart_known_bpm_generated.py`) when the auto-generated result differs from the actual BPM / time signature.
+- `song_chart_known_bpm_generated.py` is only generated for quick public reference. It is not used in the actual bot in any way.
 
 ### Translation:
 
