@@ -34,6 +34,11 @@ If some commands trigger an error message that should not be there, errors will 
 
 Users can currently submit changes under the below categories via pull requests. They will be reviewed and add to the bot if approved as soon as possible. The contributors will be shown in the credit section on [twy.name](https://twy.name/contribution/) and bot commands.
 
+- [Game Support](#game-support)
+- [Song Aliases](#song-aliases)
+- [Song BPM](#song-bpm)
+- [Translation](#translation)
+
 ### Game Support:
 
 Some classes are already created to wrap data from multiple games with a common structure that makes code/function reusing much easier. Here is a list of the implemented classes. They will be released under `common/` when the refactoring is complete:
