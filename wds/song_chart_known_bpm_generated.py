@@ -1,4 +1,4 @@
-# This file was automatically generated at 2025-04-26 14:12:37
+# This file was automatically generated at 2025-04-28 09:40:47
 # If there is any issue, please edit song_chart_known_bpm.py instead of this file.
 
 from common.chart_factory import BPM
@@ -115,8 +115,8 @@ known_bpms: Dict[int, List[Union[
         (BPM(79, 20.8699), (1, 4)),
         (BPM(79, 21.6294), (3, 4)),
         (BPM(78, 23.9079), (5, 4)),
-        (BPM(78, 27.7541), (4, 4)),
-        (BPM(78, 33.9079), (3, 4)),
+        (BPM(78, 27.7541), (9, 8)),
+        (BPM(78, 34.6772), (2, 4)),
         (BPM(80, 36.2156), (1, 4)),
         (BPM(75, 36.9656), (1, 8)),
         (BPM(75, 37.3656), (9, 8)),
