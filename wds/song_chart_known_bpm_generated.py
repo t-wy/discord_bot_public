@@ -1,4 +1,4 @@
-# This file was automatically generated at 2025-04-28 09:40:47
+# This file was automatically generated at 2025-04-29 21:54:59
 # If there is any issue, please edit song_chart_known_bpm.py instead of this file.
 
 from common.chart_factory import BPM
@@ -104,8 +104,7 @@ known_bpms: Dict[int, List[Union[
     ],
     38: [ # 変わらないもの (Auto)
         (BPM(75, 0.0000), (9, 8)),
-        (BPM(79, 5.4750), (1, 4), True),
-        (BPM(76, 6.2345), (9, 8)),
+        (BPM(76, 6.2345), (9, 8), True),
         (BPM(80, 8.1682), (9, 8), True),
         (BPM(82, 12.4157), (1, 4), True),
         (BPM(76, 13.1474), (3, 4)),
@@ -116,10 +115,7 @@ known_bpms: Dict[int, List[Union[
         (BPM(79, 21.6294), (3, 4)),
         (BPM(78, 23.9079), (5, 4)),
         (BPM(78, 27.7541), (9, 8)),
-        (BPM(78, 34.6772), (2, 4)),
-        (BPM(80, 36.2156), (1, 4)),
-        (BPM(75, 36.9656), (1, 8)),
-        (BPM(75, 37.3656), (9, 8)),
+        (BPM(75, 36.9656), (9, 8), True),
         (BPM(76, 39.1172), (9, 8), True),
         (BPM(80, 40.1040), (9, 8), True),
         (BPM(78, 42.3732), (12, 8), True),
