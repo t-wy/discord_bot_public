@@ -1,4 +1,4 @@
-# This file was automatically generated at 2025-04-29 21:55:37
+# This file was automatically generated at 2025-04-30 17:59:37
 # If there is any issue, please edit song_chart_known_bpm.py instead of this file.
 
 from common.chart_factory import BPM
@@ -304,6 +304,9 @@ known_bpms: Dict[int, List[Union[
     ],
     142: [ # Fading Stars (Auto)
         (BPM(128, 0.0000), (4, 4)),
+    ],
+    143: [ # Future Transit (Auto)
+        (BPM(155, 0.0000), (2, 4)),
     ],
     145: [ # 愛しき日々 (Auto)
         (BPM(186, 0.6452), (4, 4)),
