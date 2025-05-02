@@ -109,7 +109,7 @@ The following games have special status regarding BPM information in their chart
 - PJSK
   - The chart provides full BPM Info.
   - However, they forcefully set all measures to be 4/4, even for 3/4 songs like `去り人達のワルツ`.
-- WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py), Current Result (Read-only): [song_chart_known_bpm_generated.py](wds/song_chart_known_bpm_generated.py))
+- WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py), [Current Result (Read-only)](https://github.com/t-wy/game-public-data/blob/main/wds/song_bpm.json))
   - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
   - The following chart is from the song `Stellarium Collection Vol.1`:
@@ -128,7 +128,7 @@ The following games have special status regarding BPM information in their chart
       ]
       ```
     - Pink ones are based on the note distances, while the blue ones are based on Eighth Notes.
-- SFP ([song_chart_known_bpm.py](sfp/song_chart_known_bpm.py), Current Result (Read-only): [song_chart_known_bpm_generated.py](sfp/song_chart_known_bpm_generated.py))
+- SFP ([song_chart_known_bpm.py](sfp/song_chart_known_bpm.py), [Current Result (Read-only)](https://github.com/t-wy/game-public-data/blob/main/sfp/song_bpm.json))
   - The case is similar to WDS.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
   - However, they tend to use far less sliders (NoteLines) and thus less Eighth Ticks are availble in the charts.
