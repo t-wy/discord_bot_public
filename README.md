@@ -19,6 +19,7 @@ Currently there are also wrappers that simulates discord interactions on Guilded
   - The public guess for guessing games can be done simply by replying to the "question" with your answer.
   - Messages can be deleted by the caller via the ❌ emoji.
 - Due to Discord's cache mechanism, the "Question Audio/Image" link in guessing games only remain available when the bot can access the channel (so that the question can be backed up completely).
+- Commands like card / song / poster / ... usually also accepts internal ID as the input (that you may find from the result from searching commands or embed footers).
 
 
 ## Error reports:
