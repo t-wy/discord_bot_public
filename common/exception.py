@@ -12,7 +12,9 @@ if "CustomException" in globals(): # don't define the class again if it is being
     CustomException = globals()['CustomException'] # nop, just to fool linter
 else:
     class CustomException(Exception):
-        pass
+        def __init__(self, *args, view=None, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.view = view
 
 class APIFailException(CustomException):
     """
@@ -42,8 +44,11 @@ class AssetListDownloadException(CustomException):
     """
     Asset List for the current version cannot be downloaded.
     """
-    def __init__(self):
-        super().__init__("Asset List for the current version cannot be downloaded.")
+    def __init__(self, version: Optional[str] = None):
+        if version is None:
+            super().__init__("Asset List for the current version cannot be downloaded.")
+        else:
+            super().__init__(f"Asset List for version {version} cannot be downloaded.")
 
 class AssetListNotExistException(CustomException):
     """

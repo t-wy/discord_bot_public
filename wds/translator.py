@@ -44,7 +44,8 @@ def ordinal_translator(target: str, message: Union[MsgInt, str]) -> str:
 def regex_lookup_translator(
     target: str, message: Union[MsgInt, List[str], Tuple[str], str],
     lookup_dict: Dict[str, Dict[str, str]],
-    regex_lookup_dict: Dict[str, Dict[str, str]] = {}
+    regex_lookup_dict: Dict[str, Dict[str, str]] = {},
+    mode: str = "discord",
 ) -> str:
     if type(message) is str:
         locales = [message]
@@ -62,11 +63,11 @@ def regex_lookup_translator(
     else:
         import re
         from .const import sense_name_emote, sense_to_key
-        from .const import type_emotes, type_names
+        from .const import type_emotes, type_names, type_names_romaji
         for regex in regex_lookup_dict:
             match = re.fullmatch(regex, target)
             if match:
-                for locale in locales:
+                for locale in [*locales, "*", "ja"]:
                     if locale in regex_lookup_dict[regex]:
                         translator = regex_lookup_dict[regex][locale]
                         temp_dict = match.groupdict()
@@ -85,12 +86,18 @@ def regex_lookup_translator(
                         if "sense_type" in temp_dict:
                             # handle emoji before translating text
                             if "{sense_emoji}" in translator:
-                                temp_dict["sense_emoji"] = sense_name_emote.get(sense_to_key.get(temp_dict["sense_type"]), "❓")
+                                if mode == "discord":
+                                    temp_dict["sense_emoji"] = sense_name_emote.get(sense_to_key.get(temp_dict["sense_type"]), "❓")
+                                elif mode == "infocard":
+                                    temp_dict["sense_emoji"] = f'[{sense_to_key[temp_dict["sense_type"]].lower()}]' if temp_dict["sense_type"] in sense_to_key else "❓"
                             temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locales)
                         if "attribute" in temp_dict:
                             # handle emoji before translating text
                             if "{attribute_emoji}" in translator:
-                                temp_dict["attribute_emoji"] = type_emotes[type_names.index(temp_dict["attribute"])] if temp_dict["attribute"] in type_names else "❓"
+                                if mode == "discord":
+                                    temp_dict["attribute_emoji"] = type_emotes[type_names.index(temp_dict["attribute"])] if temp_dict["attribute"] in type_names else "❓"
+                                elif mode == "infocard":
+                                    temp_dict["attribute_emoji"] = f'[{type_names_romaji[type_names.index(temp_dict["attribute"])]}]' if temp_dict["attribute"] in type_names else "❓"
                             temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locales)
@@ -99,10 +106,7 @@ def regex_lookup_translator(
                         if "ordinal" in temp_dict:
                             temp_dict["ordinal"] = ordinal_translator(temp_dict["ordinal"], locale) # need string or message
                         return translator.format(*match.groups(), **temp_dict)
-                else:
-                    if "*" in regex_lookup_dict[regex]:
-                        return regex_lookup_dict[regex]["*"]
-                    return target
+                return target
         return target
 
 available_translators = {}
@@ -116,8 +120,8 @@ def regex_lookup_translator_wrapper(
         "simple": lookup_dict,
         "regex": regex_lookup_dict
     }
-    def wrapper(target: str, message: Union[MsgInt, str]) -> str:
-        return regex_lookup_translator(target, message, lookup_dict, regex_lookup_dict)
+    def wrapper(target: str, message: Union[MsgInt, str], mode: str = "discord") -> str:
+        return regex_lookup_translator(target, message, lookup_dict, regex_lookup_dict, mode = mode)
     return wrapper
 
 actor_translator = regex_lookup_translator_wrapper("actor_translator", {
@@ -862,17 +866,18 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
     },
 })
 
-def star_act_translator(description: str, message: MsgInt) -> str:
-    import re
+def split_star_act(description: str) -> List[str]:
     # remove size tag
+    import re
     description = re.sub(
         r"<size=\d+[%％]?>(.+?)<\/size>",
         r"\1",
         description
     )
-    return "／".join([
-        single_star_act_translator(part, message)
-    for part in description.strip().replace("/", "／").split("／")])
+    return description.strip().replace("/", "／").split("／")
+
+def star_act_translator(description: str, message: MsgInt) -> str:
+    return "／".join([single_star_act_translator(part, message) for part in split_star_act(description)])
 
 single_sense_translator = regex_lookup_translator_wrapper("single_sense_translator", {
     "[:score]倍のスコアを獲得": {
@@ -949,6 +954,12 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN" : "生命值愈多，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
         "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
     },
+    r"ライフが多いほど(?P<actor>.+)のスコア獲得量UP効果（最大＋(\d+)％）": {
+        "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
+        "zh_TW" : "生命值愈多，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
+        "zh_CN" : "生命值愈多，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
+        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
+    },
     r"ライフが少ないほど(?P<actor>.+)のスコア獲得量UP（最大＋(\d+)％）": {
         "en": "The Less the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
         "zh_TW": "生命值愈少，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
@@ -997,26 +1008,42 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "Sense 發動時，額外獲得 {1} 個「{sense_type}系光{sense_emoji}」",
         "zh_CN": "Sense 发动时，额外获得 {1} 个「{sense_type}系光{sense_emoji}」",
     },
+    r"編成されている(?P<company>.+)アクターの人数×(\d+)プリンシパルゲージを獲得": {
+        "en": "For each {company} Actor in the Unit, Gain {1} Principal Gauge",
+        "zh_TW": "獲得總數為隊伍內{company}演員人數 × {1} 的 Principal Gauge",
+        "zh_CN": "获得总数为队伍内{company}演员人数 × {1} 的 Principal Gauge",
+    },
+    r"(?P<company>.+)アクターのCTを、編成されている(?P<company2>.+)アクターの人数×(\d+)秒短縮": {
+        "en": "CT of each {company} Actor Reduces by the Number of {company2} Actor in the Unit × {2}s for the Next Sense",
+        "zh_TW": "{company}演員的 CT 縮短隊伍內{company2}演員人數 × {2} 秒",
+        "zh_CN": "{company}演员的 CT 缩短队伍内{company2}演员人数 × {2} 秒",
+    },
     r"センス発動時、編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\1アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
         "en": "When Sense Activates, the {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
         "zh_TW": "Sense 發動時，{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {3}% (此效果可疊加)",
         "zh_CN": "Sense 發動時，{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {3}% (此效果可叠加)",
     },
+    r"センス発動時、追加で「ライフガード」を獲得する（レベル1：(\d+)個／レベル2：(\d+)個／レベル3：(\d+)個／レベル4：(\d+)個／レベル5：(\d+)個\)": {
+        "en": 'When Sense Activates, Gain Additional Life Guard(s) (Lv.1: {0} pcs / Lv.2: {1} pcs / Lv.3: {2} pcs / Lv.4: {3} pcs / Lv.5: {4} pcs)',
+        "zh_TW": "Sense 發動時，額外獲得 Life Guard（Lv.1：{0}個／Lv.2：{1}個／Lv.3：{2}個／Lv.4：{3}個／Lv.5：{4}個）",
+        "zh_CN": "Sense 发动时，额外获得 Life Guard（Lv.1：{0}个／Lv.2：{1}个／Lv.3：{2}个／Lv.4：{3}个／Lv.5：{4}个）",
+    },
 })
 
-
-
-def sense_translator(description: str, message: MsgInt) -> str:
-    import re
+def split_sense(description: str) -> List[str]:
     # remove size tag
+    import re
     description = re.sub(
         r"<size=\d+[%％]?>(.+?)<\/size>",
         r"\1",
         description
     )
-    return "／".join([
-        single_sense_translator(part, message)
-    for part in description.strip().split("／")])
+    return [
+        part.replace("/レベル", "／レベル")
+    for part in description.strip().replace("／レベル", "/レベル").split("／")]
+
+def sense_translator(description: str, message: MsgInt) -> str:
+    return "／".join([single_sense_translator(part, message) for part in split_sense(description)])
 
 single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_sense_translator", {}, {
     r"「(.+?)」カテゴリの(?P<status>.+?)(\d+)[%％]上昇・(?P<status2>.+?)(が?)(\d+)[%％]上昇": {
@@ -1041,10 +1068,13 @@ single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_
     }
 })
 
+def split_leader_sense(description: str) -> List[str]:
+    return description.strip().replace("\t", "").replace("、「", "\n「").split("\n")
+
 def leader_sense_translator(description: str, message: MsgInt) -> str:
     return "\n".join([
         single_leader_sense_translator(part, message)
-    for part in description.strip().replace("\t", "").replace("、「", "\n「").split("\n")])
+    for part in split_leader_sense(description)])
 
 bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
     "公演開始時に自身と同系統の光を獲得": {
@@ -1264,6 +1294,12 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "en": "When the Performance Starts, Attach [:param11] SP Light(s)",
         "zh_TW": "公演開始時，給予 [:param11] 個 SP 光",
         "zh_CN": "公演开始时，给予 [:param11] 个 SP 光",
+        "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
+    },
+    r"公演開始時、SP光を追加で\[:param11\]個付与": {
+        "en": "When the Performance Starts, Additionally Attach [:param11] SP Light(s)",
+        "zh_TW": "公演開始時，額外給予 [:param11] 個 SP 光",
+        "zh_CN": "公演开始时，额外给予 [:param11] 个 SP 光",
         "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
     },
     r"公演開始時、SP光を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
