@@ -53,6 +53,7 @@ class AssetListDownloadException(CustomException):
 class AssetListNotExistException(CustomException):
     """
     Asset List is not Available.
+    Used when a user choose to download an asset list of a specified version that does not exist
     """
     def __init__(self):
         super().__init__("Asset List is not Available.")
@@ -172,6 +173,13 @@ class HTTPException(CustomException):
     def __init__(self, response_code):
         super().__init__("Error fetching data. Response code: {}".format(response_code))
 
+class InitializingException(CustomException):
+    """
+    The data is being initialized. Please try again later.
+    """
+    def __init__(self, message: Optional[str]=None):
+        super().__init__("The data is being initialized. Please try again later.")
+
 class InvalidArgumentException(CustomException):
     """
     Invalid argument specified.
@@ -261,9 +269,9 @@ class SongNotFoundException(CustomException):
     """
     Song not found.
     """
-    def __init__(self, suggestions: Optional[List[str]] = None):
+    def __init__(self, suggestions: Optional[List[str]] = None, view = None):
         if suggestions is None:
-            super().__init__("Song not found.")
+            super().__init__("Song not found.", view = view)
         else:
             char_count = 0
             all_suggestions = []
@@ -272,7 +280,7 @@ class SongNotFoundException(CustomException):
                     break
                 all_suggestions.append(entry)
                 char_count += len(entry) + 1
-            super().__init__("Song not found. Do you mean ...\n\n" + "\n".join(all_suggestions))
+            super().__init__("Song not found. Do you mean ...\n\n" + "\n".join(all_suggestions), view = view)
 
 class SongTrackNotFoundException(CustomException):
     """
@@ -301,6 +309,13 @@ class TimeFormatException(CustomException):
     """
     def __init__(self):
         super().__init__("The time format is not recognized.")
+
+class UnitNotFoundException(CustomException):
+    """
+    The specified unit is not found.
+    """
+    def __init__(self):
+        super().__init__("The specified unit is not found.")
 
 class UnmatchedExtensionException(CustomException):
     """
