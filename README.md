@@ -20,6 +20,7 @@ Currently there are also wrappers that simulates discord interactions on Guilded
   - Messages can be deleted by the caller via the ❌ emoji.
 - Due to Discord's cache mechanism, the "Question Audio/Image" link in guessing games only remain available when the bot can access the channel (so that the question can be backed up completely).
 - Commands like card / song / poster / ... usually also accepts internal ID as the input (that you may find from the result from searching commands or embed footers).
+- If you see "This command is outdated, please try again in a few minutes" when triggering a command, this usually means the command has been updated but not yet reflected on the client side. You may try restarting or force reloading (Ctrl/Cmd+R) the app to have the changes reflected immediately.
 
 
 ## Error reports:
