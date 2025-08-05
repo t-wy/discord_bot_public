@@ -18,6 +18,7 @@ class GameNameGlossary:
     """
     CGSS = _("CGSS", ja="デレステ")
     MLTD = _("MLTD", ja="ミリシタ")
+    LLLL = _("LLLL", ja="リンクラ")
     PJSK = _("PJSK", ja="プロセカ", ko="프로세카")
     RST = _("RST", ja="リステップ")
     SC = _("SC", ja="シャニマス")
@@ -27,11 +28,13 @@ class GameNameGlossary:
 class GameColor:
     CGSS = 0x848ac4
     MLTD = 0xffc20b
+    LLLL = 0xfce8e6
     PJSK = 0x39c5bb
     RST = 0xee2288
     SC = 0x8adfff
     SFP = 0x8adfff
     WDS = 0xee5f5f
+    IPR = 0x1428ff
 
 # categorized glossary lists
 

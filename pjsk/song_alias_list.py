@@ -174,6 +174,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     466: [ # ガーネットの涙
         "Tears of Garnet", # Official English Name
+        "Garnet Tears", # compound noun "of" reversal
     ],
     473: [ # マインドブランド
         "Mind Brand",
@@ -205,6 +206,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     507: [ # エンパープル
         "Empurple",
+    ],
+    509: [ # ライアーダンサー
+        "Liar Dancer",
     ],
     511: [ # 如月アテンション
         "如月Attention",
