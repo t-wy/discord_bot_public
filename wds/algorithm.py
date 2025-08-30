@@ -7,7 +7,7 @@ async def serve_efficient_song(message: MsgInt, unreleased: bool = False, ver="p
     from .master_models import MusicMaster
     from common.rate_limiter import rate_limiter
     from basic_utility import progress_bar
-    from common.glossary import SongGlossary
+    from common.glossary import SongGlossary, GameColor
     music_master: List[MusicMaster] = await get_master("MusicMaster", as_array=True, ver=ver)
     reply_message = await message.reply("Calculating... Please Wait...")
     callback = rate_limiter(lambda index: reply_message.edit(content="Calculating Songs...\n" + progress_bar((index + 1) / len(music_master), message.platform)))
@@ -51,7 +51,7 @@ async def serve_efficient_song(message: MsgInt, unreleased: bool = False, ver="p
         if best_from is not None:
             parts.append((best_from, entry))
     embed = discord.Embed(
-        title=SongGlossary.efficient_songs(message), color=0xee5f5f
+        title=SongGlossary.efficient_songs(message), color=GameColor.WDS
     )
     second_str = SongGlossary.seconds(message)
     infinity = "∞"

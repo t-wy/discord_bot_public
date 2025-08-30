@@ -3,7 +3,8 @@
 # used to host a sonolus server for testing official charts using the referenced engine
 # Code Source:
 # https://github.com/SonolusHaniwa/sonolus-sirius-engine/blob/master/convert.h#L120
-# up to commit c50182d7bc1f2dafb76b08b805a6a0f3868ef60c
+# up to commit f5f9b714662cad0bd29343bcb5212d017f87aa57
+# https://github.com/SonolusHaniwa/sonolus-sirius-engine/commit/f5f9b714662cad0bd29343bcb5212d017f87aa57
 
 class Note:
     def __init__(self):
@@ -238,7 +239,7 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             single["data"].append({"name": "stBeat", "value": x.startTime})
             single["data"].append({"name": "lane", "value": x.leftLane})
             single["data"].append({"name": "laneLength", "value": x.laneLength})
-            single["data"].append({"name": "scratchLength", "value": 0})
+            single["data"].append({"name": "scratchLength", "value": x.scratchLength})
             addSyncLine(x.startTime, x.leftLane, x.laneLength)
             total += 1
         elif x.type == NoteType.HoldEighth:

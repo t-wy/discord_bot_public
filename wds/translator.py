@@ -937,12 +937,6 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "Sense 发动后，额外获得 [:param11] Principal Gauge",
         "th": "ได้รับ Principal gauge เพิ่มขึ้น [:param11] หลังจากเปิดใช้งานเซนส์",
     },
-    "センス発動後、プリンシパルゲージの上限値が[:param11]上昇": {
-        "en": "After Sense Activation, Increase Principal Gauge Cap by [:param11]",
-        "zh_TW": "Sense 發動後，Principal Gauge 的上限值提升 [:param11]",
-        "zh_CN": "Sense 发动后，Principal Gauge 的上限值提升 [:param11]",
-        "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น [:param11]",
-    },
     "センス発動後、追加で獲得しているプリンシパルゲージ[:param11]%を獲得": {
         "en": "After Sense Activation, Additionally Gain [:param11]% of the Amount of Gained Principal Gauge",
         "zh_TW": "Sense 發動後，額外獲得已獲得的 Principal Gauge 的 [:param11]%",
@@ -971,6 +965,12 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "Sense 发动时，额外获得 [:param11] 个 Life Guard",
     },
 }, {
+    r"センス発動後、プリンシパルゲージの上限値が\[:param(\d\d)\]上昇": {
+        "en": "After Sense Activation, Increase Principal Gauge Cap by [:param{0}]",
+        "zh_TW": "Sense 發動後，Principal Gauge 的上限值提升 [:param{0}]",
+        "zh_CN": "Sense 发动后，Principal Gauge 的上限值提升 [:param{0}]",
+        "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น [:param{0}]",
+    },
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
         "en": "When {actor} is Present, Sense is Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
         "zh_TW": "當{actor}在隊伍時，{actor}代為發動 Sense，且{actor}獲得的分數 [:pre1]% UP",
@@ -1000,11 +1000,11 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "生命值愈少，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
         "th": "ยิ่งเลือดน้อยเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
     },
-    r"\[:sec\]秒間、(?P<company>.+)のアクターに(?P<sense_star_act>センス|スターアクト)スコア\[:param11\]％UP効果": {
-        "en": "For [:sec] seconds, {company} Actors Gain [:param11]% UP Score from {sense_star_act}",
-        "zh_TW": "[:sec]秒內，{company}演員附帶 {sense_star_act} 分數 [:param11]% UP 效果",
-        "zh_CN": "[:sec]秒内，{company}演员附带 {sense_star_act} 分数 [:param11]% UP 效果",
-        "th": "คะแนน{sense_star_act}ของ {company} เพิ่มขึ้น [:param11]% เป็นเวลา [:sec] วินาที",
+    r"\[:sec(\d*)\]秒間、(?P<company>.+)のアクターに(?P<sense_star_act>センス|スターアクト)スコア\[:param(\d\d)\]％UP効果": {
+        "en": "For [:sec{0}] seconds, {company} Actors Gain [:param{3}]% UP Score from {sense_star_act}",
+        "zh_TW": "[:sec{0}]秒內，{company}演員附帶 {sense_star_act} 分數 [:param{3}]% UP 效果",
+        "zh_CN": "[:sec{0}]秒内，{company}演员附带 {sense_star_act} 分数 [:param{3}]% UP 效果",
+        "th": "คะแนน{sense_star_act}ของ {company} เพิ่มขึ้น [:param{3}]% เป็นเวลา [:sec{0}] วินาที",
     },
     r"(?P<company>.+)のアクターのCTを(\d+)秒短縮": {
         "en": "CT of each {company} Actor Reduces by {1}s for the Next Sense",
@@ -1052,6 +1052,11 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": "For each {company} Actor in the Unit, Gain {1} Principal Gauge",
         "zh_TW": "獲得總數為隊伍內{company}演員人數 × {1} 的 Principal Gauge",
         "zh_CN": "获得总数为队伍内{company}演员人数 × {1} 的 Principal Gauge",
+    },
+    r"センス発動時、(?P<company>.+)アクターの人数×(\d+)のプリンシパルゲージを獲得": {
+        "en": "When Sense Activates, Gain {1} Principal Gauge for each {company} Actor ",
+        "zh_TW": "Sense 發動時，獲得總數為{company}演員人數 × {1} 的 Principal Gauge",
+        "zh_CN": "Sense 发动时，获得总数为{company}演员人数 × {1} 的 Principal Gauge",
     },
     r"(?P<company>.+)アクターのCTを、編成されている(?P<company2>.+)アクターの人数×(\d+)秒短縮": {
         "en": "CT of each {company} Actor Reduces by the Number of {company2} Actors in the Unit × {2}s for the Next Sense",
@@ -1478,6 +1483,11 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_TW": "公演開始時，給予 Life Guard（{} 次）",
         "zh_CN": "公演开始时，给予 Life Guard（{} 次）",
         "th": "เมื่อเริ่มเพลงจะได้ Life Guard {} ครั้ง",
+    },
+    r"公演開始時、自身のセンススコア\[:param11\]％UP効果が公演終了まで発動する": {
+        "en": 'When the Performance Starts, Activate the Effect of [:param11]% UP Sense Score to oneself Until the Performance Ends',
+        "zh_TW": "公演開始時，自身發動 Sense 分數 [:param11]% UP 效果直到公演結束",
+        "zh_CN": "公演开始时，自身发动 Sense 分数 [:param11]% UP 效果直到公演结束",
     },
     r"公演と協力公演の公演報酬が\[:param11\][%％]増加（アクセサリーを除く）": {
         "en": "Rewards from Performances and Multi-player Performances Increase by [:param11]% (Except Accessories)",

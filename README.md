@@ -28,7 +28,7 @@ Currently there are also wrappers that simulates discord interactions on Guilded
 If some commands trigger an error message that should not be there, errors will be sent to a channel that will be reviewed and fixed as soon as possible. Therefore, generally there are no needs to report errors. If errors are not fixed in a few days, feel free to submit an issue regarding those errors.
 
 - Errors refer to those red embeds with content as `No Information Available.`
-- If the content is not `No Information Available.`, they should have been handled probably.
+- If the content is not `No Information Available.`, the error should already be handled properly.
   - Exceptions like `DataUnavailableException` or `AssetNotExistException` really means that the requested information does not exist.
   - Error handling can still be bugged that prevents the whole command from working. If that is the case, feel free to raise an issue. 
 
@@ -100,6 +100,7 @@ Currently the bot does not maintain a user-submitted song/character alias list.
 You may contribute to the file `song_alias_list.py` if a name is an unlisted officially translated title or titles with all the Katakana replaced with the borrowed term (in English or the source language) that is significantly different from the Romaji that makes the bot underestimate the name similarity.
 
 - PJSK ([song_alias_list.py](pjsk/song_alias_list.py))
+- WDS ([song_alias_list.py](wds/song_alias_list.py))
 
 ### Song BPM:
 

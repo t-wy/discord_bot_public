@@ -16,18 +16,23 @@ class GameNameGlossary:
     Used for game name in outputs
     For command group name, check command_text.gamename
     """
+    CG = _("Mobamas", zh="cg走路工", ja="モバマス")
     CGSS = _("CGSS", ja="デレステ")
     MLTD = _("MLTD", ja="ミリシタ")
+    GKMS = _("GKMS", zh_TW="學園偶大", zh_CN="学园偶大", ja="学マス")
+    IPR = _("IPR", zh_TW="偶像榮耀", zh_CN="偶像荣耀", ja="アイプラ")
     LLLL = _("LLLL", ja="リンクラ")
     PJSK = _("PJSK", ja="プロセカ", ko="프로세카")
     RST = _("RST", ja="リステップ")
-    SC = _("SC", ja="シャニマス")
+    SC = _("SC", zh_TW="閃耀色彩", zh_CN="闪耀色彩", ja="シャニマス")
     SFP = _("SFP", ja="シャニソン")
     WDS = _("WDS", ja="ユメステ")
 
 class GameColor:
+    CG = 0x848ac4
     CGSS = 0x848ac4
     MLTD = 0xffc20b
+    GKMS = 0xf39800
     LLLL = 0xfce8e6
     PJSK = 0x39c5bb
     RST = 0xee2288
@@ -178,7 +183,7 @@ class SongGlossary:
     duration_last_note = _("Duration (Last Note)", ja="長さ（最後のノート）", zh_TW="長度（最後的 Note）", zh_CN="长度（最后的 Note）")
     """長さ（最後のノート）\n\nrefer to the time of the last note of the chart, shown in song difficulty"""
 
-    efficiency_coef = _("Efficiency Coef.", ja="効率係数", zh="效率係數", zh_CN="效率P系数")
+    efficiency_coef = _("Efficiency Coef.", ja="効率係数", zh="效率係數", zh_CN="效率系数")
 
     efficient_songs = _("Efficient Songs", ja="効率曲", zh="效率曲")
 

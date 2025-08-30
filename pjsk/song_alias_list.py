@@ -1,6 +1,7 @@
 # Put translated FULL name here if it is not the best match
 # We have variant character (異[体體]字) matching, so probably need not handle CJK variants (i.e. Japanese Kanji / Korean Hanja / Trad. Chi. / Simp. Chi.)
 # Take care of katakana songs which EN version is not yet released.
+# If the translated song name can be found in the lyrics, it can also be included.
 # "of" reversal may be considered if the Japanese title appears like "AのB" or compound noun "AB" but is translated as "B of A" in EN version (not for JP song with it's original title already in English)
 # Reload pjsk.song after reload this file to refresh the cache if needed
 from typing import *
