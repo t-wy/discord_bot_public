@@ -9,6 +9,9 @@
 # Last Update: Song before 2025-08-19
 
 from typing import *
+if TYPE_CHECKING:
+    import bot_client
+
 song_alias_list: Dict[int, List[str]] = {
     1: [ # ワナビスタ！
         "Wanna Be Star!", # as in song name, JASRAC Database
@@ -221,6 +224,7 @@ song_alias_list: Dict[int, List[str]] = {
     89: [ # ウタカタララバイ
         "Utakata Lullaby", # JASRAC Database
         "ウタカタLullaby",
+        "Fleeting Lullaby", # From Jacket
     ],
     90: [ # NEO SKY, NEO MAP!
         "ネオ・スカイ、ネオ・マップ！",
@@ -528,3 +532,8 @@ song_alias_list: Dict[int, List[str]] = {
         "ステラリウム・コレクション・ボリューム・ワン",
     ],
 }
+
+def setup(client: 'bot_client.BotClient'):
+    # reload whatever creates the Song instances
+    from basic_utility import full_reload
+    full_reload("wds.song", message_client = client)

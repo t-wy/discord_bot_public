@@ -4,7 +4,13 @@
 # If the translated song name can be found in the lyrics, it can also be included.
 # "of" reversal may be considered if the Japanese title appears like "AのB" or compound noun "AB" but is translated as "B of A" in EN version (not for JP song with it's original title already in English)
 # Reload pjsk.song after reload this file to refresh the cache if needed
+
+# Last Update: Song before yyyy-mm-dd
+
 from typing import *
+if TYPE_CHECKING:
+    import bot_client
+
 song_alias_list: Dict[int, List[str]] = {
     46: [ # グリーンライツ・セレナーデ
         "綠光小夜曲",
@@ -288,3 +294,8 @@ song_alias_list: Dict[int, List[str]] = {
         "法則書", # as appearing in Lyrics corr. to the song name
     ],
 }
+
+def setup(client: 'bot_client.BotClient'):
+    # reload whatever creates the Song instances
+    from basic_utility import full_reload
+    full_reload("pjsk.song", message_client = client)
