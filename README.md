@@ -1,5 +1,7 @@
 # Discord Bot (社長) for Idol Games
 
+Support Server: [Discord](https://discord.gg/fYA3r8tens)
+
 This repository currently contains only the parts that have been tidied up and do not include codes that connect to the API servers.
 
 Currently there are also wrappers that simulates discord interactions on Guilded and Telegram. Some caveats:

@@ -65,6 +65,13 @@ class AssetNotExistException(CustomException):
     def __init__(self):
         super().__init__("The specified asset does not exist.")
 
+class AssetWithoutMediaException(CustomException):
+    """
+    The specified asset does not contain any audio or video.
+    """
+    def __init__(self):
+        super().__init__("The specified asset does not contain any audio or video.")
+
 class CardNotFoundException(CustomException):
     """
     The specified card is not found.
