@@ -491,6 +491,9 @@ song_alias_list: Dict[int, List[str]] = {
     206: [ # SECRET TRAINING!!!!
         "シークレット・トレーニング!!!!",
     ],
+    208: [ # アンチ・サニーデイズ・カレンダー
+        "Anti Sunny Days Calendar",
+    ],
     209: [ # RAREFIED HEIGHTS
         "レアファイド・ハイツ", # JASRAC Database
         "レアリファイド・ハイツ",
@@ -515,6 +518,11 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     219: [ # 蜘蛛の糸
         "Spider's Thread", # Shown in Arcaea
+    ],
+    220: [ # ロマンスの神様
+        "Romance の神様",
+        "Romance no Kamisama",
+        "The Cupid of Romance", # Official English Title
     ],
     221: [ # DreamRiser
         "ドリームライザー",

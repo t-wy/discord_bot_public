@@ -821,6 +821,11 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_CN": "Star Act 发动后，获得当时分数 [:param11]% 的分数",
         "th": "หลังจากเปิดใช้งาน Star Act จะได้รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
     },
+    "スターアクト発動後、現在のプリンシパルゲージ上限の[:param11]%分のプリンシパルゲージを獲得する": {
+        "en": "After Star Act Activation, Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap",
+        "zh_TW": "Star Act 發動後，獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+        "zh_CN": "Star Act 发动后，获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+    },
 }, {
     r"ライフが多いほどスコア獲得量UP効果（最大＋ (\d+)%）": {
         "en": "The More the Life Value is, the More Score Gain UP is Resulted in from so (+{0}% at Most)",
@@ -947,6 +952,11 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "Sense 發動後，額外獲得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
         "zh_CN": "Sense 发动后，额外获得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
     },
+    "センス発動後、現在のプリンシパルゲージ上限の[:param11]%分のプリンシパルゲージを獲得する。": {
+        "en": "After Sense Activation, Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap.",
+        "zh_TW": "Sense 發動後，獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge。",
+        "zh_CN": "Sense 发动后，获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge。",
+    },
     "センス発動直後、その時のスコアの[:param11]％のスコアを獲得": {
         "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Score at That Moment",
         "zh_TW": "Sense 發動後，獲得當時分數 [:param11]% 的分數",
@@ -970,6 +980,12 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "Sense 發動後，Principal Gauge 的上限值提升 [:param{0}]",
         "zh_CN": "Sense 发动后，Principal Gauge 的上限值提升 [:param{0}]",
         "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น [:param{0}]",
+    },
+    r"センス発動後、付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
+        "en": "After Sense Activation, Increase Principal Gauge Cap by {0} (+{1} at Most)",
+        "zh_TW": "Sense 發動後，每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {0}（最多 +{1}）",
+        "zh_CN": "Sense 发动后，每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {0}（最多 +{1}）",
+        "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้นต่อ Life Guard 1 ครั้ง {0} (สูงสุด {1})",
     },
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
         "en": "When {actor} is Present, Sense is Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
@@ -1054,9 +1070,14 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "获得总数为队伍内{company}演员人数 × {1} 的 Principal Gauge",
     },
     r"センス発動時、(?P<company>.+)アクターの人数×(\d+)のプリンシパルゲージを獲得": {
-        "en": "When Sense Activates, Gain {1} Principal Gauge for each {company} Actor ",
+        "en": "When Sense Activates, Gain {1} Principal Gauge for each {company} Actor",
         "zh_TW": "Sense 發動時，獲得總數為{company}演員人數 × {1} 的 Principal Gauge",
         "zh_CN": "Sense 发动时，获得总数为{company}演员人数 × {1} 的 Principal Gauge",
+    },
+    r"センス発動時、編成されている(?P<company>.+)アクターの人数×(\d+)プリンシパルゲージを獲得": {
+        "en": "When Sense Activates, Gain {1} Principal Gauge for each {company} Actor in the Unit",
+        "zh_TW": "Sense 發動時，獲得總數為隊伍內{company}演員人數 × {1} Principal Gauge",
+        "zh_CN": "Sense 发动时，获得总数为队伍内{company}演员人数 × {1} Principal Gauge",
     },
     r"(?P<company>.+)アクターのCTを、編成されている(?P<company2>.+)アクターの人数×(\d+)秒短縮": {
         "en": "CT of each {company} Actor Reduces by the Number of {company2} Actors in the Unit × {2}s for the Next Sense",
@@ -1105,6 +1126,11 @@ single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_
         "en": 'Initial Principal Gauge Increases by {1} for each actor having Category "{0}"',
         "zh_TW": "根據持有「{0}」分類的演員數量，初始 Principal Gauge 各提升 {1}",
         "zh_CN": "根据持有「{0}」分类的演员数量，初始 Principal Gauge 各提升 {1}",
+    },
+    r"「(.+?)」カテゴリの数に応じて初期プリンシパルゲージが(\d+)上昇": {
+        "en": 'Initial Principal Gauge Increases by {1} Times the Count of Category "{0}"',
+        "zh_TW": "根據「{0}」分類數量，初始 Principal Gauge 各提升 {1}",
+        "zh_CN": "根据「{0}」分类数量，初始 Principal Gauge 各提升 {1}",
     },
     r"「(.+?)」カテゴリのCTを(\d+)秒短縮する": {
         "en": 'Category "{0}" CT Reduces by {1}s',

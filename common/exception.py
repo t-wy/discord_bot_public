@@ -222,6 +222,13 @@ class MessageNotFoundException(CustomException):
     def __init__(self):
         super().__init__("The message is not found.\n\nMaybe the message was deleted or the bot does have access to read messages in this channel.")
 
+class NotMyMessageException(CustomException):
+    """
+    The message is not sent by me.
+    """
+    def __init__(self):
+        super().__init__("The message is not sent by me.")
+
 class PayloadTooLargeException(CustomException):
     """
     The provided payload is too large to be sent.
@@ -309,6 +316,13 @@ class TableNotFoundException(CustomException):
     """
     def __init__(self):
         super().__init__("The specified table is not found.")
+
+class TemporarilyDisabledException(CustomException):
+    """
+    This feature is temporarily disabled due to possible platform issues.
+    """
+    def __init__(self):
+        super().__init__("This feature is temporarily disabled due to possible platform issues.")
 
 class TimeFormatException(CustomException):
     """

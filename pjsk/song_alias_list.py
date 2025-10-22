@@ -117,6 +117,9 @@ song_alias_list: Dict[int, List[str]] = {
     354: [ # セツナトリップ
         "剎那旅程",
     ],
+    355: [ # 白い雪のプリンセスは (The Snow White Princess Is...)
+        "THE STORY OF THE GIRL AND HER...", # subtitle
+    ],
     365: [ # 恋は戦争
         "戀愛是場戰爭", # Supercell Album Taiwan Title
         "愛是戰爭", # Supercell Album China Official Title
@@ -192,6 +195,10 @@ song_alias_list: Dict[int, List[str]] = {
     477: [ # モザイクロール (Reloaded)
         "Mosaic Roll (Reloaded)",
     ],
+    490: [ # ルーマー
+        "Rumor",
+        "Rumour",
+    ],
     491: [ # キャットラビング
         "Cat Loving",
     ],
@@ -214,6 +221,9 @@ song_alias_list: Dict[int, List[str]] = {
     507: [ # エンパープル
         "Empurple",
     ],
+    508: [ # ヘイヴン
+        "Haven",
+    ],
     509: [ # ライアーダンサー
         "Liar Dancer",
     ],
@@ -225,6 +235,12 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     517: [ # メリーゴーラウンド
         "Merry Go Round",
+    ],
+    520: [ # 透明エレジー
+        "透明 Elegy",
+    ],
+    521: [ # オーバーライド
+        "Override",
     ],
     523: [ # きみとぼくのレゾナンス
         "きみとぼくのResonance",
@@ -249,6 +265,13 @@ song_alias_list: Dict[int, List[str]] = {
         "reunion", # the only English substring
         "World Lampshade [reunion]",
     ],
+    538: [ # オールセーブチャレンジ
+        "All-Save Challenge",
+        "All Save Challenge",
+    ],
+    539: [ # イレヴンス
+        "Eleventh",
+    ],
     541: [ # メインキャラクター
         "Main Character",
     ],
@@ -258,11 +281,17 @@ song_alias_list: Dict[int, List[str]] = {
     544: [ # 妄想アスパルテーム
         "妄想Aspartame",
     ],
+    551: [ # ロストアンブレラ
+        "Lost Umbrella",
+    ],
     553: [ # パリィ
         "Parry",
     ],
     555: [ # フュージョン
         "Fusion",
+    ],
+    560: [ # アイリッド
+        "Eyelid",
     ],
     561: [ # プロトディスコ 
         "Proto Disco",
@@ -277,6 +306,9 @@ song_alias_list: Dict[int, List[str]] = {
     569: [ # シークレット・シーカー
         "Secret Seeker",
     ],
+    570: [ # スター
+        "Star",
+    ],
     576: [ # ファイアダンス
         "Fire Dance",
     ],
@@ -286,12 +318,108 @@ song_alias_list: Dict[int, List[str]] = {
     578: [ # ハローセカイ
         "Hello Sekai",
     ],
+    580: [ # 三日月ステップ
+        "三日月 Step",
+    ],
+    581: [ # 厨病激発ボーイ
+        "厨病激発 Boy",
+    ],
     582: [ # アンチユー
         "Antiyou",
+    ],
+    583: [ # アクセラレイト
+        "Accelerate",
     ],
     587: [ # ルルブ
         "Rule Book",
         "法則書", # as appearing in Lyrics corr. to the song name
+    ],
+    588: [ # プラネットヒーロー
+        "Planet Hero",
+    ],
+    591: [ # 吉原ラメント 再来盤
+        "吉原 Lament 再来盤",
+    ],
+    592: [ # クイーンオブハート
+        "Queen of Heart",
+    ],
+    595: [ # エンヴィキャットウォーク
+        "Envy Catwalk",
+        "Envy Cat Walk",
+    ],
+    606: [ # スーサイドパレヱド
+        "Suicide Parade",
+    ],
+    608: [ # 星宙メランコリア
+        "星宙 Melancholia",
+    ],
+    621: [ # 東京サマーセッション
+        "東京 Summer Session",
+        "Tokyo Summer Session",
+    ],
+    622: [ # 超ナイト・オブ・ナイツ
+        "超 Night of Knights",
+    ],
+    623: [ # とうほう☆ワンダーランド
+        "とうほう☆Wonderland",
+        "Touhou☆Wonderland",
+    ],
+    624: [ # チルノのパーフェクトさんすう学園
+        "Cirno の Perfect さんすう学園",
+    ],
+    626: [ # フィッシュアンドTips
+        "Fish and Tips",
+    ],
+    627: [ # テトリス
+        "Tetris",
+        "Tetoris",
+        "Тетрис",
+    ],
+    628: [ # モニタリング
+        "Monitoring",
+    ],
+    635: [ # ありのままのストーリーを
+        "ありのままの Story を",
+    ],
+    636: [ # エクスプロウル
+        "Explore",
+    ],
+    639: [ # マリオネットダンサー
+        "Marionette Dancer",
+    ],
+    645: [ # 深海シティアンダーグラウンド
+        "深海 City Underground",
+    ],
+    646: [ # 透明なパレット
+        "透明なPalette",
+    ],
+    651: [ # ホワイトハッピー
+        "White Happy",
+    ],
+    652: [ # カレシのジュード
+        "カレシのJude",
+        "彼氏のジュード",
+    ],
+    653: [ # パメラ
+        "Pamela",
+    ],
+    655: [ # リリィララ
+        "lily-lala",
+    ],
+    656: [ # ブラッドドール
+        "Blood Doll",
+    ],
+    663: [ # ヴィーナス
+        "Venus",
+    ],
+    668: [ # ネクラチューンサーカス
+        "Nekuratune Circus",
+    ],
+    672: [ # ハウトゥー世界征服
+        "How to 世界征服",
+    ],
+    677: [ # アベリア
+        "Abelia",
     ],
 }
 
