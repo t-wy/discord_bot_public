@@ -543,5 +543,15 @@ song_alias_list: Dict[int, List[str]] = {
 
 def setup(client: 'bot_client.BotClient'):
     # reload whatever creates the Song instances
-    from basic_utility import full_reload
-    full_reload("wds.song", message_client = client)
+    # from basic_utility import full_reload
+    # full_reload("wds.song", message_client = client)
+    from .game_manager import managers
+    from common.song import SongList
+    from console_color import color_print
+    for ver, manager in managers.items():
+        if isinstance(manager.song_list, SongList):
+            color_print(
+                f"* Reload {manager.__class__.game_abbr.upper()} ({manager.game_version}) song alias list...",
+                color = manager.__class__.color
+            )
+            manager.song_list.reload_lookup()

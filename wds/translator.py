@@ -839,6 +839,12 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_CN": "每持有 1 次 Life Guard，分数获得量增加{0}%（最多 +{1}%）",
         "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
     },
+    r"付与されているライフガード1回につき(\d+)プリンシパルゲージの上限を上昇（最大＋(\d+)）": {
+        "en": "For each Life Guard in Possession, Principal Gauge Cap Increases by {0} (+{1} at Most)",
+        "zh_TW": "每持有 1 次 Life Guard，Principal Gauge 的上限值提升{0}（最多 +{1}）",
+        "zh_CN": "每持有 1 次 Life Guard，Principal Gauge 的上限值提升{0}（最多 +{1}）",
+        "th": "Principal gauge สูงสุดจะเพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
+    },
     r"消費するライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Life Guard Spent, Score Gain Increases by {0}% (+{1}% at Most)",
         "zh_TW": "每消費 1 次 Life Guard，分數獲得量增加{0}%（最多 +{1}%）",
@@ -1088,6 +1094,11 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": "When Sense Activates, the {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
         "zh_TW": "Sense 發動時，{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {3}% (此效果可疊加)",
         "zh_CN": "Sense 發動時，{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {3}% (此效果可叠加)",
+    },
+    r"センス発動後、編成されている(?P<companies>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を消費するライフガードの数\(最大(\d+)回\)×(\d+)%上昇させる\(この効果は重複する\)": {
+        "en": "After Sense Activation, the {status} and {status2} of each {companies} Actor in the Unit Increases by the Number of Life Guards Spent (At most {3} pcs.) × {4}% (This Effect can be Stacked)",
+        "zh_TW": "Sense 發動後，{companies}演員的 {status} 及 {status2} 提升 Life Guard 消費次數（最多 {3} 次） × {4}% (此效果可疊加)",
+        "zh_CN": "Sense 發動后，{companies}演员的 {status} 及 {status2} 提升 Life Guard 消费次数（最多 {3} 次） × {4}% (此效果可叠加)",
     },
     r"センス発動時、追加で「ライフガード」を獲得する（レベル1：(\d+)個／レベル2：(\d+)個／レベル3：(\d+)個／レベル4：(\d+)個／レベル5：(\d+)個\)": {
         "en": 'When Sense Activates, Gain Additional Life Guard(s) (Lv.1: {0} pcs / Lv.2: {1} pcs / Lv.3: {2} pcs / Lv.4: {3} pcs / Lv.5: {4} pcs)',

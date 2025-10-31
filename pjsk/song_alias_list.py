@@ -31,6 +31,11 @@ song_alias_list: Dict[int, List[str]] = {
         "Hatsune Miku's Disappearance", # processive noun "of" reversal
     ],
     74: [ # 独りんぼエンヴィー
+        "エビ",
+        "えび",
+        "海老",
+        "蝦",
+        "🦐",
         "孑然妒火",
         "充滿嫉妒的一人捉迷藏",
     ],
@@ -69,6 +74,10 @@ song_alias_list: Dict[int, List[str]] = {
     194: [ # 妄想感傷代償連盟
         "Delusion Sentiment Compensation Federation", # Only DSCF in EN Server
     ],
+    196: [ # オーダーメイド
+        "Ordermade",
+        "Order Made",
+    ],
     198: [ # グッバイ宣言
         "再見宣言",
     ],
@@ -90,6 +99,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     251: [ # フロイライン＝ビブリォチカ
         "Fraulein=Biblioteca",  # Fräulein=библиотека in EN Server
+    ],
+    266: [ # YY
+        "丫丫",
+        "ㄚㄚ",
     ],
     275: [ # パラジクロロベンゼン
         "Benzene", # Paradichlorobenzene is too long that Benzene get matched to Bad End Night (BEN)
@@ -150,6 +163,24 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     411: [ # 世界を照らすテトラッド
         "世界を照らすTetrad",
+    ],
+    423: [ # レグルス (Regulus)
+        # as star name
+        "Alpha Leonis",
+        "Cor Leonis",
+        "Καρδια Λεοντος",
+        "Kardia Leontos",
+        "α Leo",
+        "alpha Leo",
+        "a Leo",
+        "しし座α星",
+        "しし座 alpha 星",
+        "しし座a星",
+        "獅子座α",
+        "獅子座alpha",
+        "獅子座a",
+        "軒轅十四",
+        "軒轅14",
     ],
     428: [ # ときめきジェットコースター
         "Tokimeki Jet Coaster",
@@ -342,6 +373,18 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     592: [ # クイーンオブハート
         "Queen of Heart",
+        "Queen of Hearts",
+        "Heart Queen",
+        # Poker Card
+        "♥Q",
+        "Q♥",
+        "🂽",
+         # Alice in Wonderland
+        "ハートの女王",
+        "紅心王后",
+        "紅心皇后",
+        "紅心女王",
+        "하트의 여왕",
     ],
     595: [ # エンヴィキャットウォーク
         "Envy Catwalk",
@@ -425,5 +468,16 @@ song_alias_list: Dict[int, List[str]] = {
 
 def setup(client: 'bot_client.BotClient'):
     # reload whatever creates the Song instances
-    from basic_utility import full_reload
-    full_reload("pjsk.song", message_client = client)
+    # from basic_utility import full_reload
+    # full_reload("pjsk.song", message_client = client)
+    # call reload_lookup from all songlist in game_manager instead
+    from .game_manager import managers
+    from common.song import SongList
+    from console_color import color_print
+    for ver, manager in managers.items():
+        if isinstance(manager.song_list, SongList):
+            color_print(
+                f"* Reload {manager.__class__.game_abbr.upper()} ({manager.game_version}) song alias list...",
+                color = manager.__class__.color
+            )
+            manager.song_list.reload_lookup()
