@@ -569,7 +569,6 @@ attribute_translator = regex_lookup_translator_wrapper("attribute_translator", {
     },
     "彩": {
         "en": "Colorful",
-        "zh_CN": "彩",
     },
     "陽": {
         "en": "Cheerful",

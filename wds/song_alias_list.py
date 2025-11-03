@@ -214,8 +214,9 @@ song_alias_list: Dict[int, List[str]] = {
         "サージズ",
         "サージス",
     ],
-    86: [ # アスノヨゾラ哨戒班
+    86: [ # アスノヨゾラ哨戒班 (Check PJSK 18 Also)
         "Night Sky Patrol of Tomorrow", # Official English Title
+        "明日の夜空哨戒班",
     ],
     88: [ # 幻日ミステリウム
         "幻日Mysterium",
@@ -292,6 +293,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     117: [ # 水際PARTY、水着でFUNNY
         "水際パーティー、水着でファニー",
+    ],
+    118: [ # あの夏が飽和する。 (Check PJSK 650 Also)
+        "那个夏日已然饱和。", # https://www.bilibili.com/video/BV1CGdAYoEJJ
+        "那個已然飽和的夏天。", # / 尖端出版社 ISBN 978-626-338-374-6
     ],
     119: [ # Stellar Stellar
         "ステラ・ステラ",
@@ -409,7 +414,7 @@ song_alias_list: Dict[int, List[str]] = {
     175: [ # Believe again
         "ビリーブ・アゲイン",
     ],
-    176: [ # いーあるふぁんくらぶ
+    176: [ # いーあるふぁんくらぶ (Check PJSK 174 Also)
         "一二Fanclub",
         "1, 2, Fanclub", # JASRAC Database
     ],
