@@ -6,6 +6,15 @@
 # "of" reversal may be considered if the Japanese title appears like "AのB" or compound noun "AB" but is translated as "B of A" in EN version (not for JP song with it's original title already in English)
 # Reload wds.song after reload this file to refresh the cache if needed
 
+# Official Translation References (e.g.):
+# - JASRAC Works Information Database 作品データベース検索サービス https://www2.jasrac.or.jp/eJwid/main?trxID=F00100
+# - Alternative names appeared on Song Jacket
+# - WDS Official Tweets
+# - Otehr translated titles from PJSK of the same song
+
+# Extra Reliable Translation / Abbreviation References (e.g.):
+# - や (@Ya8328) https://t.co/KAJ65uQCFB (https://x.com/Ya8328/status/1878147115211235517)
+
 # Last Update: Song before 2025-08-19
 
 from typing import *

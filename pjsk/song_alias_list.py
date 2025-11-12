@@ -5,6 +5,19 @@
 # "of" reversal may be considered if the Japanese title appears like "AのB" or compound noun "AB" but is translated as "B of A" in EN version (not for JP song with it's original title already in English)
 # Reload pjsk.song after reload this file to refresh the cache if needed
 
+# Official Translation References (e.g.):
+# - Youtube bilingual title / region-specific title
+# - Bilibili Official Upload Title
+# - Authorised Derivative Comic / Novel / Book
+# - Self-explanatory Lyrics
+
+# Extra Reliable Translation / Abbreviation References (e.g.):
+# - https://home.gamer.com.tw/ (Fanmade lyrics translations)
+# - https://moegirl.org.cn (Backup: https://moegirl.icu)
+# - https://pjsekai.fandom.com
+# - https://viewer.unipjsk.com/musics/
+# - https://assets.unipjsk.com/logs/202511.html (If ever accessible)
+
 # Last Update: Song before 2025-11-01
 
 from typing import *
