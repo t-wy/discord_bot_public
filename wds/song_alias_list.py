@@ -89,8 +89,9 @@ song_alias_list: Dict[int, List[str]] = {
         "スノー・ハレーション",
         "スノーハレーション",
     ],
-    34: [ # フォニイ
+    34: [ # フォニイ (Check PJSK 277 Also)
         "Phony",
+        '佛你',
     ],
     35: [ # チューリングラブ
         "Turing Love",
@@ -180,8 +181,9 @@ song_alias_list: Dict[int, List[str]] = {
         "いろはうたブルーミング", # JASRAC Database
         "IROHAUTA BLOOMING", # JASRAC Database
     ],
-    72: [ # DAYBREAK FRONTLINE
+    72: [ # DAYBREAK FRONTLINE (Check PJSK 253 Also)
         "デイブレイク・フロントライン",
+        '黎明前線',
     ],
     73: [ # フタリノスタルジア
         "フタリNostalgia",
@@ -210,13 +212,15 @@ song_alias_list: Dict[int, List[str]] = {
     83: [ # Rolling Stone
         "ローリング・ストーン",
     ],
-    85: [ # Surges
+    85: [ # Surges (Check PJSK 632 Also)
         "サージズ",
         "サージス",
+        '被海放',
     ],
     86: [ # アスノヨゾラ哨戒班 (Check PJSK 18 Also)
         "Night Sky Patrol of Tomorrow", # Official English Title
         "明日の夜空哨戒班",
+        '明日的夜空巡邏班',
     ],
     88: [ # 幻日ミステリウム
         "幻日Mysterium",
@@ -397,7 +401,7 @@ song_alias_list: Dict[int, List[str]] = {
         "Prism△▽Rhythm",
     ],
     169: [ # 花と、雪と、ドラムンベース。
-        "花と、雪と、Drum'n' Bass."
+        "花と、雪と、Drum'n' Bass.",
     ],
     170: [ # Starry Colors
         "スターリー・カラーズ",
@@ -417,6 +421,8 @@ song_alias_list: Dict[int, List[str]] = {
     176: [ # いーあるふぁんくらぶ (Check PJSK 174 Also)
         "一二Fanclub",
         "1, 2, Fanclub", # JASRAC Database
+        '1 2 粉絲俱樂部',
+        '一二粉絲俱樂部',
     ],
     179: [ # ヱテルナ・ガラクシア
         "Eterna Galaxia", # JASRAC Database
