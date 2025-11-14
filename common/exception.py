@@ -113,6 +113,13 @@ class DataNotExistException(CustomException):
     def __init__(self):
         super().__init__("There is no such entry.")
 
+class EmbedNotFoundException(CustomException):
+    """
+    Embed not found.
+    """
+    def __init__(self):
+        super().__init__("Embed not found. It seems to have been manually removed")
+
 class EventNotFoundException(CustomException):
     """
     Event not found.

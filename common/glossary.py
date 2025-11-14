@@ -165,7 +165,7 @@ class SongGlossary:
     chart_search = _("Chart Search", ja="譜面検索", zh_TW="譜面搜尋", zh_CN="谱面搜索")
     """譜面検索\n\nused as embed title"""
 
-    cover_song = _("Cover Song", ja="カバー楽曲", zh="翻唱歌曲")
+    cover_song = _("Cover Song", ja="カバー曲", zh="翻唱歌曲")
     """use ○ / × as the value"""
 
     duration = _("Duration", ja="長さ", zh_TW="長度", zh_CN="长度")

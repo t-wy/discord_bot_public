@@ -31,7 +31,7 @@ class description:
     character_info = _("Character Basic Information", zh="角色基本資料", ja="キャラクター設定")
     circle_id = _('Circle id', zh_TW="社團 ID", zh_CN="社团 ID", ja="サークル ID")
     count_card = _('Number of cards', zh="卡面數量")
-    cover_songs_guess = _('Whether to include cover songs', zh="是否顯示翻唱曲", ja="カバー楽曲表示")
+    cover_songs_guess = _('Whether to include cover songs', zh="是否顯示翻唱曲", ja="カバー曲表示") # vs pre_existing_songs_guess
     detail_circle = _("Detailed circle information", zh="詳細社團資訊")
     detail_player = _("Detailed player information", zh="詳細玩家資訊")
     diff = _('Chart difficulty', zh="譜面難度", ja="譜面難易度")
@@ -100,6 +100,7 @@ class description:
     poster_info = _("Poster information", zh="海報資訊")
     poster_name = _('Poster name', zh="海報名稱", ja="ポスター名")
     poster_mode = _('The item to fetch', zh="海報資訊", ja="ポスター情報")
+    pre_existing_songs_guess = _('Whether to include existing songs', zh="是否顯示既存曲", ja="既存曲表示") # vs cover_songs_guess
     @staticmethod
     def rank_range(max: int):
         return _('Target rank (1 ~ {})'.format(max), zh="目標排名 (1 至 {})".format(max), ja="目標順位 (1 ～ {})".format(max))
@@ -173,7 +174,7 @@ class locale:
     chart_video = _("chart_video", zh_TW="譜面影片", zh_CN="谱面影片")
     circle = _("circle", ja="サークル", zh_TW="社團", zh_CN="社团")
     count = _("count", zh_TW="數量", zh_CN="数量")
-    cover_songs = _('cover_songs', zh="翻唱曲")
+    cover_songs = _('cover_songs', zh="翻唱曲", ja="カバー曲") # vs pre_existing_songs
     detail = _("detail", zh_TW="詳細", zh_CN="详细", ja="詳細")
     diff = _("diff", zh_TW="難度", zh_CN="难度", ja="難易度")
     diff_summary = _('diff_summary', zh_TW="差異_概要", zh_CN="差异_概要")
@@ -233,6 +234,7 @@ class locale:
     predict_detail_character_jiiku = _("predict_detail-character_jiiku", zh_TW="詳細預測-角色_jiiku", zh_CN="详细预测-角色_jiiku")
     old_version = _("old_version", zh_TW="舊版本", zh_CN="旧版本")
     order = _('order', zh="次序")
+    pre_existing_songs = _('existing_songs', zh="既存曲", ja="既存曲") # vs cover songs
     rank = _('rank', zh="排名", ja="順位") # as field name
     ranking = _("ranking", zh="排名", ja="ランキング") # as group name
     rarity = _('rarity', zh="稀有度", ja="レア度")
