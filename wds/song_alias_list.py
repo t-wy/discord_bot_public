@@ -375,8 +375,10 @@ song_alias_list: Dict[int, List[str]] = {
     150: [ # 粛聖!!ロリ神レクイエム☆
         "粛聖!!ロリ神Requiem☆",
     ],
-    152: [ # シャルル
+    152: [ # シャルル (Check PJSK 19 Also)
         "Charles",
+        '夏露露',
+        '下陸路',
     ],
     153: [ # DISCOTHEQUE
         "ディスコテーク",
