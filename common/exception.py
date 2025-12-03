@@ -378,6 +378,13 @@ class VersionHashNotFoundException(CustomException):
     def __init__(self):
         super().__init__("The hash for the current version is not found.")
 
+class VersionOutdatedException(CustomException):
+    """
+    The data version has been updated during the command execution. Please try again.
+    """
+    def __init__(self):
+        super().__init__("The data version has been updated during the command execution. Please try again.")
+
 class WorkInProgressException(CustomException):
     """
     This feature is being developed in progress.

@@ -279,6 +279,9 @@ song_alias_list: Dict[int, List[str]] = {
         '意想不到的wonders',
         '不可思議的奇蹟',
     ],
+    128: [ # Brand New Day
+        'bnd', # ブリキノダンス using the same bnd form
+    ],
     129: [ # ビターチョコデコレーション
         '苦巧',
     ],
@@ -330,6 +333,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     149: [ # カナデトモスソラ
         '奏響點亮天空',
+        'kanade',
     ],
     150: [ # トキヲ・ファンカ
         '東京不夜城',
@@ -680,6 +684,10 @@ song_alias_list: Dict[int, List[str]] = {
     285: [ # ÅMARA(大未来電脳)
         "AMARA", # without bracket or character modifiers
         "大未来電脳", # only bracket contents
+        '阿罵啦',
+        '阿媽啦',
+        '阿嬤啦',
+        '阿嫲啦',
     ],
     290: [ # どんな結末がお望みだい？ (Removed)
         "どんな結末がお望みだい？",
@@ -793,6 +801,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     344: [ # 脳内革命ガール
         "脳内革命 Girl",
+    ],
+    346: [ # 嗚呼、素晴らしきニャン生
+        '啊啊，美妙的貓生',
     ],
     347: [ # 円尾坂の仕立屋 (The Tailor of Enbizaka)
         "The Enbizaka's Tailor", # processive noun "of" reversal
@@ -934,6 +945,7 @@ song_alias_list: Dict[int, List[str]] = {
     400: [ # 我らステインバスターズ！
         "我らStain Busters！",
         '我們是污漬剋星！',
+        '牙刷',
     ],
     401: [ # まにまに
         '錢錢',
@@ -1112,6 +1124,9 @@ song_alias_list: Dict[int, List[str]] = {
     470: [ # ハジメテノオト
         '初めての音',
         '始めての音',
+    ],
+    471: [ # ULTRA C
+        'c',
     ],
     473: [ # マインドブランド
         "Mind Brand",
@@ -1431,6 +1446,11 @@ song_alias_list: Dict[int, List[str]] = {
         "Accelerate",
         "加速", # Literal Chinese translation
     ],
+    584: [ # IMAWANOKIWA
+        '今際の際',
+        '臨終之際',
+        '今わの際',
+    ],
     585: [ # ペンタトニック
         "Pentatonic",
         '五聲音階',
@@ -1582,6 +1602,9 @@ song_alias_list: Dict[int, List[str]] = {
         "透明的調色盤", # Unofficial
         '透明調色板',
     ],
+    647: [ # SAN値直葬
+        'SAN',
+    ],
     648: [ # Life Will Change
         'persona5',
     ],
@@ -1678,6 +1701,11 @@ song_alias_list: Dict[int, List[str]] = {
     10006: [ # 비밀 인형극 II
         '秘密人偶劇II',
         '秘密人偶劇二',
+        '秘密 人形劇 II', # hanja
+        '秘密木偶劇 II',
+        '秘密傀儡戲 II',
+        '秘密木偶戲 II',
+        '秘密人偶戲 II',
     ],
     10007: [ # Carpe Diem!
         '及時行樂！',

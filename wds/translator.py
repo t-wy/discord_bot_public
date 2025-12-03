@@ -1027,6 +1027,12 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "[:sec{0}]秒内，{company}演员附带 {sense_star_act} 分数 [:param{3}]% UP 效果",
         "th": "คะแนน{sense_star_act}ของ {company} เพิ่มขึ้น [:param{3}]% เป็นเวลา [:sec{0}] วินาที",
     },
+    r"\[:sec(\d*)\]秒間、編成されているアクターのプリンシパルゲージ獲得量\[:param(\d\d)\]％UP効果": {
+        "en": "For [:sec{0}] seconds, Apply a [:param{1}]% UP Effect to the Principal Gauge Gained by Actors in the Unit",
+        "zh_TW": "[:sec{0}]秒內，隊伍內演員附帶獲得 Principal Gauge 量 [:param{1}]% UP 效果",
+        "zh_CN": "[:sec{0}]秒内，队伍内演员附带获得 Principal Gauge 量 [:param{1}]% UP 效果",
+        "th": "Principal gauge ที่ได้รับของนักแสดงทุกคนเพิ่มขึ้น [:param{1}]% เป็นเวลา [:sec{0}] วินาที",
+    },
     r"(?P<company>.+)のアクターのCTを(\d+)秒短縮": {
         "en": "CT of each {company} Actor Reduces by {1}s for the Next Sense",
         "zh_TW": "{company}演員的 CT 縮短 {1} 秒",

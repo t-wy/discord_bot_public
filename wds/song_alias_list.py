@@ -64,6 +64,8 @@ song_alias_list: Dict[int, List[str]] = {
     16: [ # ウタカタメロディ
         "ウタカタMelody",
         "Utakata Melody", # JASRAC Database
+        '泡沫メロディー',
+        '泡沫Melody',
     ],
     17: [ # シリウスの輝きのように
         "Siriusの輝きのように",
@@ -239,6 +241,7 @@ song_alias_list: Dict[int, List[str]] = {
         "Utakata Lullaby", # JASRAC Database
         "ウタカタLullaby",
         "Fleeting Lullaby", # From Jacket
+        '泡沫ララバイ',
     ],
     90: [ # NEO SKY, NEO MAP!
         "ネオ・スカイ、ネオ・マップ！",
@@ -411,6 +414,9 @@ song_alias_list: Dict[int, List[str]] = {
     167: [ # プリズム△▽リズム
         "Prism△▽Rhythm",
     ],
+    168: [ # ホシシズク
+        '星雫',
+    ],
     169: [ # 花と、雪と、ドラムンベース。
         "花と、雪と、Drum'n' Bass.",
     ],
@@ -473,6 +479,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     191: [ # 愛包ダンスホール
         "愛包Dancehall",
+    ],
+    192: [ # カオスが極まる
+        '混沌が極まる', # 当て字
     ],
     193: [ # 1・2・3
         "One Two Three", # JASRAC Database
@@ -555,8 +564,15 @@ song_alias_list: Dict[int, List[str]] = {
     225: [ # VIVID BIT AT HOME！
         "ビビッド・ビット・アット・ホーム！",
     ],
+    226: [ # ナツのキオクのナイショのホンネ！
+        '夏の記憶の内緒の本音',
+    ],
     236: [ # カルペ・ディエム
         "Carpe diem",
+    ],
+    237: [ # 誰ガ為ノサダメ
+        '誰が為の定め',
+        '誰が為の運命', # 当て字
     ],
     249: [ # Stellarium Collection Vol.1
         "ステラリウム・コレクション・ボリューム・ワン",

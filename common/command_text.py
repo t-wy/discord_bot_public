@@ -147,6 +147,7 @@ class description:
     type_campaign = _('Campaign type', zh="Campaign 的類型")
     unit_detail = _('Show skill info', zh_TW="顯示隊伍特技", zh_CN="显示队伍特技")
     unreleased = _("Include unreleased contents", zh_TW="包括未公開內容", zh_CN="包括未公开内容", ja="未公開内容を含む")
+    ver_lang = _('Game Language Version', zh="語言版本")
     version_game = _("Get game version", zh_TW="取得遊戲版本", zh_CN="取得游戏版本", ja="ゲームバージョン")
     version_asset = _("Asset version", zh_TW="資源版本", zh_CN="资源版本", ja="アセットバージョン")
     witch = _('Keep witch notes', zh="保留Witch特效")
@@ -272,6 +273,7 @@ class locale:
     table_name = _("table_name", zh_TW="表格名稱", zh_CN="表格名称")
     type_ = _('type', zh_TW="種類", zh_CN="种类", ja="タイプ") # e.g. ranking type
     unreleased = _("unreleased", zh_TW="未公開", zh_CN="未公开", ja="未公開")
+    ver_lang = _('ver', zh="版本") # usually for game version (e.g. en / kr)
     version = _("version", zh="版本", ja="バージョン")
     zipped = _("zipped", zh_TW="壓縮", zh_CN="压缩", ja="圧縮")
 
