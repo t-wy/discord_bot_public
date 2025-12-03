@@ -941,12 +941,6 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "沒有效果 (所持的「光」得以保留)",
         "zh_CN": "没有效果 (所持的「光」得以保留)",
     },
-    "センス発動後、追加で[:param11]のプリンシパルゲージを獲得": {
-        "en": "After Sense Activation, Gain Additional [:param11] Principal Gauge",
-        "zh_TW": "Sense 發動後，額外獲得 [:param11] Principal Gauge",
-        "zh_CN": "Sense 发动后，额外获得 [:param11] Principal Gauge",
-        "th": "ได้รับ Principal gauge เพิ่มขึ้น [:param11] หลังจากเปิดใช้งานเซนส์",
-    },
     "センス発動後、追加で獲得しているプリンシパルゲージ[:param11]%を獲得": {
         "en": "After Sense Activation, Additionally Gain [:param11]% of the Amount of Gained Principal Gauge",
         "zh_TW": "Sense 發動後，額外獲得已獲得的 Principal Gauge 的 [:param11]%",
@@ -980,6 +974,12 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "Sense 发动时，额外获得 [:param11] 个 Life Guard",
     },
 }, {
+    r"センス発動後、追加で\[:param(\d\d)\]のプリンシパルゲージを獲得": {
+        "en": "After Sense Activation, Gain Additional [:param{0}] Principal Gauge",
+        "zh_TW": "Sense 發動後，額外獲得 [:param{0}] Principal Gauge",
+        "zh_CN": "Sense 发动后，额外获得 [:param{0}] Principal Gauge",
+        "th": "ได้รับ Principal gauge เพิ่มขึ้น [:param{0}] หลังจากเปิดใช้งานเซนส์",
+    },
     r"センス発動後、プリンシパルゲージの上限値が\[:param(\d\d)\]上昇": {
         "en": "After Sense Activation, Increase Principal Gauge Cap by [:param{0}]",
         "zh_TW": "Sense 發動後，Principal Gauge 的上限值提升 [:param{0}]",
