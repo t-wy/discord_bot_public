@@ -15,10 +15,14 @@ async def serve_efficient_song(message: MsgInt, unreleased: bool = False, ver="p
     if not unreleased:
         from datetime import datetime
         current_time = datetime.now()
+    else:
+        current_time = ...
     # O(n), with k unique elements
     for index, entry in enumerate(music_master):
         if (unreleased or current_time.timestamp() >= entry.releasedAt.timestamp()) and entry.id < 1000:
             duration = await get_song_duration(entry.id, ver=ver)
+            if duration is None:
+                continue
             qualified = True
             if entry.staminaConsumption in stamina_best:
                 if duration >= stamina_best[entry.staminaConsumption][1]:

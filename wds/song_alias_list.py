@@ -116,6 +116,7 @@ song_alias_list: Dict[int, List[str]] = {
     40: [ # 魔法少女とチョコレゐト
         "魔法少女とChocolate",
         "Magical Girl and Chocolate", # On Jacket
+        '魔法少女與巧克力',
     ],
     42: [ # 六兆年と一夜物語
         "Six Trillion Years and Overnight Story", # Official title
@@ -567,12 +568,19 @@ song_alias_list: Dict[int, List[str]] = {
     226: [ # ナツのキオクのナイショのホンネ！
         '夏の記憶の内緒の本音',
     ],
+    231: [ # ハロー・マイ・ロケット
+        'Hello My Rocket',
+    ],
     236: [ # カルペ・ディエム
         "Carpe diem",
     ],
     237: [ # 誰ガ為ノサダメ
         '誰が為の定め',
         '誰が為の運命', # 当て字
+    ],
+    239: [ # ヴィヴァラヰタ
+        'Viva la Vita', # original song title
+        'VivaRaWita', # Original Romaji
     ],
     249: [ # Stellarium Collection Vol.1
         "ステラリウム・コレクション・ボリューム・ワン",

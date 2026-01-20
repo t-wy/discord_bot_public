@@ -24,6 +24,7 @@ class description:
     card_name = _('Card name', zh="卡面名稱", ja="カード名")
     card_mode = _('The item to fetch', zh="卡面資訊", ja="カード情報")
     card_rarity = _('Card rarity', zh="卡面稀有度")
+    camp = _('Camp', zh_TW="陣營", zh_CN="阵营", ja="陣営")
     campaign = _("Campaign information", zh="Campaign 資訊")
     character = _('Character Name', zh="角色名稱", ja="キャラクター名")
     character_event_chart = _("Character Event ranking chart", zh_TW="角色活動排名走勢圖", zh_CN="角色活动排名走势图", ja="応援イベントランキング推移グラフ")
@@ -166,6 +167,7 @@ class locale:
     bar_mode = _("bar_mode", zh_TW="小節模式", zh_CN="小节模式")
     bpm_search = _("bpm_search", zh_TW="bpm搜尋", zh_CN="bpm搜索", ja="bpm検索")
     by_rank = _('by_rank', zh="按排名", ja="順位依存")
+    camp = _('camp', zh_TW="陣營", zh_CN="阵营", ja="陣営")
     card = _('card', zh="卡面", ja="カード") # as group name and argument name
     cards = _("cards", zh="卡面", ja="カード") # for asset command (implying plural)
     character = _("character", zh="角色", ja="キャラクター")

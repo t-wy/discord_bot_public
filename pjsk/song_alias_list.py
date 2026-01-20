@@ -252,6 +252,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     116: [ # アイディスマイル
         'id',
+        '哀滴',
+        'ID微笑',
+        '哀滴微笑',
+        '愛的微笑',
     ],
     119: [ # ワールズエンド・ダンスホール
         '舞廳',
@@ -393,6 +397,9 @@ song_alias_list: Dict[int, List[str]] = {
         '陽炎daze',
         '陽炎眩亂',
     ],
+    172: [ # Happy Halloween
+        '萬聖節快樂',
+    ],
     173: [ # 流星のパルス (Pulse of the Meteor)
         "流星の Pulse",
         "流星的脉搏", # https://www.bilibili.com/video/BV1ZPdfY6Eif/
@@ -510,6 +517,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     212: [ # 星空のメロディー
         "星空の Melody",
+        '星空旋律',
     ],
     214: [ # パレットには君がいっぱい
         "Palette には君がいっぱい",
@@ -547,6 +555,9 @@ song_alias_list: Dict[int, List[str]] = {
     230: [ # サラマンダー
         "沙羅曼蛇",
         '火蠑螈',
+        '沙羅曼達',
+        '火蜥蜴',
+        '沙律曼達',
     ],
     232: [ # 青色絵具
         '蔚藍畫具',
@@ -680,6 +691,8 @@ song_alias_list: Dict[int, List[str]] = {
         "星空管弦樂",
         "星空交響樂團", # https://www.bilibili.com/video/BV1T8411P7Bu/
         '星空管弦樂團',
+        '星空樂團',
+        '星空樂隊',
     ],
     285: [ # ÅMARA(大未来電脳)
         "AMARA", # without bracket or character modifiers
@@ -1073,6 +1086,11 @@ song_alias_list: Dict[int, List[str]] = {
     449: [ # MarbleBlue.
         "媽寶藍", # Sound-alike abbre.
     ],
+    450: [ # オペラ！スペースオペラ！
+        '喔配啦太空喔配啦',
+        '歌劇！太空歌劇！',
+        '歐佩拉！太空歐佩拉！',
+    ],
     452: [ # サイバーパンクデッドボーイ
         "Cyberpunk Dead Boy",
         '賽博龐克死男孩',
@@ -1127,6 +1145,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     471: [ # ULTRA C
         'c',
+        '超C',
     ],
     473: [ # マインドブランド
         "Mind Brand",
@@ -1146,6 +1165,9 @@ song_alias_list: Dict[int, List[str]] = {
         "馬賽克卷 (Reloaded)", # Doesn't seem to be official anyways
         '瑞士捲 (Reloaded)',
         '馬賽克卷（重製版）',
+    ],
+    478: [ # フューエル
+        '燃料',
     ],
     480: [ # おちゃめ機能
         '天真爛漫機能',
@@ -1348,6 +1370,8 @@ song_alias_list: Dict[int, List[str]] = {
         "Lost Umbrella",
         'Lost傘',
         'ロスト傘',
+        'Lost☂️',
+        'ロスト☂️',
     ],
     553: [ # パリィ
         "Parry",
@@ -1408,6 +1432,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     570: [ # スター
         "Star",
+        '星',
     ],
     571: [ # 偽物人間40号
         '偽物人類40號',
@@ -1445,6 +1470,7 @@ song_alias_list: Dict[int, List[str]] = {
     583: [ # アクセラレイト
         "Accelerate",
         "加速", # Literal Chinese translation
+        '加速器', # to prevent Slow downer: 減速器 from stealing 加速
     ],
     584: [ # IMAWANOKIWA
         '今際の際',
@@ -1632,6 +1658,8 @@ song_alias_list: Dict[int, List[str]] = {
         '怕沒啦',
         '怕滅啦',
         '怕咩啦',
+        '帕梅啦',
+        '怕妹啦',
     ],
     654: [ # ラストラス
         '星漢燦爛',
@@ -1671,6 +1699,15 @@ song_alias_list: Dict[int, List[str]] = {
     669: [ # げんてん
         "原点", # kanji
     ],
+    670: [ # い〜やい〜やい〜や
+        'Whatever whatever whatever', # https://www.youtube.com/watch?v=y8-6QPEes1k
+    ],
+    671: [ # 怪獣になりたい
+        '我想化身為怪獸',
+        '我想變成怪獸',
+        '想成为怪兽',
+        '想变成怪兽',
+    ],
     672: [ # ハウトゥー世界征服
         "How to 世界征服",
         '世征',
@@ -1684,6 +1721,27 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     678: [ # 金時計
         '金時鐘',
+    ],
+    684: [ # ファイター
+        'Fighter',
+        '戦士',
+        '闘士',
+        '格闘家',
+    ],
+    689: [ # 最愛人生ランナー
+        '最愛人生Runner',
+    ],
+    690: [ # 惑星ループ
+        '行星環',
+        '行星循環',
+    ],
+    692: [ # ぼかろころしあむ
+        'Vocaloid Colosseum',
+        'VOCALOID競技場',
+        'VOCALOID鬥獸場',
+    ],
+    696: [ # ドリーム・キス
+        'Dream Kiss',
     ],
     10001: [ # 장산범
         '萇山虎',

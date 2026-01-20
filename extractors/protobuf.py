@@ -56,9 +56,10 @@ def loads(data: bytes) -> Dict[int, object]:
                 assert reader.tell() + size <= len(data)
                 raw_bytes = reader.readBytes(size)
                 try:
-                    target[field] = loads(raw_bytes)
+                    content = loads(raw_bytes)
                 except:
-                    target[field] = raw_bytes.decode("utf-8", "surrogateescape")
+                    content = raw_bytes.decode("utf-8", "surrogateescape")
+                set_field(target, field, content)
             elif wire_type == 3:  # sgroup
                 stack.append((target, field))
                 obj = {}
@@ -101,8 +102,7 @@ def dumps(obj: Dict[int, object]) -> bytes:
                 write_value(field, v)
         else:
             write_value(field, value)
-    writer.seek(0)
-    return writer.read()
+    return writer.getvalue()
 
 # real protobuf to class instance
 # https://protobuf.dev/programming-guides/encoding/
@@ -207,7 +207,7 @@ def deserialize(_type, content: bytes):
         elif _type is sint or _type is int32 or _type is int64 or _type is sfixed32:
             value &= 0xffffffff
             if value & (1 << 31):
-                value -= (1 << 32)
+                value -= 1 << 32
             return value
         elif _type is float or _type is double:
             # single float
@@ -224,12 +224,13 @@ def deserialize(_type, content: bytes):
         # print(current, field_number, wire_type)
         # print(types[field_number])
         field_type = types[field_number] if field_number < len(values) else ...
-        typing_origin = get_origin(field_type)
-        is_list = typing_origin is list
+        # typing_origin = get_origin(field_type)
+        is_list = getattr(field_type, "__origin__", None) is list # quick check to avoid get_origin, which is slow
         if is_list:
             single_type = get_args(field_type)[0]
         else:
             single_type = field_type
+        # print(_type, is_list, single_type)
         is_repeated = False # wire type 2 multiple entries
         if wire_type == 0:  # varint
             value = cast_wire_type_0(reader.readVarint(), single_type)
@@ -305,3 +306,83 @@ def deserialize(_type, content: bytes):
             # Skip assigning value
             pass
     return _type(*values)
+
+def serialize(instance) -> bytes:
+    _type = type(instance)
+    from dataclasses import is_dataclass
+    assert is_dataclass(_type)
+    field_types = list(_type.__annotations__.values())
+    fields = list(_type.__dataclass_fields__.values())
+    from .byte_reader import LittleEndianWriter
+    from enum import Enum
+    import struct
+    def write_value(field_number, field_type, value) -> Tuple[int, bytes]:
+        # typing_origin = get_origin(field_type)
+        is_list = getattr(field_type, "__origin__", None) is list # quick check to avoid get_origin, which is slow
+        if is_list:
+            single_type = get_args(field_type)[0]
+            for v in value:
+                write_value(field_number, single_type, v)
+            return
+        if field_type is fixed32 or field_type is sfixed32:
+            # wire type 5
+            writer.writeVarint((field_number << 3) | 5)
+            writer.writeInt(value)
+        elif field_type is float:
+            # wire type 5
+            writer.writeVarint((field_number << 3) | 5)
+            writer.write(struct.pack('<f', value))
+        elif field_type is fixed64 or field_type is sfixed64:
+            # wire type 1
+            writer.writeVarint((field_number << 3) | 1)
+            writer.writeLong(value)
+        elif field_type is double:
+            # wire type 1
+            writer.writeVarint((field_number << 3) | 1)
+            writer.write(struct.pack('<d', value))
+        elif field_type is bytes:
+            # wire type 2
+            writer.writeVarint((field_number << 3) | 2)
+            writer.writeVarint(len(value))
+            writer.write(value)
+        elif field_type is str:
+            # wire type 2
+            writer.writeVarint((field_number << 3) | 2)
+            serialized = value.encode("utf-8", "surrogateescape")
+            writer.writeVarint(len(serialized))
+            writer.write(serialized)
+        elif is_dataclass(field_type):
+            if value is not None:
+                # wire type 2
+                writer.writeVarint((field_number << 3) | 2)
+                serialized = serialize(value)
+                writer.writeVarint(len(serialized))
+                writer.write(serialized)
+        else:
+            # wire type 0
+            if field_type is int or field_type is uint:
+                pass
+            elif field_type is sint:
+                sign = value < 0
+                if sign:
+                    value = ~value
+                value = (value << 1) | (1 if sign else 0)
+            elif field_type is int32:
+                if value < 0:
+                    value += 1 << 32
+            elif field_type is int64:
+                if value < 0:
+                    value += 1 << 64
+            elif field_type is bool:
+                value = 1 if value else 0
+            elif issubclass(field_type, Enum):
+                assert isinstance(value, field_type)
+                value = value.value
+            else:
+                assert False, "Type \"{}\" not supported".format(type(value).__name__)
+            writer.writeVarint((field_number << 3) | 0)
+            writer.writeVarint(value)
+    writer = LittleEndianWriter()
+    for index, (field_type, value) in enumerate(zip(field_types, fields)):
+        write_value(index + 1, field_type, getattr(instance, value.name))
+    return writer.getvalue()

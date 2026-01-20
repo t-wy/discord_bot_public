@@ -124,3 +124,13 @@ class BigEndianWriter(Writer):
     def writeLong(self, value: int) -> None:
         self.writeInt(value >> 32)
         self.writeInt(value & 0xffffffff)
+
+class LittleEndianWriter(Writer):
+    def writeShort(self, value: int) -> None:
+        self.write(bytes([value & 0xff, value >> 8]))
+    def writeInt(self, value: int) -> None:
+        self.writeShort(value & 0xffff)
+        self.writeShort(value >> 16)
+    def writeLong(self, value: int) -> None:
+        self.writeInt(value & 0xffffffff)
+        self.writeInt(value >> 32)

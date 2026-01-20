@@ -198,11 +198,13 @@ class InvalidArgumentException(CustomException):
     """
     Invalid argument specified.
     """
-    def __init__(self, message: Optional[str]=None):
+    def __init__(self, message: Optional[Union[str, List[str]]]=None):
         if message is None:
             super().__init__("Invalid argument specified.")
-        else:
+        elif isinstance(message, str):
             super().__init__("Invalid argument specified.\n\n" + message)
+        else:
+            super().__init__("Invalid argument specified.\n\n" + "\n".join(message))
 
 class InvalidPlayerIDException(CustomException):
     """
@@ -210,10 +212,6 @@ class InvalidPlayerIDException(CustomException):
     """
     def __init__(self, category: str="player"):
         super().__init__(f"Invalid {category.title()} ID specified.")
-
-class InvalidPayloadException(CustomException):
-    def __init__(self, lines: List[str]):
-        super().__init__("\n".join(lines))
 
 class MasterDatabaseDownloadException(CustomException):
     """
