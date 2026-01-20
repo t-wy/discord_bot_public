@@ -103,6 +103,8 @@ def regex_lookup_translator(
                             temp_dict["status"] = status_translator(temp_dict["status"], locales)
                         if "status2" in temp_dict:
                             temp_dict["status2"] = status_translator(temp_dict["status2"], locales)
+                        if "timing" in temp_dict:
+                            temp_dict["timing"] = timing_translator(temp_dict["timing"], locales)
                         if "ordinal" in temp_dict:
                             temp_dict["ordinal"] = ordinal_translator(temp_dict["ordinal"], locale) # need string or message
                         return translator.format(*match.groups(), **temp_dict)
@@ -541,19 +543,27 @@ sense_type_translator = regex_lookup_translator_wrapper("sense_type_translator",
     "支援": {
         "en": "Support",
         "th": "ดาวสีเขียว", # "green"
+        "ko"     : "지원",
+        "ko_Kore": "支援",
     },
     "支配": {
         "en": "Control",
         "th": "ดาวสีแดง", # "red"
+        "ko"     : "지배",
+        "ko_Kore": "支配",
     },
     "増幅": {
         "en": "Amplification",
         "zh": "增幅",
         "th": "ดาวสีเหลือง", # "yellow"
+        "ko"     : "증폭",
+        "ko_Kore": "增幅",
     },
     "特殊": {
         "en": "Special",
         "th": "ดาวสีน้ำเงิน", # "blue"
+        "ko"     : "특수",
+        "ko_Kore": "特殊",
     },
 })
 
@@ -561,18 +571,26 @@ attribute_translator = regex_lookup_translator_wrapper("attribute_translator", {
     "憐": {
         "en": "Cute",
         "zh_CN": "怜",
+        "ko"     : "련",
+        "ko_Kore": "憐",
     },
     "凛": {
         "en": "Cool",
         "zh_TW": "凜",
         "zh_CN": "凛",
+        "ko"     : "름",
+        "ko_Kore": "凜",
     },
     "彩": {
         "en": "Colorful",
+        "ko"     : "채",
+        "ko_Kore": "彩",
     },
     "陽": {
         "en": "Cheerful",
         "zh_CN": "阳",
+        "ko"     : "양",
+        "ko_Kore": "陽",
     },
 })
 
@@ -586,7 +604,7 @@ sense_star_act_translator = regex_lookup_translator_wrapper("sense_star_act_tran
     },
     "スターアクト": {
         "en": "Star Act",
-        "ko": "스타 액트",
+        "ko": "스타액트",
         "ja": "スターアクト",
         "*": "Star Act",
     },
@@ -596,29 +614,112 @@ status_translator = regex_lookup_translator_wrapper("status_translator", {
     "演技力": {
         "en": "Total Status",
         "th": "ความสามารถการแสดง",
+        "ko"     : "연기력",
+        "ko_Kore": "演技力",
     },
     "演技力上限": {
         "en": "Status Cap",
         "zh": "演技力上限",
         "th": "ความสามารถการแสดงสูงสุด",
+        "ko"     : "연기력 상한",
+        "ko_Kore": "演技力 上限",
     },
     "演技力の上限": {
         "en": "Status Cap",
         "zh": "演技力的上限",
         "th": "ความสามารถการแสดงสูงสุด",
+        "ko"     : "연기력 상한",
+        "ko_Kore": "演技力 上限",
     },
     "歌唱力": {
         "en": "Vocal Status",
         "th": "การร้องเพลง",
+        "ko"     : "가창력",
+        "ko_Kore": "歌唱力",
     },
     "表現力": {
         "en": "Expression Status",
         "zh_CN": "表现力",
         "th": "การแสดงออก",
+        "ko"     : "표현력",
+        "ko_Kore": "表現力",
     },
     "集中力": {
         "en": "Concentration Status",
         "th": "สมาธิ",
+        "ko"     : "집중력",
+        "ko_Kore": "集中力",
+    },
+})
+
+timing_translator = regex_lookup_translator_wrapper("timing_translator", {
+    "公演開始時、": {
+        "en": "When the Performance Starts, ",
+        "zh_TW": "公演開始時，",
+        "zh_CN": "公演开始时，",
+        "th": "เมื่อเริ่มการแสดง ",
+    },
+    "公演開始時に": {
+        "en": "When the Performance Starts, ",
+        "zh_TW": "公演開始時，",
+        "zh_CN": "公演开始时，",
+        "th": "เมื่อเริ่มการแสดง ",
+    },
+    "センス発動時、": {
+        "en": "When Sense Activates, ",
+        "zh_TW": "Sense 發動時，",
+        "zh_CN": "Sense 发动时，",
+        "th": "เมื่อเปิดใช้งานเซนส์ ",
+        "ko"     : "센스 발동 시, ",
+        "ko_Kore": "센스 發動 時, ",
+    },
+    "センス発動時に、": {
+        "en": "When Sense Activates, ",
+        "zh_TW": "Sense 發動時，",
+        "zh_CN": "Sense 发动时，",
+        "th": "เมื่อเปิดใช้งานเซนส์ ",
+        "ko"     : "센스 발동 시, ",
+        "ko_Kore": "센스 發動 時, ",
+    },
+    "センス発動後、": {
+        "en": "After Sense Activation, ",
+        "zh_TW": "Sense 發動後，",
+        "zh_CN": "Sense 發動后，",
+        "th": "หลังจากเปิดใช้งานเซนส์ ", # omit จะ or ได้
+        "ko"     : "센스 발동 후, ",
+        "ko_Kore": "센스 發動 後, ",
+    },
+    "センス発動直後、": {
+        "en": "Immediately After Sense Activation, ",
+        "zh_TW": "Sense 發動後當刻，",
+        "zh_CN": "Sense 發動后当刻，",
+        "th": "ทันทีหลังจากเปิดใช้งานเซนส์ ", # omit จะ or ได้
+        "ko"     : "센스 발동 직후, ",
+        "ko_Kore": "센스 發動 直後, ",
+    },
+    "スターアクト発動時、": {
+        "en": "When Star Act Activates, ",
+        "zh_TW": "Star Act 發動時，",
+        "zh_CN": "Star Act 发动时，",
+        "th": "เมื่อเปิดใช้งาน Star Act ",
+        "ko"     : "스타액트 발동 시, ",
+        "ko_Kore": "스타액트 發動 時, ",
+    },
+    "スターアクト発動後、": {
+        "en": "After Star Act Activation, ",
+        "zh_TW": "Star Act 發動後，",
+        "zh_CN": "Star Act 發動后，",
+        "th": "หลังจากเปิดใช้งาน Star Act ", # omit จะ or ได้
+        "ko"     : "스타액트 발동 후, ",
+        "ko_Kore": "스타액트 發動 後, ",
+    },
+    "スターアクト発動直後、": {
+        "en": "Immediately After Star Act Activation, ",
+        "zh_TW": "Star Act 發動後當刻，",
+        "zh_CN": "Star Act 發動后当刻，",
+        "th": "ทันทีหลังจากเปิดใช้งาน Star Act ", # omit จะ or ได้
+        "ko"     : "스타액트 발동 직후, ",
+        "ko_Kore": "스타액트 發動 直後, ",
     },
 })
 
@@ -806,7 +907,7 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "en": "Gain a Score of [:score] Times the Total Status",
         "zh_TW": "獲得總演技力 [:score] 倍的分數",
         "zh_CN": "获得总演技力 [:score] 倍的分数",
-        "th": "ได้รับคะแนน [:score] เท่าของความสามารถการแสดงทั้งหมด",
+        "th": "รับคะแนน [:score] เท่าของความสามารถการแสดงทั้งหมด",
     },
     "公演中の一番最後に発動するスターアクトで、スターアクトの発動回数×総演技力の[:score]倍のスコアを獲得": {
         "en": "When the Last Star Act During the Performance Activates, Gain a Score of the Number of Times the Star Act Activates × [:score] Times the Total Status",
@@ -817,69 +918,92 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "en": "The More the Life Value is, the More Score Gain UP is Resulted in from so (+[:pre1]% at Most)",
         "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +[:pre1]%）",
         "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +[:pre1]%）",
-        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +[:pre1]%)",
-    },
-    "スターアクト発動直後、その時のスコアの[:param11]％のスコアを獲得": {
-        "en": "Right After Star Act Activation, Gain a Score of [:param11]% of the Score at That Moment",
-        "zh_TW": "Star Act 發動後，獲得當時分數 [:param11]% 的分數",
-        "zh_CN": "Star Act 发动后，获得当时分数 [:param11]% 的分数",
-        "th": "หลังจากเปิดใช้งาน Star Act จะได้รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
-    },
-    "スターアクト発動後、現在のプリンシパルゲージ上限の[:param11]%分のプリンシパルゲージを獲得する": {
-        "en": "After Star Act Activation, Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap",
-        "zh_TW": "Star Act 發動後，獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
-        "zh_CN": "Star Act 发动后，获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งรับคะแนนมากเท่านั้น (สูงสุด +[:pre1]%)",
     },
 }, {
+    r"(?P<timing>スターアクト発動時、)編成されている(?P<company>.+)アクターの人数×\[:param11\]秒、センスのCTを短縮する": {
+        "en": "{timing}Sense CT of each Actor Reduces by the Number of {company} Actors in the Unit × [:param11]s for the Next Sense",
+        "zh_TW": "{timing}演員所持 Sense 的 CT 縮短隊伍內{company}演員人數 × [:param11] 秒",
+        "zh_CN": "{timing}演员所持 Sense 的 CT 缩短队伍内{company}演员人数 × [:param11] 秒",
+    },
+    r"(?P<timing>スターアクト発動後、)追加で\[:param1(\d+)\]のプリンシパルゲージを獲得": {
+        "en": "{timing}Gain Additional [:param1{1}] Principal Gauge",
+        "zh_TW": "{timing}額外獲得 [:param1{1}] Principal Gauge",
+        "zh_CN": "{timing}额外获得 [:param1{1}] Principal Gauge",
+    },
+    r"(?P<timing>スターアクト発動後、)プリンシパルゲージの上限値が\[:param1(\d+)\]上昇": {
+        "en": "{timing}Increase Principal Gauge Cap by [:param1{1}]",
+        "zh_TW": "{timing}Principal Gauge 的上限值提升[:param1{1}]",
+        "zh_CN": "{timing}Principal Gauge 的上限值提升[:param1{1}]",
+    },
+    r"(?P<timing>スターアクト発動後、)現在のプリンシパルゲージ上限の\[:param11\]%分のプリンシパルゲージを獲得する": {
+        "en": "{timing}Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap",
+        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+    },
+    r"(?P<timing>スターアクト発動直後、)その時のスコアの\[:param11\]％のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param11]% of the Score at That Moment",
+        "zh_TW": "{timing}獲得當時分數 [:param11]% 的分數",
+        "zh_CN": "{timing}获得当时分数 [:param11]% 的分数",
+        "th": "{timing}รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
+        "ko"     : "{timing}그때의 스코어의 [:param11]% 스코어 획득",
+        "ko_Kore": "{timing}그때의 스코어의 [:param11]% 스코어 獲得",
+    },
     r"ライフが多いほどスコア獲得量UP効果（最大＋ (\d+)%）": {
         "en": "The More the Life Value is, the More Score Gain UP is Resulted in from so (+{0}% at Most)",
         "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +{0}%）",
         "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +{0}%）",
-        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{0}%)",
+        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งรับคะแนนมากเท่านั้น (สูงสุด +{0}%)",
     },
     r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Life Guard in Possession, Score Gain Increases by {0}% (+{1}% at Most)",
         "zh_TW": "每持有 1 次 Life Guard，分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "每持有 1 次 Life Guard，分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
+        "th": "รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
+        "ko"     : "추가되어 있는 라이프 가드 1개당 스코어 획득량 {0}% (최대 {1}%)",
+        "ko_Kore": "追加되어 있는 라이프 가드 1個當 스코어 獲得量 {0}% (最大 {1}%)",
     },
     r"付与されているライフガード1回につき(\d+)プリンシパルゲージの上限を上昇（最大＋(\d+)）": {
         "en": "For each Life Guard in Possession, Principal Gauge Cap Increases by {0} (+{1} at Most)",
         "zh_TW": "每持有 1 次 Life Guard，Principal Gauge 的上限值提升{0}（最多 +{1}）",
         "zh_CN": "每持有 1 次 Life Guard，Principal Gauge 的上限值提升{0}（最多 +{1}）",
-        "th": "Principal gauge สูงสุดจะเพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
+        "th": "Principal gauge สูงสุดเพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
+        "ko"     : "추가되어 있는 라이프 가드 1개당 프린시펄 게이지 상한 {0} 상승 (최대 {1})",
+        "ko_Kore": "追加되어 있는 라이프 가드 1個當 프린시펄 게이지 上限 {0} 上昇 (最大 {1})",
     },
     r"消費するライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Life Guard Spent, Score Gain Increases by {0}% (+{1}% at Most)",
         "zh_TW": "每消費 1 次 Life Guard，分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "每消费 1 次 Life Guard，分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อการใช้ Life Guard 1 ครั้ง (สูงสุด {1}%)",
+        "th": "รับคะแนนเพิ่มขึ้น {0}% ต่อการใช้ Life Guard 1 ครั้ง (สูงสุด {1}%)",
     },
     r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Attribute there is in the Unit, Score Gain Increases by {0}% (+{1}% at Most)",
         "zh_TW": "每 1 個編成的屬性能使分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "每 1 个编成的属性能使分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
+        "th": "รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
+        "ko"     : "편성되어 있는 속성 1종류당 스코어 {0}% 상승 (최대 {1}%)",
+        "ko_Kore": "編成되어 있는 屬性 1種類當 스코어 {0}% 上昇 (最大 {1}%)",
     },
     r"ストックされている全ての光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
         "en": "For each Stocked Light, Gain a Score of [:param11] Times the Total Status ({0} Lights at Most)",
         "zh_TW": "每儲藏 1 個光，獲得總演技力 [:param11] 倍的分數 (最多 {0} 個)",
         "zh_CN": "每储藏 1 个光，获得总演技力 [:param11] 倍的分数 (最多 {0} 个)",
-        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของดาวแต่ละดวงสูงสุด {0} ดวง",
+        "th": "รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของดาวแต่ละดวงสูงสุด {0} ดวง",
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを獲得\(最大(\d+)個\)": {
         "ja": "ストックされている{sense_type}系の光「{sense_emoji}」1個につき総演技力の[:param11]倍のスコアを獲得(最大{1}個)",
         "en": "For each Stocked {sense_type} Light ({sense_emoji}), Gain a Score of [:param11] Times the Total Status ({1} Lights at Most)",
         "zh_TW": "每儲藏 1 個{sense_type}系光「{sense_emoji}」，獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
         "zh_CN": "每储藏 1 个{sense_type}系光「{sense_emoji}」，获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
-        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) ดาวแต่ละดวงสูงสุด {1} ดวง",
+        "th": "รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) ดาวแต่ละดวงสูงสุด {1} ดวง",
     },
     r"ストックされている(?P<sense_type>.{2})系の光1個につき総演技力の\[:param11\]倍のスコアを追加で獲得\(最大(\d+)個\)": {
         "ja": "ストックされている{sense_type}系の光「{sense_emoji}」1個につき総演技力の[:param11]倍のスコアを追加で獲得(最大{1}個)",
         "en": "For each Stocked {sense_type} Light ({sense_emoji}), Gain an Additional Score of [:param11] Times the Total Status ({1} Lights at Most)",
         "zh_TW": "每儲藏 1 個{sense_type}系光「{sense_emoji}」，額外獲得總演技力 [:param11] 倍的分數 (最多 {1} 個)",
         "zh_CN": "每储藏 1 个{sense_type}系光「{sense_emoji}」，额外获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
-        "th": "ได้รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) แต่ละดวงสูงสุด {1} ดวง",
+        "th": "รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) แต่ละดวงสูงสุด {1} ดวง",
     },
     r"プリンシパルゲージの上限を編成されている(?P<company>.+)アクターの人数×\[:param11\]上昇させる": {
         "en": 'Principal Gauge Cap Increases by the Number of {company} Actors in Unit × [:param11]',
@@ -890,27 +1014,14 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "en": "The {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
         "zh_TW": "{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {3}% (此效果可疊加)",
         "zh_CN": "{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {3}% (此效果可叠加)",
-    },
-    r"スターアクト発動時、編成されている(?P<company>.+)アクターの人数×\[:param11\]秒、センスのCTを短縮する": {
-        "en": "When Star Act Activates, Sense CT of each Actor Reduces by the Number of {company} Actors in the Unit × [:param11]s for the Next Sense",
-        "zh_TW": "Star Act 發動時，演員所持 Sense 的 CT 縮短隊伍內{company}演員人數 × [:param11] 秒",
-        "zh_CN": "Star Act 发动时，演员所持 Sense 的 CT 缩短队伍内{company}演员人数 × [:param11] 秒",
+        "ko"     : "편성되어 있는 {company} 액터의 {status}과 {status2}을, 편성되어 있는 {company} 액터의 인원수 ×{3}% 증가 (중첩 가능)",
+        "ko_Kore": "編成되어 있는 {company} 액터의 {status}과 {status2}을, 編成되어 있는 {company} 액터의 人員數 ×{3}% 增加 (重疊 可能)",
     },
     r"編成されている(?P<company>.+)・(?P<company2>.+)アクター1人につきその時のスコアの(\d+)％のスコアを獲得": {
         "en": "For each {company} or {company2} Actor in the Unit, Gain a Score of {2}% of the Score at That Moment",
         "zh_TW": "根據隊伍內{company}及{company2}演員人數，各演員獲得當時分數 {2}% 的分數",
         "zh_CN": "根据队伍内{company}及{company2}演员人数，各演员获得当时分数 {2}% 的分数",
-        "th": "ต่อหนึ่งนักแสดงจาก {company} หรือ {company2} ที่อยู่ในทีม จะได้รับคะแนน {2}% ของคะแนนในขณะนั้น",
-    },
-    r"スターアクト発動後、追加で\[:param1(\d+)\]のプリンシパルゲージを獲得": {
-        "en": "After Star Act Activates, Gain Additional [:param1{0}] Principal Gauge",
-        "zh_TW": "Star Act 發動後，額外獲得 [:param1{0}] Principal Gauge",
-        "zh_CN": "Star Act 发动后，额外获得 [:param1{0}] Principal Gauge",
-    },
-    r"スターアクト発動後、プリンシパルゲージの上限値が\[:param1(\d+)\]上昇": {
-        "en": "After Star Act Activates, Increase Principal Gauge Cap by [:param1{0}]",
-        "zh_TW": "Star Act 發動後，Principal Gauge 的上限值提升[:param1{0}]",
-        "zh_CN": "Star Act 发动后，Principal Gauge 的上限值提升[:param1{0}]",
+        "th": "ต่อหนึ่งนักแสดงจาก {company} หรือ {company2} ที่อยู่ในทีม รับคะแนน {2}% ของคะแนนในขณะนั้น",
     },
     r"公演中のセンス発動回数(\d+)回につきスコア獲得量(\d+)[%％]上昇（最大＋(\d+)[%％]）": {
         "en": "For every {0} Time(s) Sense Activated During the Performance, Score Gain Increases by {1}% (+{2}% at Most)",
@@ -938,12 +1049,14 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "獲得 [:score] 倍的分數",
         "zh_CN": "获得 [:score] 倍的分数",
         "th": "เพิ่มคะแนน [:score] เท่า",
+        "ko"     : "[:score]배의 스코어 획득",
+        "ko_Kore": "[:score]倍의 스코어 獲得",
     },
     "[:gauge]のプリンシパルゲージを獲得": {
         "en": "Gain [:gauge] Principal Gauge",
         "zh_TW": "獲得 [:gauge] Principal Gauge",
         "zh_CN": "获得 [:gauge] Principal Gauge",
-        "th": "ได้รับ Principal gauge เพิ่มขึ้น [:gauge]",
+        "th": "รับ Principal gauge เพิ่มขึ้น [:gauge]",
     },
     "ライフを[:param11]回復": {
         "en": "Recover Life by [:param11]",
@@ -961,73 +1074,123 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "沒有效果 (所持的「光」得以保留)",
         "zh_CN": "没有效果 (所持的「光」得以保留)",
     },
-    "センス発動後、追加で獲得しているプリンシパルゲージ[:param11]%を獲得": {
-        "en": "After Sense Activation, Additionally Gain [:param11]% of the Amount of Gained Principal Gauge",
-        "zh_TW": "Sense 發動後，額外獲得已獲得的 Principal Gauge 的 [:param11]%",
-        "zh_CN": "Sense 发动后，额外获得已获得的 Principal Gauge 的 [:param11]%",
-    },
-    "センス発動後、現在のプリンシパルゲージ[:param11]%分のプリンシパルゲージを追加で獲得する": {
-        "en": "After Sense Activation, Gain Additional Principal Gauge of [:param11]% of the Current Principal Gauge",
-        "zh_TW": "Sense 發動後，額外獲得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
-        "zh_CN": "Sense 发动后，额外获得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
-    },
-    r"センス発動後、現在のプリンシパルゲージ上限の[:param11]%分のプリンシパルゲージを獲得する": {
-        "en": "After Sense Activation, Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap",
-        "zh_TW": "Sense 發動後，獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
-        "zh_CN": "Sense 发动后，获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
-    },
-    r"センス発動後、現在のプリンシパルゲージ上限の[:param11]%分のプリンシパルゲージを獲得する。": {
-        "en": "After Sense Activation, Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap.",
-        "zh_TW": "Sense 發動後，獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge。",
-        "zh_CN": "Sense 发动后，获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge。",
-    },
-    "センス発動直後、その時のスコアの[:param11]％のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Score at That Moment",
-        "zh_TW": "Sense 發動後，獲得當時分數 [:param11]% 的分數",
-        "zh_CN": "Sense 发动后，获得当时分数 [:param11]% 的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
-    },
     "ライフが多いほどスコア獲得量UP効果（最大＋[:pre1]%）": {
         "en": "The More the Life value is, the More Score Gain UP is resulted in from so (+[:pre1]% at Most)",
         "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +[:pre1]%）",
         "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +[:pre1]%）",
-        "th": "ยิ่งเลือดน้อยเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +[:pre1]%)",
-    },
-    "センス発動時、追加で「ライフガード」を[:param11]回獲得する": {
-        "en": 'When Sense Activates, Gain [:param11] Additional Life Guard(s)',
-        "zh_TW": "Sense 發動時，額外獲得 [:param11] 個 Life Guard",
-        "zh_CN": "Sense 发动时，额外获得 [:param11] 个 Life Guard",
+        "th": "ยิ่งเลือดน้อยเท่าไหร่ยิ่งรับคะแนนมากเท่านั้น (สูงสุด +[:pre1]%)",
     },
 }, {
-    r"センス発動後、追加で\[:param(\d\d)\]のプリンシパルゲージを獲得": {
-        "en": "After Sense Activation, Gain Additional [:param{0}] Principal Gauge",
-        "zh_TW": "Sense 發動後，額外獲得 [:param{0}] Principal Gauge",
-        "zh_CN": "Sense 发动后，额外获得 [:param{0}] Principal Gauge",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับ Principal gauge เพิ่มขึ้น [:param{0}]",
+    r"(?P<timing>センス発動時、)(?P<company>.+)アクターの人数×(\d+)のプリンシパルゲージを獲得": {
+        "en": "{timing}Gain {2} Principal Gauge for each {company} Actor",
+        "zh_TW": "{timing}獲得總數為{company}演員人數 × {2} 的 Principal Gauge",
+        "zh_CN": "{timing}获得总数为{company}演员人数 × {2} 的 Principal Gauge",
     },
-    r"センス発動後、プリンシパルゲージの上限値が\[:param(\d\d)\]上昇": {
-        "en": "After Sense Activation, Increase Principal Gauge Cap by [:param{0}]",
-        "zh_TW": "Sense 發動後，Principal Gauge 的上限值提升 [:param{0}]",
-        "zh_CN": "Sense 发动后，Principal Gauge 的上限值提升 [:param{0}]",
-        "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น [:param{0}]",
+    r"(?P<timing>センス発動時、)編成されている(?P<company>.+)アクターの人数×(\d+)プリンシパルゲージを獲得": {
+        "en": "{timing}Gain {2} Principal Gauge for each {company} Actor in the Unit",
+        "zh_TW": "{timing}獲得總數為隊伍內{company}演員人數 × {2} Principal Gauge",
+        "zh_CN": "{timing}获得总数为队伍内{company}演员人数 × {2} Principal Gauge",
     },
-    r"センス発動後、付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
-        "en": "After Sense Activation, Increase Principal Gauge Cap by {0} (+{1} at Most)",
-        "zh_TW": "Sense 發動後，每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {0}（最多 +{1}）",
-        "zh_CN": "Sense 发动后，每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {0}（最多 +{1}）",
-        "th": "หลังจากเปิดใช้งานเซนส์ Principal gauge สูงสุดจะเพิ่มขึ้น ต่อ Life Guard 1 ครั้ง {0} (สูงสุด {1})",
+    r"(?P<timing>センス発動時、)(?P<company>.+)または(?P<company2>.+)アクターの編成数×\[:param1(\d+)\]秒、編成されているアクターのCTを短縮": {
+        "en": "{timing}CT of each Actor Reduces by the Number of {company} or {company2} Actors in the Unit × [:param1{3}]s for the Next Sense",
+        "zh_TW": "{timing}演員的 CT 縮短隊伍內{company} 或 {company2}演員人數 × [:param1{3}] 秒",
+        "zh_CN": "{timing}演员的 CT 缩短队伍内{company} 或 {company2}演员人数 × [:param1{3}] 秒",
     },
-    r"センス発動後、付与されているライフガード1回につきプリンシパルゲージを(\d+)獲得（最大\+(\d+)）": {
-        "en": "After Sense Activation, Gain {0} Principal Gauge (+{1} at Most)",
-        "zh_TW": "Sense 發動後，每持有 1 次 Life Guard，獲得 {0} Principal Gauge（最多 +{1}）",
-        "zh_CN": "Sense 发动后，每持有 1 次 Life Guard，獲得 {0} Principal Gauge {0}（最多 +{1}）",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับ Principal gauge เพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
+    r"(?P<timing>センス発動時、)編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\2アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
+        "en": "{timing}the {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {4}% (This Effect can be Stacked)",
+        "zh_TW": "{timing}{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {4}% (此效果可疊加)",
+        "zh_CN": "{timing}{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {4}% (此效果可叠加)",
+    },
+    r"(?P<timing>センス発動時、)追加で「ライフガード」を獲得する（レベル1：(\d+)個／レベル2：(\d+)個／レベル3：(\d+)個／レベル4：(\d+)個／レベル5：(\d+)個\)": {
+        "en": '{timing}Gain Additional Life Guard(s) (Lv.1: {1} pcs / Lv.2: {2} pcs / Lv.3: {3} pcs / Lv.4: {4} pcs / Lv.5: {5} pcs)',
+        "zh_TW": "{timing}額外獲得 Life Guard（Lv.1：{1}個／Lv.2：{2}個／Lv.3：{3}個／Lv.4：{4}個／Lv.5：{5}個）",
+        "zh_CN": "{timing}额外获得 Life Guard（Lv.1：{1}个／Lv.2：{2}个／Lv.3：{3}个／Lv.4：{4}个／Lv.5：{5}个）",
+    },
+    r"(?P<timing>センス発動時、)追加で「ライフガード」を\[:param11\]回獲得する": {
+        "en": '{timing}Gain [:param11] Additional Life Guard(s)',
+        "zh_TW": "{timing}額外獲得 [:param11] 個 Life Guard",
+        "zh_CN": "{timing}额外获得 [:param11] 个 Life Guard",
+    },
+    r"(?P<timing>センス発動時に?、)追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
+        "ja": "{timing}追加で「{sense_type}の光{sense_emoji}」を{2}個獲得する",
+        "en": '{timing}Gain {2} Additional "{sense_type} Light(s){sense_emoji}"',
+        "zh_TW": "{timing}額外獲得 {2} 個「{sense_type}系光{sense_emoji}」",
+        "zh_CN": "{timing}额外获得 {2} 个「{sense_type}系光{sense_emoji}」",
+        "ko"     : "{timing}추가로 ‘{sense_type}의 빛{sense_emoji}’ {2}개 획득한다",
+        "ko_Kore": "{timing}追加로 ‘{sense_type}의 빛{sense_emoji}’ {2}個 獲得한다",
+    },
+    r"(?P<timing>センス発動後、)追加で獲得しているプリンシパルゲージ\[:param11\]%を獲得": {
+        "en": "{timing}Additionally Gain [:param11]% of the Amount of Gained Principal Gauge",
+        "zh_TW": "{timing}額外獲得已獲得的 Principal Gauge 的 [:param11]%",
+        "zh_CN": "{timing}额外获得已获得的 Principal Gauge 的 [:param11]%",
+    },
+    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ\[:param11\]%分のプリンシパルゲージを追加で獲得する": {
+        "en": "{timing}Gain Additional Principal Gauge of [:param11]% of the Current Principal Gauge",
+        "zh_TW": "{timing}額外獲得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
+        "zh_CN": "{timing}额外获得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
+    },
+    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ上限の\[:param11\]%分のプリンシパルゲージを獲得する": {
+        "en": "{timing}Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap",
+        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+    },
+    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ上限の\[:param11\]%分のプリンシパルゲージを獲得する。": {
+        "en": "{timing}Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap.",
+        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge。",
+        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge。",
+    },
+    r"(?P<timing>センス発動後、)追加で\[:param(\d\d)\]のプリンシパルゲージを獲得": {
+        "en": "{timing}Gain Additional [:param{1}] Principal Gauge",
+        "zh_TW": "{timing}額外獲得 [:param{1}] Principal Gauge",
+        "zh_CN": "{timing}额外获得 [:param{1}] Principal Gauge",
+        "th": "{timing}รับ Principal gauge เพิ่มขึ้น [:param{1}]",
+        "ko"     : "{timing}추가로 프린시펄 게이지 [:param{1}] 획득",
+        "ko_Kore": "{timing}追加로 프린시펄 게이지 [:param{1}] 獲得",
+    },
+    r"(?P<timing>センス発動後、)プリンシパルゲージの上限値が\[:param(\d\d)\]上昇": {
+        "en": "{timing}Increase Principal Gauge Cap by [:param{1}]",
+        "zh_TW": "{timing}Principal Gauge 的上限值提升 [:param{1}]",
+        "zh_CN": "{timing}Principal Gauge 的上限值提升 [:param{1}]",
+        "th": "{timing}Principal gauge สูงสุดเพิ่มขึ้น [:param{1}]",
+    },
+    r"(?P<timing>センス発動後、)付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
+        "en": "{timing}Increase Principal Gauge Cap by {1} (+{2} at Most)",
+        "zh_TW": "{timing}每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {1}（最多 +{2}）",
+        "zh_CN": "{timing}每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {1}（最多 +{2}）",
+        "th": "{timing}Principal gauge สูงสุดเพิ่มขึ้น ต่อ Life Guard 1 ครั้ง {1} (สูงสุด {2})",
+    },
+    r"(?P<timing>センス発動後、)付与されているライフガード1回につきプリンシパルゲージを(\d+)獲得（最大\+(\d+)）": {
+        "en": "{timing}Gain {1} Principal Gauge (+{2} at Most)",
+        "zh_TW": "{timing}每持有 1 次 Life Guard，獲得 {1} Principal Gauge（最多 +{2}）",
+        "zh_CN": "{timing}每持有 1 次 Life Guard，獲得 {1} Principal Gauge（最多 +{2}）",
+        "th": "{timing}รับ Principal gauge เพิ่มขึ้น {1} ต่อ Life Guard 1 ครั้ง (สูงสุด {2})",
+    },
+    r"(?P<timing>センス発動後、)編成されている(?P<companies>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を消費するライフガードの数\(最大(\d+)回\)×(\d+)%上昇させる\(この効果は重複する\)": {
+        "en": "{timing}the {status} and {status2} of each {companies} Actor in the Unit Increases by the Number of Life Guards Spent (At most {4} pcs.) × {5}% (This Effect can be Stacked)",
+        "zh_TW": "{timing}{companies}演員的 {status} 及 {status2} 提升 Life Guard 消費次數（最多 {4} 次） × {5}% (此效果可疊加)",
+        "zh_CN": "{timing}{companies}演员的 {status} 及 {status2} 提升 Life Guard 消费次数（最多 {4} 次） × {5}% (此效果可叠加)",
+        "ko"     : "{timing}편성되어 있는 {companies} {status}과 {status2}을 소비하는 라이프 가드 수 (최대 {4})×{5}% 상승 (중첩 가능)",
+        "ko_Kore": "{timing}編成되어 있는 {companies} {status}과 {status2}을 消費하는 라이프 가드 數 (最大 {4})×{5}% 上昇 (重疊 可能)",
+    },
+    r"(?P<timing>センス発動直後、)その時のスコアの\[:param11\]％のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param11]% of the Score at That Moment",
+        "zh_TW": "{timing}獲得當時分數 [:param11]% 的分數",
+        "zh_CN": "{timing}获得当时分数 [:param11]% 的分数",
+        "th": "{timing}รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
+        "ko"     : "{timing}그때의 스코어의 [:param11]% 스코어 획득",
+        "ko_Kore": "{timing}그때의 스코어의 [:param11]% 스코어 獲得",
+    },
+    r"(?P<timing>センス発動直後、)自身の(?P<status>.+?)の\[:param1(\d+)\]倍のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param1{2}] Times one's own {status}",
+        "zh_TW": "{timing}獲得自身{status} [:param1{2}] 倍的分數",
+        "zh_CN": "{timing}获得自身{status} [:param1{2}] 倍的分数",
+        "th": "{timing}รับคะแนน [:param1{2}] เท่าของ{status}",
     },
     r"(?P<actor>.+)編成時、(?P=actor)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
         "en": "When {actor} is Present, Sense is Activated by {actor} Instead, and {actor} Gains [:pre1]% UP Score from so",
         "zh_TW": "當{actor}在隊伍時，{actor}代為發動 Sense，且{actor}獲得的分數 [:pre1]% UP",
         "zh_CN": "当{actor}在队伍时，{actor}代为发动 Sense，且{actor}获得的分数 [:pre1]% UP",
-        "th": "เมื่อ{actor}อยู่ในทีม {actor}จะเปิดใช้งานเซนส์แทนและคะแนนจะเพิ่มขึ้น [:pre1]%",
+        "th": "เมื่อ{actor}อยู่ในทีม {actor}เปิดใช้งานเซนส์แทนและคะแนนเพิ่มขึ้น [:pre1]%",
     },
     r"(?P<actor>.+)が隣に編成された状態でセンスを発動したとき、自身もセンスを発動する\(センスの光は獲得出来ない\)": {
         "en": "When {actor} is placed in an Adjacent Slot and Activates Sense, this Sense also Activates (Sense Light will not be Gained)",
@@ -1038,31 +1201,33 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
         "zh_TW" : "生命值愈多，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
         "zh_CN" : "生命值愈多，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
-        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
+        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งรับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
     },
     r"ライフが多いほど(?P<actor>.+)のスコア獲得量UP効果（最大＋(\d+)％）": {
         "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
         "zh_TW" : "生命值愈多，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
         "zh_CN" : "生命值愈多，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
-        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
+        "th" : "ยิ่งเลือดมากเท่าไหร่ยิ่งรับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
     },
     r"ライフが少ないほど(?P<actor>.+)のスコア獲得量UP（最大＋(\d+)％）": {
         "en": "The Less the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
         "zh_TW": "生命值愈少，{actor}的分數獲得量 UP 效果愈強（最多 +{1}%）",
         "zh_CN": "生命值愈少，{actor}的分数获得量 UP 效果愈强（最多 +{1}%）",
-        "th": "ยิ่งเลือดน้อยเท่าไหร่ยิ่งได้รับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
+        "th": "ยิ่งเลือดน้อยเท่าไหร่ยิ่งรับคะแนนมากเท่านั้น (สูงสุด +{1}%)",
     },
     r"\[:sec(\d*)\]秒間、(?P<company>.+)のアクターに(?P<sense_star_act>センス|スターアクト)スコア\[:param(\d\d)\]％UP効果": {
         "en": "For [:sec{0}] seconds, {company} Actors Gain [:param{3}]% UP Score from {sense_star_act}",
         "zh_TW": "[:sec{0}]秒內，{company}演員附帶 {sense_star_act} 分數 [:param{3}]% UP 效果",
         "zh_CN": "[:sec{0}]秒内，{company}演员附带 {sense_star_act} 分数 [:param{3}]% UP 效果",
         "th": "คะแนน{sense_star_act}ของ {company} เพิ่มขึ้น [:param{3}]% เป็นเวลา [:sec{0}] วินาที",
+        "ko"     : "[:sec{0}]초간, {company}의 액터에게 {sense_star_act} 스코어 [:param{3}]%UP 효과",
+        "ko_Kore": "[:sec{0}]秒間, {company}의 액터에게 {sense_star_act} 스코어 [:param{3}]%UP 效果",
     },
     r"\[:sec(\d*)\]秒間、編成されているアクターのプリンシパルゲージ獲得量\[:param(\d\d)\]％UP効果": {
         "en": "For [:sec{0}] seconds, Apply a [:param{1}]% UP Effect to the Principal Gauge Gained by Actors in the Unit",
         "zh_TW": "[:sec{0}]秒內，隊伍內演員附帶獲得 Principal Gauge 量 [:param{1}]% UP 效果",
         "zh_CN": "[:sec{0}]秒内，队伍内演员附带获得 Principal Gauge 量 [:param{1}]% UP 效果",
-        "th": "Principal gauge ที่ได้รับของนักแสดงทุกคนเพิ่มขึ้น [:param{1}]% เป็นเวลา [:sec{0}] วินาที",
+        "th": "Principal gauge ที่รับของนักแสดงทุกคนเพิ่มขึ้น [:param{1}]% เป็นเวลา [:sec{0}] วินาที",
     },
     r"(?P<company>.+)のアクターのCTを(\d+)秒短縮": {
         "en": "CT of each {company} Actor Reduces by {1}s for the Next Sense",
@@ -1074,77 +1239,37 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": "For each Life Guard in Possession, Score Gain Increases by {0}% (+{1}% at Most)",
         "zh_TW": "每持有 1 次 Life Guard，分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "每持有 1 次 Life Guard，分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
+        "th": "รับคะแนนเพิ่มขึ้น {0}% ต่อ Life Guard 1 ครั้ง (สูงสุด {1}%)",
     },
     r"付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
         "en": "For each Life Guard in Possession, Increase Principal Gauge Cap by {0} (+{1} at Most)",
         "zh_TW": "每持有 1 次 Life Guard，Principal Gauge 的上限值提升{0}（最多 +{1}）",
         "zh_CN": "每持有 1 次 Life Guard，Principal Gauge 的上限值提升{0}（最多 +{1}）",
-        "th": "Principal gauge สูงสุดจะเพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
+        "th": "Principal gauge สูงสุดเพิ่มขึ้น {0} ต่อ Life Guard 1 ครั้ง (สูงสุด {1})",
     },
     r"(?P<company>.+)または(?P<company2>.+)アクターの編成数×\[:param11\]プリンシパルゲージの上限が上昇する": {
         "en": "Principal Gauge Cap Increases by Number of {company} or {company2} Actors in the Unit × [:param11]",
         "zh_TW": "Principal Gauge 的上限值提升 {company} 或 {company2} 演員人數 × [:param11]",
         "zh_CN": "Principal Gauge 的上限值提升 {company} 或 {company2} 演员人数 × [:param11]",
-        "th": "Principal gauge สูงสุดจะเพิ่มขึ้น [:param11] ต่อจำนวนสมาชิกจาก {company} หรือ {company2} ที่อยู่ในทีม",
+        "th": "Principal gauge สูงสุดเพิ่มขึ้น [:param11] ต่อจำนวนสมาชิกจาก {company} หรือ {company2} ที่อยู่ในทีม",
     },
     r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Attribute there is in the Unit, Score Gain Increases by {0}% (+{1}% at Most)",
         "zh_TW": "每 1 個編成的屬性能使分數獲得量增加{0}%（最多 +{1}%）",
         "zh_CN": "每 1 个编成的属性能使分数获得量增加{0}%（最多 +{1}%）",
-        "th": "ได้รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
-    },
-    r"センス発動直後、自身の(?P<status>.+?)の\[:param1(\d+)\]倍のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param1{1}] Times one's own {status}",
-        "zh_TW": "Sense 發動後，獲得自身{status} [:param1{1}] 倍的分數",
-        "zh_CN": "Sense 发动后，获得自身{status} [:param1{1}] 倍的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับคะแนน [:param1{1}] เท่าของ{status}",
-    },
-    r"センス発動時(に?)、追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
-        "ja": "センス発動時、追加で「{sense_type}の光{sense_emoji}」を{2}個獲得する",
-        "en": 'When Sense Activates, Gain {2} Additional "{sense_type} Light(s){sense_emoji}"',
-        "zh_TW": "Sense 發動時，額外獲得 {2} 個「{sense_type}系光{sense_emoji}」",
-        "zh_CN": "Sense 发动时，额外获得 {2} 个「{sense_type}系光{sense_emoji}」",
+        "th": "รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
     },
     r"編成されている(?P<company>.+)アクターの人数×(\d+)プリンシパルゲージを獲得": {
         "en": "For each {company} Actor in the Unit, Gain {1} Principal Gauge",
         "zh_TW": "獲得總數為隊伍內{company}演員人數 × {1} 的 Principal Gauge",
         "zh_CN": "获得总数为队伍内{company}演员人数 × {1} 的 Principal Gauge",
     },
-    r"センス発動時、(?P<company>.+)アクターの人数×(\d+)のプリンシパルゲージを獲得": {
-        "en": "When Sense Activates, Gain {1} Principal Gauge for each {company} Actor",
-        "zh_TW": "Sense 發動時，獲得總數為{company}演員人數 × {1} 的 Principal Gauge",
-        "zh_CN": "Sense 发动时，获得总数为{company}演员人数 × {1} 的 Principal Gauge",
-    },
-    r"センス発動時、編成されている(?P<company>.+)アクターの人数×(\d+)プリンシパルゲージを獲得": {
-        "en": "When Sense Activates, Gain {1} Principal Gauge for each {company} Actor in the Unit",
-        "zh_TW": "Sense 發動時，獲得總數為隊伍內{company}演員人數 × {1} Principal Gauge",
-        "zh_CN": "Sense 发动时，获得总数为队伍内{company}演员人数 × {1} Principal Gauge",
-    },
-    r"センス発動時、(?P<company>.+)または(?P<company2>.+)アクターの編成数×\[:param1(\d+)\]秒、編成されているアクターのCTを短縮": {
-        "en": "When Sense Activates, CT of each Actor Reduces by the Number of {company} or {company2} Actors in the Unit × [:param1{2}]s for the Next Sense",
-        "zh_TW": "Sense 發動時，演員的 CT 縮短隊伍內{company} 或 {company2}演員人數 × [:param1{2}] 秒",
-        "zh_CN": "Sense 发动时，演员的 CT 缩短队伍内{company} 或 {company2}演员人数 × [:param1{2}] 秒",
-    },
     r"(?P<company>.+)アクターのCTを、編成されている(?P<company2>.+)アクターの人数×(\d+)秒短縮": {
         "en": "CT of each {company} Actor Reduces by the Number of {company2} Actors in the Unit × {2}s for the Next Sense",
         "zh_TW": "{company}演員的 CT 縮短隊伍內{company2}演員人數 × {2} 秒",
         "zh_CN": "{company}演员的 CT 缩短队伍内{company2}演员人数 × {2} 秒",
-    },
-    r"センス発動時、編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\1アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
-        "en": "When Sense Activates, the {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {3}% (This Effect can be Stacked)",
-        "zh_TW": "Sense 發動時，{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {3}% (此效果可疊加)",
-        "zh_CN": "Sense 發動時，{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {3}% (此效果可叠加)",
-    },
-    r"センス発動後、編成されている(?P<companies>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を消費するライフガードの数\(最大(\d+)回\)×(\d+)%上昇させる\(この効果は重複する\)": {
-        "en": "After Sense Activation, the {status} and {status2} of each {companies} Actor in the Unit Increases by the Number of Life Guards Spent (At most {3} pcs.) × {4}% (This Effect can be Stacked)",
-        "zh_TW": "Sense 發動後，{companies}演員的 {status} 及 {status2} 提升 Life Guard 消費次數（最多 {3} 次） × {4}% (此效果可疊加)",
-        "zh_CN": "Sense 發動后，{companies}演员的 {status} 及 {status2} 提升 Life Guard 消费次数（最多 {3} 次） × {4}% (此效果可叠加)",
-    },
-    r"センス発動時、追加で「ライフガード」を獲得する（レベル1：(\d+)個／レベル2：(\d+)個／レベル3：(\d+)個／レベル4：(\d+)個／レベル5：(\d+)個\)": {
-        "en": 'When Sense Activates, Gain Additional Life Guard(s) (Lv.1: {0} pcs / Lv.2: {1} pcs / Lv.3: {2} pcs / Lv.4: {3} pcs / Lv.5: {4} pcs)',
-        "zh_TW": "Sense 發動時，額外獲得 Life Guard（Lv.1：{0}個／Lv.2：{1}個／Lv.3：{2}個／Lv.4：{3}個／Lv.5：{4}個）",
-        "zh_CN": "Sense 发动时，额外获得 Life Guard（Lv.1：{0}个／Lv.2：{1}个／Lv.3：{2}个／Lv.4：{3}个／Lv.5：{4}个）",
+        "ko"     : "{company} 액터의 CT를, 편성되어 있는 {company} 액터의 인원수 ×{2}초 단축",
+        "ko_Kore": "{company} 액터의 CT를, 編成되어 있는 {company} 액터의 人員數 ×{2}秒 短縮",
     },
 })
 
@@ -1178,6 +1303,8 @@ single_leader_sense_translator = regex_lookup_translator_wrapper("single_leader_
         "en": 'Category "{0}" {status} Increases by {3}%',
         "zh_TW": "「{0}」分類的{status}提升 {3}%",
         "zh_CN": "「{0}」分类的{status}提升 {3}%",
+        "ko"     : "‘{0}’ 카테고리의 {status} {3}% 상승",
+        "ko_Kore": "‘{0}’ 카테고리의 {status} {3}% 上昇",
     },
     r"「(.+?)」カテゴリを持つアクターの数に応じて初期プリンシパルゲージが(\d+)上昇": {
         "en": 'Initial Principal Gauge Increases by {1} for each actor having Category "{0}"',
@@ -1204,13 +1331,24 @@ def leader_sense_translator(description: str, message: MsgInt) -> str:
         single_leader_sense_translator(part, message)
     for part in split_leader_sense(description)])
 
-bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
-    "公演開始時に自身と同系統の光を獲得": {
-        "en": "When the Performance Starts, Gain a Light with the same System as oneself",
-        "zh_TW": "公演開始時，獲得與自身同系統的光",
-        "zh_CN": "公演开始时，获得与自身同系统的光",
-    }
-}, {
+bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {}, {
+    r"(?P<timing>公演開始時、)ライフガードを(\d+)付与": {
+        "en": "{timing}Attach {1} Life Guard(s)",
+        "zh_TW": "{timing}給予 {1} 個 Life Guard",
+        "zh_CN": "{timing}给予 {1} 个 Life Guard",
+        "th": "{timing}Life Guard {1} ครั้ง",
+    },
+    r"(?P<timing>公演開始時に)(?P<sense_type>.{2})の光を獲得": {
+        "ja": "{timing}{sense_type}の光「{sense_emoji}」を獲得",
+        "en": "{timing}Gain {sense_type} Light ({sense_emoji})",
+        "zh_TW": "{timing}獲得{sense_type}系光「{sense_emoji}」",
+        "zh_CN": "{timing}获得{sense_type}系光「{sense_emoji}」",
+    },
+    r"(?P<timing>公演開始時に)自身と同系統の光を獲得": {
+        "en": "{timing}Gain a Light with the same System as oneself",
+        "zh_TW": "{timing}獲得與自身同系統的光",
+        "zh_CN": "{timing}获得与自身同系统的光",
+    },
     r"演技力(\d+)[%％]UP": {
         "en": "Status {}% UP",
         "zh": "演技力 {}% UP",
@@ -1262,22 +1400,10 @@ bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {
         "zh_CN": "Star Act 发动所需的{sense_type}系光「{sense_emoji}」数量减少 {1} 个",
         "th": "จำนวน{sense_type} ({sense_emoji}) ที่ใช้ในการเปิด Star Act ลดลง {1} ดวง",
     },
-    r"公演開始時、ライフガードを(\d+)付与": {
-        "en": "When the Performance Starts, Attach {} Life Guard(s)",
-        "zh_TW": "公演開始時，給予 {} 個 Life Guard",
-        "zh_CN": "公演开始时，给予 {} 个 Life Guard",
-        "th": "เมื่อเริ่มเพลงจะได้ Life Guard {} ครั้ง",
-    },
     r"(?P<sense_type>.{2})の光追加": {
         "ja": "{sense_type}の光「{sense_emoji}」追加",
         "en": "Additional {sense_type} Light ({sense_emoji})",
         "zh": "追加{sense_type}系光「{sense_emoji}」",
-    },
-    r"公演開始時に(?P<sense_type>.{2})の光を獲得": {
-        "ja": "公演開始時に{sense_type}の光「{sense_emoji}」を獲得",
-        "en": "When the Performance Starts, Gain {sense_type} Light ({sense_emoji})",
-        "zh_TW": "公演開始時，獲得{sense_type}系光「{sense_emoji}」",
-        "zh_CN": "公演开始时，获得{sense_type}系光「{sense_emoji}」",
     },
 })
 
@@ -1339,82 +1465,154 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
 })
 
 poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_translator", {
-    "センス発動直後、その時のスコアの[:param11]％のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Score at That Moment",
-        "zh_TW": "Sense 發動後，獲得當時分數 [:param11]% 的分數",
-        "zh_CN": "Sense 发动后，获得当时分数 [:param11]% 的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
-    },
-    "公演開始時、P.ゲージが[:param11]上昇": {
-        "en": "When the Performance Starts, P. Gauge Increases by [:param11]",
-        "zh_TW": "公演開始時，P. Gauge 提升 [:param11]",
-        "zh_CN": "公演开始时，P. Gauge 提升 [:param11]",
-        "th": "ในช่วงเริ่มเพลงเพิ่มขีดจำกัดของ Principal gauge จะเพิ่มขึ้น [:param11]",
-    },
-    "センス発動直後、ライフを[:param11]回復": {
-        "en": "Right After Sense Activation, Life Value Recovers by [:param11]",
-        "zh_TW": "Sense 發動後，生命值回復 [:param11]",
-        "zh_CN": "Sense 发动后，生命值回复 [:param11]",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะฟื้นฟูเลือด [:param11]",
-    },
-    "公演開始時、ライフが[:param11]上昇": {
-        "en": "When the Performance Starts, Life Value Increases by [:param11]",
-        "zh_TW": "公演開始時，生命值提升 [:param11]",
-        "zh_CN": "公演开始时，生命值提升 [:param11]",
-        "th": "เมื่อเริ่มเพลงจะได้รับเลือดเพิ่ม [:param11]",
-    },
-    "公演開始時、Pゲージの上限が[:param11]上昇": {
-        "en": "When the Performance Starts, P. Gauge Cap Increases by [:param11]",
-        "zh_TW": "公演開始時，P. Gauge 的上限值提升 [:param11]",
-        "zh_CN": "公演开始时，P. Gauge 的上限值提升 [:param11]",
-        "th": "เมื่อเริ่มเพลงเพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
-    },
     "P.ゲージの上限が[:param11]上昇": {
         "en": "P. Gauge Cap Increases by [:param11]",
         "zh_TW": "P. Gauge 的上限值提升 [:param11]",
         "zh_CN": "P. Gauge 的上限值提升 [:param11]",
         "th": "เพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
     },
-    "センス発動直後、P.ゲージの上限が[:param11]上昇": {
-        "en": "Right After Sense Activation, P. Gauge Cap Increases by [:param11]",
-        "zh_TW": "Sense 發動後，P. Gauge 的上限值提升 [:param11]",
-        "zh_CN": "Sense 发动后，P. Gauge 的上限值提升 [:param11]",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะเพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
-    },
     "センスを発動しなくなるが、自身の演技力が2倍": {
         "en": 'Sense can no Longer Activate, but one\'s own Total Status doubled',
         "zh_TW": "Sense 無法發動，但自身演技力 2 倍",
         "zh_CN": "Sense 无法发动，但自身演技力 2 倍",
-        "th": "เซนส์จะไม่ถูกเปิดใช้งานแต่ความสามารถการแสดงจะเพิ่มเป็น 2 เท่า",
-    },
-    "センス発動時、SP光を追加で付与": {
-        "en": 'When Sense Activates, Gain an Additional SP Light',
-        "zh_TW": "Sense 發動時，額外獲得 SP 光",
-        "zh_CN": "Sense 发动时，额外获得 SP 光",
-    },
-    "センス発動時、SP光を追加で[:param11]個付与": {
-        "en": 'When Sense Activates, Gain [:param11] Additional SP Light(s)',
-        "zh_TW": "Sense 發動時，額外獲得[:param11]個 SP 光",
-        "zh_CN": "Sense 发动时，额外获得[:param11]個 SP 光",
+        "th": "เซนส์ไม่ถูกเปิดใช้งานแต่ความสามารถการแสดงเพิ่มเป็น 2 เท่า",
     },
     "センスで付与する「光」の付与数が[:param11]個増加": {
         "en": "The Number of \"Lights\" Gained by Sense Increases by [:param11]",
         "zh_TW": "自 Sense 獲得的「光」的數量增加 [:param11] 個",
         "zh_CN": "自 Sense 获得的「光」的数量增加 [:param11] 个",
-        "th": "จำนวนดาวที่ได้รับจากเซนส์ +[:param11]",
-    },
-    "公演開始時、ライフガードを[:param11]付与": {
-        "en": "When the Performance Starts, Attach [:param11] Life Guard(s)",
-        "zh_TW": "公演開始時，給予 [:param11] 個 Life Guard",
-        "zh_CN": "公演开始时，给予 [:param11] 个 Life Guard",
-        "th": "เมื่อเริ่มเพลงจะได้ Life Guard [:param11] ครั้ง",
+        "th": "จำนวนดาวที่รับจากเซนส์ +[:param11]",
     },
 }, {
-    r"センス発動直後、現在のスコアの\[:param11\][%％]のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param11]% of the Current Score",
-        "zh_TW": "Sense 發動後，獲得目前分數 [:param11]% 的分數",
-        "zh_CN": "Sense 发动后，获得目前分数 [:param11]% 的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับคะแนน [:param11]% ของคะแนนปัจจุบัน",
+    r"(?P<timing>公演開始時、)P.ゲージが\[:param11\]上昇": {
+        "en": "{timing}P. Gauge Increases by [:param11]",
+        "zh_TW": "{timing}P. Gauge 提升 [:param11]",
+        "zh_CN": "{timing}P. Gauge 提升 [:param11]",
+        "th": "{timing}เพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
+    },
+    r"(?P<timing>公演開始時、)ライフが\[:param11\]上昇": {
+        "en": "{timing}Life Value Increases by [:param11]",
+        "zh_TW": "{timing}生命值提升 [:param11]",
+        "zh_CN": "{timing}生命值提升 [:param11]",
+        "th": "{timing}รับเลือดเพิ่ม [:param11]",
+    },
+    r"(?P<timing>公演開始時、)Pゲージの上限が\[:param11\]上昇": {
+        "en": "{timing}P. Gauge Cap Increases by [:param11]",
+        "zh_TW": "{timing}P. Gauge 的上限值提升 [:param11]",
+        "zh_CN": "{timing}P. Gauge 的上限值提升 [:param11]",
+        "th": "{timing}เพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
+    },
+    r"(?P<timing>公演開始時、)ライフガードを\[:param11\]付与": {
+        "en": "{timing}Attach [:param11] Life Guard(s)",
+        "zh_TW": "{timing}給予 [:param11] 個 Life Guard",
+        "zh_CN": "{timing}给予 [:param11] 个 Life Guard",
+        "th": "{timing}Life Guard [:param11] ครั้ง",
+    },
+    r"(?P<timing>公演開始時、)(?P<sense_type>.{2})系の光「<color=#.{6}>\*<\/color>」を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
+        "ja": "{timing}{sense_type}系の光「{sense_emoji}」を[:param11]{2}付与（効果は公演開始時1回のみ発動する）",
+        "en": "{timing}Attach [:param11] {sense_type} Light(s) ({sense_emoji}) (The Effect only Activates once when the Performance Starts)",
+        "zh_TW": "{timing}給予 [:param11] 個{sense_type}系光「{sense_emoji}」（效果僅於公演開始時發動 1 次）",
+        "zh_CN": "{timing}给予 [:param11] 个{sense_type}系光「{sense_emoji}」（效果仅于公演开始时发动 1 次）",
+        "th": "{timing}รับ{sense_type} ({sense_emoji}) [:param11] ดวง",
+    },
+    r"(?P<timing>公演開始時、)SP光を\[:param11\]個?付与": {
+        "en": "{timing}Attach [:param11] SP Light(s)",
+        "zh_TW": "{timing}給予 [:param11] 個 SP 光",
+        "zh_CN": "{timing}给予 [:param11] 个 SP 光",
+        "th": "{timing}รับดาว SP [:param11] ดวง",
+    },
+    r"(?P<timing>公演開始時、)SP光を追加で\[:param11\]個付与": {
+        "en": "{timing}Additionally Attach [:param11] SP Light(s)",
+        "zh_TW": "{timing}額外給予 [:param11] 個 SP 光",
+        "zh_CN": "{timing}额外给予 [:param11] 个 SP 光",
+        "th": "{timing}รับดาว SP [:param11] ดวง",
+    },
+    r"(?P<timing>公演開始時、)SP光を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
+        "en": "{timing}Attach [:param11] SP Light(s) (The Effect only Activates once when the Performance Starts)",
+        "zh_TW": "{timing}給予 [:param11] 個 SP 光（效果僅於公演開始時發動 1 次）",
+        "zh_CN": "{timing}给予 [:param11] 个 SP 光（效果仅于公演开始时发动 1 次）",
+        "th": "{timing}รับดาว SP [:param11] ดวง",
+    },
+    r"(?P<timing>公演開始時、)ライフが(\d+)上昇": {
+        "en": "{timing}Life Value Increases by {1}",
+        "zh_TW": "{timing}生命值提升 {1}",
+        "zh_CN": "{timing}生命值提升 {1}",
+        "th": "{timing}รับเลือดเพิ่ม {1}",
+    },
+    r"(?P<timing>公演開始時、)ライフを(\d+)回復": {
+        "en": "{timing}Life Value Recovers by {1}",
+        "zh_TW": "{timing}生命值回復 {1}",
+        "zh_CN": "{timing}生命值回复 {1}",
+        "th": "{timing}ฟื้นฟูเลือดเพิ่ม {1}",
+    },
+    r"(?P<timing>公演開始時、)ライフを(\d+)減少": {
+        "en": "{timing}Life Value Reduces by {1}",
+        "zh_TW": "{timing}生命值減少 {1}",
+        "zh_CN": "{timing}生命值减少 {1}",
+        "th": "{timing}เลือดลดลง {1}",
+    },
+    r"(?P<timing>公演開始時、)ライフガード（(\d+)回）を付与": {
+        "en": "{timing}Attach Life Guard(s) ({1} Times)",
+        "zh_TW": "{timing}給予 Life Guard（{1} 次）",
+        "zh_CN": "{timing}给予 Life Guard（{1} 次）",
+        "th": "{timing} Life Guard {1} ครั้ง",
+    },
+    r"(?P<timing>公演開始時、)自身の(?P<sense_star_act>センス|スターアクト)スコア\[:param11\]％UP効果が公演終了まで発動する": {
+        "en": '{timing}Activate the Effect of [:param11]% UP {sense_star_act} Score to oneself Until the Performance Ends',
+        "zh_TW": "{timing}自身發動 {sense_star_act} 分數 [:param11]% UP 效果直到公演結束",
+        "zh_CN": "{timing}自身发动 {sense_star_act} 分数 [:param11]% UP 效果直到公演结束",
+    },
+    r"(?P<timing>センス発動時、)SP光を追加で付与": {
+        "en": '{timing}Gain an Additional SP Light',
+        "zh_TW": "{timing}額外獲得 SP 光",
+        "zh_CN": "{timing}额外获得 SP 光",
+    },
+    r"(?P<timing>センス発動時、)SP光を追加で\[:param11\]個付与": {
+        "en": '{timing}Gain [:param11] Additional SP Light(s)',
+        "zh_TW": "{timing}額外獲得[:param11]個 SP 光",
+        "zh_CN": "{timing}额外获得[:param11]個 SP 光",
+    },
+    r"(?P<timing>センス発動時、)(?P<sense_type>.{2})系の光「<color=#.{6}>\*<\/color>」を追加で\[:param11\]個付与": {
+        "ja": "{timing}{sense_type}系の光「{sense_emoji}」を追加で[:param11]個付与",
+        "en": '{timing}Gain [:param11] Additional "{sense_type} Light(s){sense_emoji}"',
+        "zh_TW": "{timing}獲得額外 [:param11] 個「{sense_type}系光{sense_emoji}」",
+        "zh_CN": "{timing}获得额外 [:param11] 个「{sense_type}系光{sense_emoji}」",
+    },
+    r"(?P<timing>センス発動直後、)現在のスコアの\[:param11\][%％]のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param11]% of the Current Score",
+        "zh_TW": "{timing}獲得目前分數 [:param11]% 的分數",
+        "zh_CN": "{timing}获得目前分数 [:param11]% 的分数",
+        "th": "{timing}รับคะแนน [:param11]% ของคะแนนปัจจุบัน",
+    },
+    r"(?P<timing>センス発動直後、)その時のスコアの\[:param11\]％のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param11]% of the Score at That Moment",
+        "zh_TW": "{timing}獲得當時分數 [:param11]% 的分數",
+        "zh_CN": "{timing}获得当时分数 [:param11]% 的分数",
+        "th": "{timing}รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
+    },
+    r"(?P<timing>センス発動直後、)ライフを\[:param11\]回復": {
+        "en": "{timing}Life Value Recovers by [:param11]",
+        "zh_TW": "{timing}生命值回復 [:param11]",
+        "zh_CN": "{timing}生命值回复 [:param11]",
+        "th": "{timing}ฟื้นฟูเลือด [:param11]",
+    },
+    r"(?P<timing>センス発動直後、)P.ゲージの上限が\[:param11\]上昇": {
+        "en": "{timing}P. Gauge Cap Increases by [:param11]",
+        "zh_TW": "{timing}P. Gauge 的上限值提升 [:param11]",
+        "zh_CN": "{timing}P. Gauge 的上限值提升 [:param11]",
+        "th": "{timing}เพิ่มขีดจำกัดของ P. Gauge เพิ่มขึ้น [:param11]",
+    },
+    r"(?P<timing>センス発動直後、)自身の(?P<status>.+?)の\[:param1(\d+)\]倍のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param1{2}] Times one's own {status}",
+        "zh_TW": "{timing}獲得自身{status} [:param1{2}] 倍的分數",
+        "zh_CN": "{timing}获得自身{status} [:param1{2}] 倍的分数",
+        "th": "{timing}รับคะแนน [:param1{2}] เท่าของ{status}",
+    },
+    r"(?P<timing>センス発動直後、)P(\.?)ゲージを\[:param11\]獲得": {
+        "en": "{timing}Gain [:param11] P. Gauge",
+        "zh_TW": "{timing}獲得 [:param11] P. Gauge",
+        "zh_CN": "{timing}獲得 [:param11] P. Gauge",
+        "th": "{timing}รับ P. Gauge [:param11]",
     },
     r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]([%％])上昇": {
         "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]{1}上昇",
@@ -1422,37 +1620,6 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_TW": "{attribute_emoji} {attribute}屬性演員的演技力提升[:param11]%",
         "zh_CN": "{attribute_emoji} {attribute}属性演员的演技力提升[:param11]%",
         "th": "การแสดงของนักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เพิ่มขึ้น [:param11] %",
-    },
-    r"公演開始時、(?P<sense_type>.{2})系の光「<color=#.{6}>\*<\/color>」を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
-        "ja": "公演開始時、{sense_type}系の光「{sense_emoji}」を[:param11]{1}付与（効果は公演開始時1回のみ発動する）",
-        "en": "When the Performance Starts, Attach [:param11] {sense_type} Light(s) ({sense_emoji}) (The Effect only Activates once when the Performance Starts)",
-        "zh_TW": "公演開始時，給予 [:param11] 個{sense_type}系光「{sense_emoji}」（效果僅於公演開始時發動 1 次）",
-        "zh_CN": "公演开始时，给予 [:param11] 个{sense_type}系光「{sense_emoji}」（效果仅于公演开始时发动 1 次）",
-        "th": "เมื่อเริ่มเพลงจะได้รับ{sense_type} ({sense_emoji}) [:param11] ดวง",
-    },
-    r"公演開始時、SP光を\[:param11\](個?)付与": {
-        "en": "When the Performance Starts, Attach [:param11] SP Light(s)",
-        "zh_TW": "公演開始時，給予 [:param11] 個 SP 光",
-        "zh_CN": "公演开始时，给予 [:param11] 个 SP 光",
-        "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
-    },
-    r"公演開始時、SP光を追加で\[:param11\]個付与": {
-        "en": "When the Performance Starts, Additionally Attach [:param11] SP Light(s)",
-        "zh_TW": "公演開始時，額外給予 [:param11] 個 SP 光",
-        "zh_CN": "公演开始时，额外给予 [:param11] 个 SP 光",
-        "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
-    },
-    r"公演開始時、SP光を\[:param11\](個?)付与（効果は公演開始時1回のみ発動する）": {
-        "en": "When the Performance Starts, Attach [:param11] SP Light(s) (The Effect only Activates once when the Performance Starts)",
-        "zh_TW": "公演開始時，給予 [:param11] 個 SP 光（效果僅於公演開始時發動 1 次）",
-        "zh_CN": "公演开始时，给予 [:param11] 个 SP 光（效果仅于公演开始时发动 1 次）",
-        "th": "เมื่อเริ่มเพลงจะได้รับดาว SP [:param11] ดวง",
-    },
-    r"センス発動時、(?P<sense_type>.{2})系の光「<color=#.{6}>\*<\/color>」を追加で\[:param11\]個付与": {
-        "ja": "センス発動時、{sense_type}系の光「{sense_emoji}」を追加で[:param11]個付与",
-        "en": 'When Sense Activates, Gain [:param11] Additional "{sense_type} Light(s){sense_emoji}"',
-        "zh_TW": "Sense 發動時，獲得額外 [:param11] 個「{sense_type}系光{sense_emoji}」",
-        "zh_CN": "Sense 发动时，获得额外 [:param11] 个「{sense_type}系光{sense_emoji}」",
     },
     r"(?P<company>.+)または(?P<company2>.+)に所属するアクターの(?P<status>.+?)が\[:param11\][%％]上昇": {
         "en": "{status} of {company} or {company2} Actors Increase by [:param11]%",
@@ -1470,25 +1637,25 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "en": "When the Unit only Consists of {company} Actors, {status} Values of All Actors Increase Additionally by [:param11]%",
         "zh_TW": "當隊伍只由{company}所屬演員組成時，全部演員的 {status} 額外提升[:param11]%",
         "zh_CN": "当队伍只由{company}所属演员组成时，全部演员的 {status} 额外提升[:param11]%",
-        "th": "หากจัดทีมด้วย {company} เท่านั้น {status}ทุกคนจะเพิ่มขึ้น [:param11]%",
+        "th": "หากจัดทีมด้วย {company} เท่านั้น {status}ทุกคนเพิ่มขึ้น [:param11]%",
     },
     r"(?P<company>.+)に所属しているアクターを(\d+)人以上編成している場合、追加で全アクターの(?P<status>.+?)が\[:param11\]％上昇": {
         "en": "When the Unit Consists of {1} or more {company} Actors, {status} Values of All Actors Increase Additionally by [:param11]%",
         "zh_TW": "當隊伍由至少 {1} 名{company}所屬演員組成時，全部演員的 {status} 額外提升[:param11]%",
         "zh_CN": "当队伍由至少 {1} 名{company}所属演员组成时，全部演员的 {status} 额外提升[:param11]%",
-        "th": "หากจัดทีมด้วย {company} อย่างน้อย {1} คนในทีม {status}ทุกคนจะเพิ่มขึ้น [:param11]%",
+        "th": "หากจัดทีมด้วย {company} อย่างน้อย {1} คนในทีม {status}ทุกคนเพิ่มขึ้น [:param11]%",
     },
     r"(?P<company>.+)に所属しているアクターのみで編成している場合、追加で(?P<status>.+?)が\[:param11\]％上昇": {
         "en": "When the Unit only Consists of {company} Actors, {status} Values Increase Additionally by [:param11]%",
         "zh_TW": "當隊伍只由{company}所屬演員組成時，{status} 額外提升[:param11]%",
         "zh_CN": "当队伍只由{company}所属演员组成时，{status} 额外提升[:param11]%",
-        "th": "หากจัดทีมด้วย {company} เท่านั้น {status}จะเพิ่มขึ้น [:param11]%",
+        "th": "หากจัดทีมด้วย {company} เท่านั้น {status}เพิ่มขึ้น [:param11]%",
     },
     r"(?P<company>.+)に所属しているアクターを(\d+)人以上編成している場合、追加で(?P<status>.+?)が\[:param11\]％上昇": {
         "en": "When the Unit Consists of {1} or more {company} Actors, {status} Values Increase Additionally by [:param11]%",
         "zh_TW": "當隊伍由至少 {1} 名{company}所屬演員組成時，{status} 額外提升[:param11]%",
         "zh_CN": "当队伍由至少 {1} 名{company}所属演员组成时，{status} 额外提升[:param11]%",
-        "th": "หากจัดทีมด้วย {company} อย่างน้อย {1} คนในทีม {status}จะเพิ่มขึ้น [:param11]%",
+        "th": "หากจัดทีมด้วย {company} อย่างน้อย {1} คนในทีม {status}เพิ่มขึ้น [:param11]%",
     },
     r"全アクターの(?P<status>.+?)が\[:param11\][%％]上昇": {
         "en": "{status} of Each Actor Increases by [:param11]%",
@@ -1519,85 +1686,38 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_CN": "编成的属性数量愈少，自身的{status}上升愈多（1属性：[:param11]%／2属性：[:param21]%／3属性：[:param31]%／4属性：[:param41]%）",
         "th": "ยิ่งคุณสมบัตินักแสดงแตกต่างกัน ความสามารถ{status}ยิ่งต่ำลง (1 คุณสมบัติ: [:param11]% / 2 คุณสมบัติ: [:param21]% / 3 คุณสมบัติ: [:param31]% / 4 คุณสมบัติ: [:param41]%)",
     },
-    r"公演開始時、ライフが(\d+)上昇": {
-        "en": "When the Performance Starts, Life Value Increases by {}",
-        "zh_TW": "公演開始時，生命值提升 {}",
-        "zh_CN": "公演开始时，生命值提升 {}",
-        "th": "เมื่อเริ่มเพลงจะได้รับเลือดเพิ่ม {}",
-    },
-    r"公演開始時、ライフを(\d+)回復": {
-        "en": "When the Performance Starts, Life Value Recovers by {}",
-        "zh_TW": "公演開始時，生命值回復 {}",
-        "zh_CN": "公演开始时，生命值回复 {}",
-        "th": "เมื่อเริ่มเพลงจะฟื้นฟูเลือดเพิ่ม {}",
-    },
-    r"公演開始時、ライフを(\d+)減少": {
-        "en": "When the Performance Starts, Life Value Reduces by {}",
-        "zh_TW": "公演開始時，生命值減少 {}",
-        "zh_CN": "公演开始时，生命值减少 {}",
-        "th": "เมื่อเริ่มเพลงเลือดจะลดลง {}",
-    },
-    r"センス発動直後、自身の(?P<status>.+?)の\[:param1(\d+)\]倍のスコアを獲得": {
-        "en": "Right After Sense Activation, Gain a Score of [:param1{1}] Times one's own {status}",
-        "zh_TW": "Sense 發動後，獲得自身{status} [:param1{1}] 倍的分數",
-        "zh_CN": "Sense 发动后，获得自身{status} [:param1{1}] 倍的分数",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับคะแนน [:param1{1}] เท่าของ{status}",
-    },
-    r"センス発動直後、P(\.?)ゲージを\[:param11\]獲得": {
-        "en": "Right After Sense Activation, Gain [:param11] P. Gauge",
-        "zh_TW": "Sense 發動後，獲得 [:param11] P. Gauge",
-        "zh_CN": "Sense 发动后，獲得 [:param11] P. Gauge",
-        "th": "หลังจากเปิดใช้งานเซนส์ จะได้รับ P. Gauge [:param11]",
-    },
     r"プリンシパルゲージの上限を(\d+)上昇": {
         "en": "Principal Gauge Cap Increases by {}",
         "zh_TW": "Principal Gauge 的上限值提升 {}",
         "zh_CN": "Principal Gauge 的上限值提升 {}",
-        "th": "เมื่อเริ่มเพลงปริมาณ Principal gauge สูงสุดจะเพิ่มขึ้น {}",
+        "th": "เมื่อเริ่มเพลงปริมาณ Principal gauge สูงสุดเพิ่มขึ้น {}",
     },
     r"センスによるP.ゲージの獲得量が\[:param11\][%％]UP": {
         "en": "The Amount of P. Gauge Gained by Sense [:param11]% UP",
         "zh_TW": "自 Sense 獲得的 P. Gauge 量 [:param11]%UP",
         "zh_CN": "自 Sense 获得的 P. Gauge 量 [:param11]%UP",
-        "th": "ปริมาณ P. gauge ที่ได้รับจากเซนส์เพิ่มขึ้น [:param11] %",
-    },
-    r"公演開始時、ライフガード（(\d+)回）を付与": {
-        "en": "When the Performance Starts, Attach Life Guard(s) ({} Times)",
-        "zh_TW": "公演開始時，給予 Life Guard（{} 次）",
-        "zh_CN": "公演开始时，给予 Life Guard（{} 次）",
-        "th": "เมื่อเริ่มเพลงจะได้ Life Guard {} ครั้ง",
-    },
-    r"公演開始時、自身のセンススコア\[:param11\]％UP効果が公演終了まで発動する": {
-        "en": 'When the Performance Starts, Activate the Effect of [:param11]% UP Sense Score to oneself Until the Performance Ends',
-        "zh_TW": "公演開始時，自身發動 Sense 分數 [:param11]% UP 效果直到公演結束",
-        "zh_CN": "公演开始时，自身发动 Sense 分数 [:param11]% UP 效果直到公演结束",
+        "th": "ปริมาณ P. gauge ที่รับจากเซนส์เพิ่มขึ้น [:param11] %",
     },
     r"公演と協力公演の公演報酬が\[:param11\][%％]増加（アクセサリーを除く）": {
         "en": "Rewards from Performances and Multi-player Performances Increase by [:param11]% (Except Accessories)",
         "zh_TW": "公演及協力公演的公演報酬增加[:param11]%（飾品除外）",
         "zh_CN": "公演及协力公演的公演报酬增加[:param11]%（饰品除外）",
-        "th": "จำนวนไอเทมที่ได้รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param11] % ( ไม่รวม Accessory )",
+        "th": "จำนวนไอเทมที่รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param11] % ( ไม่รวม Accessory )",
     },
     r"公演と協力公演の獲得EXPが\[:param11\][%％]増加": {
         "en": "EXP Gained from Performances and Multi-player Performances Increase by [:param11]%",
         "zh_TW": "公演及協力公演的獲得EXP增加[:param11]%",
         "zh_CN": "公演及协力公演的获得EXP增加[:param11]%",
-        "th": "EXP ที่ได้รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param11] %",
+        "th": "EXP ที่รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param11] %",
     },
 })
 
 accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_translator", {
-    "公演開始時、ライフが[:param1]上昇": {
-        "en": "When the Performance Starts, Life Value Increases by [:param1]",
-        "zh_TW": "公演開始時，生命值提升 [:param1]",
-        "zh_CN": "公演开始时，生命值提升 [:param1]",
-        "th": "เมื่อเริ่มเพลงจะได้รับเลือดเพิ่ม [:param1]",
-    },
     "センス発動により光を付与するとき、同系統の光を追加で1個付与する。": {
         "en": "When Lights are Attached by Sense Activation, Attach 1 additional Light of the same System",
         "zh_TW": "當 Sense 發動給予光的時候，額外給予 1 個同系統的光",
         "zh_CN": "当 Sense 发动给予光的时候，额外给予 1 个同系统的光",
-        "th": "จำนวนดาวที่ได้รับจากเซนส์ +1",
+        "th": "จำนวนดาวที่รับจากเซนส์ +1",
     },
     "基礎スコアが[:param1]％上昇": {
         "en": "Base Score Increases by [:param1]%",
@@ -1606,6 +1726,23 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
         "th": "คะแนนพื้นฐานเพิ่มขึ้น [:param1]%",
     },
 }, {
+    r"(?P<timing>公演開始時、)ライフが\[:param1\]上昇": {
+        "en": "{timing}Life Value Increases by [:param1]",
+        "zh_TW": "{timing}生命值提升 [:param1]",
+        "zh_CN": "{timing}生命值提升 [:param1]",
+        "th": "{timing}รับเลือดเพิ่ม [:param1]",
+    },
+    r"(?P<timing>公演開始時、)「SP光」を\[:param1\]付与（SP光はどの系統の光としても扱われる）": {
+        "en": "{timing}Attach [:param1] \"SP Light(s)\" (SP Light(s) can be treated as Light(s) of any system)",
+        "zh_TW": "{timing}給予 [:param1] 個「SP 光」（SP 光能被視為任何系統的光）",
+        "zh_CN": "{timing}给予 [:param1] 个「SP 光」（SP 光能被视为任何系统的光）",
+        "th": "{timing}รับดาว SP สีไหนก็ [:param1] ดวง",
+    },
+    r"(?P<timing>センス発動時、)SP光を追加で\[:param1\]個付与": {
+        "en": '{timing}Gain [:param11] Additional SP Light(s)',
+        "zh_TW": "{timing}額外獲得 [:param11] 個 SP 光",
+        "zh_CN": "{timing}额外获得 [:param11] 个 SP 光",
+    },
     r"自身の(?P<status>.+?)が?\[:param1\]上昇": {
         "en": "One's {status} Increases by [:param1]",
         "zh": "自身的{status}提升 [:param1]",
@@ -1630,25 +1767,19 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
     r"初期プリンシパルゲージ上限が\[:param1\]上昇": {
         "en": "Initial Principal Gauge Cap Increases by [:param1]",
         "zh": "初始 Principal Gauge 上限提升 [:param1]",
-        "th": "Principal gauge สูงสุดจะเพิ่มขึ้น [:param1]",
+        "th": "Principal gauge สูงสุดเพิ่มขึ้น [:param1]",
     },
     r"公演と協力公演の公演報酬が\[:param1\][%％]増加（アクセサリーを除く）": {
         "en": "Rewards from Performances and Multi-player Performances Increase by [:param1]% (Except Accessories)",
         "zh_TW": "公演及協力公演的公演報酬增加[:param1]%（飾品除外）",
         "zh_CN": "公演及协力公演的公演报酬增加[:param1]%（饰品除外）",
-        "th": "จำนวนไอเทมที่ได้รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param1] % ( ไม่รวม Accessory )",
-    },
-    r"公演開始時、「SP光」を\[:param1\]付与（SP光はどの系統の光としても扱われる）": {
-        "en": "When the Performance Starts, Attach [:param1] \"SP Light(s)\" (SP Light(s) can be treated as Light(s) of any system)",
-        "zh_TW": "公演開始時，給予 [:param1] 個「SP 光」（SP 光能被視為任何系統的光）",
-        "zh_CN": "公演开始时，给予 [:param1] 个「SP 光」（SP 光能被视为任何系统的光）",
-        "th": "มื่อเริ่มเพลงจะได้รับดาว SP สีไหนก็ได้ [:param1] ดวง",
+        "th": "จำนวนไอเทมที่รับจากการแสดงโซโล่และมัลติเพิ่มขึ้น [:param1] % ( ไม่รวม Accessory )",
     },
     r"センスによるP.ゲージの獲得量が\[:param1\][%％]UP": {
         "en": "The Amount of P. Gauge Gained by Sense [:param1]% UP",
         "zh_TW": "自 Sense 獲得的 P. Gauge 量 [:param1]%UP",
         "zh_CN": "自 Sense 获得的 P. Gauge 量 [:param1]%UP",
-        "th": "ปริมาณ P. gauge ที่ได้รับจากเซนส์เพิ่มขึ้น [:param1] %",
+        "th": "ปริมาณ P. gauge ที่รับจากเซนส์เพิ่มขึ้น [:param1] %",
     },
 })
 
