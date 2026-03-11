@@ -170,7 +170,7 @@ class FileSizeExceededException(CustomException):
         if message is not ...:
             msg += " Maximum file size: {} MB".format(message.filesize_limit >> 20)
         # additonal message
-        msg += "\n\n※ The size limit depends on the server boost level and the user's nitro status (only for Interactions like Commands / Buttons / etc.), whatever gives the higher."
+        msg += "\n\n※ The size limit depends on the server boost level and the user's nitro status (only for Interactions like Commands / Buttons / etc.), whichever is higher."
         super().__init__(msg)
 
 class FormatException(CustomException):
@@ -185,6 +185,7 @@ class HTTPException(CustomException):
     Error fetching data. Response code: ...
     """
     def __init__(self, response_code):
+        self.response_code = response_code
         super().__init__("Error fetching data. Response code: {}".format(response_code))
 
 class InitializingException(CustomException):

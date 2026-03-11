@@ -118,8 +118,19 @@ song_alias_list: Dict[int, List[str]] = {
         "Magical Girl and Chocolate", # On Jacket
         '魔法少女與巧克力',
     ],
+    41: [ # 怪物
+        'Monster', # https://www.youtube.com/watch?v=Eoe5IZHbarQ
+    ],
     42: [ # 六兆年と一夜物語
         "Six Trillion Years and Overnight Story", # Official title
+    ],
+    43: [ # 名前のない怪物
+        '无名怪物',
+        '沒有名字的怪物',
+        '無名的怪物',
+        'Monster Without a Name',
+        'A Nameless Monster',
+        'The Nameless Monster',
     ],
     45: [ # Blondie Revenge Tragedy
         "ブロンディ・リベンジ・トラジェディー", # JASRAC Database
@@ -581,6 +592,18 @@ song_alias_list: Dict[int, List[str]] = {
     239: [ # ヴィヴァラヰタ
         'Viva la Vita', # original song title
         'VivaRaWita', # Original Romaji
+    ],
+    241: [ # テアトルム・アストラーレ
+        'Theatrum Astrale',
+    ],
+    243: [ # バブリック・ビューイング！
+        'Bubblic Viewing',
+    ],
+    245: [ # 未来への前奏曲-Prelude-
+        'Mirai e no Prelude',
+    ],
+    247: [ # 空っぽのギフトボックス
+        '空っぽの Gift Box',
     ],
     249: [ # Stellarium Collection Vol.1
         "ステラリウム・コレクション・ボリューム・ワン",

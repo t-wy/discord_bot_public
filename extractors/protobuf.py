@@ -122,189 +122,192 @@ sfixed32 = Annotated[int, "sfixed32"] # explicitly wire type 5, makes the distin
 
 double = Annotated[float, "double"] # explicitly wire type 1, makes the distinction from float (single) when parsed in wire type 2 as packed repeated fields
 
-def deserialize(_type, content: bytes):
+def deserialize(_type, content: bytes, _temp = None):
     from dataclasses import is_dataclass
     assert is_dataclass(_type)
     from .byte_reader import LittleEndianReader
     from enum import Enum
-    import struct
+    import struct, pickle
+    if _temp is None:
+        _temp = {}
+    class_temp = _temp
     reader = LittleEndianReader(content)
     def get_default_value(_type):
         if _type is None: # deprecated fields
             return None
-        # typing_origin = get_origin(_type)
-        # if typing_origin is list:
-        #     return []
-        # if _type is sint or _type is uint or _type is int32 or _type is int64 or _type is fixed64 or _type is sfixed64 or _type is fixed32 or _type is sfixed32 or _type is int:
-        #     return 0
-        # if _type is str:
-        #     return ""
-        # if _type is bytes:
-        #     return b""
-        # if _type is bool:
-        #     return False
-        # if _type is float or _type is double:
-        #     return 0
-        if is_dataclass(_type):
-            return None
-        if isinstance(_type, type) and issubclass(_type, Enum):
-            return _type(0)
+        if isinstance(_type, type):
+            if issubclass(_type, Enum):
+                return _type(0)
+            if hasattr(_type, '__dataclass_fields__'):
+                return None
         if getattr(_type, "__origin__", None) is list: # quick check to avoid get_origin, which is slow
-            return []
+            return [] # use tuple to check we are not adding things to this placeholder list
         return _type()
-        # raise NotImplementedError("Type {} not supported".format(_type))
-    types = list(_type.__annotations__.values())
-    values = [get_default_value(t) for t in types] # 1-based
+    if _type in class_temp:
+        types, values, is_list_single_type = class_temp[_type]
+        values = values.copy() # values would be modified in place later
+    else:
+        types = tuple(_type.__annotations__.values())
+        values = [get_default_value(t) for t in types] # 1-based
+        is_list_single_type = [
+            (
+                (True, get_args(field_type)[0])
+                if getattr(field_type, "__origin__", None) is list  # quick check to avoid get_origin, which is slow
+                else (False, field_type)
+            )
+            for field_type in types
+        ]
+        class_temp[_type] = (types, values.copy(), is_list_single_type) # values would be modified in place later
     total_length = len(reader.getvalue())
 
     def cast_wire_type_0(value, _type): # varint
         if _type is int or _type is uint:
             return value
-        elif _type is sint:
+        if _type is sint:
             sign = value & 1
             value = value >> 1
             if sign:
                 value = ~value
             return value
-        elif _type is int32:
+        if _type is int32:
             value &= 0xffffffff
             if value & (1 << 31):
                 value -= (1 << 32)
             return value
-        elif _type is int64:
+        if _type is int64:
             value &= 0xffffffffffffffff
             if value & (1 << 63):
                 value -= (1 << 64)
             return value
-        elif _type is bool:
+        if _type is bool:
             assert value <= 1
             return value == 1
-        elif issubclass(_type, Enum):
+        if issubclass(_type, Enum):
             try:
                 return _type(value)
             except:
                 return value
-        else:
-            assert False, f"Cannot cast value {value} to type {_type}"
+        assert False, f"Cannot cast value {value} to type {_type}"
 
-    def cast_wire_type_1(value, _type): # i64
+    def cast_wire_type_1(value: int, _type): # i64
         if _type is int or _type is uint or _type is fixed64:
             return value
-        elif _type is sint or _type is int64 or _type is sfixed64:
+        if _type is sint or _type is int64 or _type is sfixed64:
             value &= 0xffffffffffffffff
             if value & (1 << 63):
                 value -= (1 << 64)
             return value
-        elif _type is float or _type is double:
+        if _type is float or _type is double:
             # double
             return struct.unpack("<d", struct.pack("<Q", value))[0]
-        else:
-            assert False, f"Cannot cast value {value} to type {_type}"
+        assert False, f"Cannot cast value {value} to type {_type}"
 
-    def cast_wire_type_5(value, _type): # i64
+    def cast_wire_type_2(value: bytes, _type, is_list: bool): # len
+        if _type is bytes:
+            return value, False
+        if _type is str:
+            return value.decode('utf-8', 'surrogateescape'), False
+        if hasattr(_type, '__dataclass_fields__'): # is_dataclass(_type):
+            return deserialize(_type, value, _temp = _temp), False
+        if is_list:
+            # packed repeated fields
+            if (
+                _type is fixed64 or
+                _type is sfixed64 or
+                _type is double
+            ):
+                # wire type 1
+                assert size & 7 == 0, "Wire type 1 size must be a multiple of 8"
+                return struct.unpack(
+                    '<' + (
+                        'Q' if _type is fixed64 else 'q' if _type is sfixed64 else 'd'
+                    ) * (size >> 3),
+                    value
+                ), True
+            if (
+                _type is fixed32 or
+                _type is sfixed32 or
+                _type is float
+            ):
+                # wire type 5
+                assert size & 3 == 0, "Wire type 5 size must be a multiple of 4"
+                return struct.unpack(
+                    '<' + (
+                        'I' if _type is fixed64 else 'i' if _type is sfixed32 else 'f'
+                    ) * (size >> 2),
+                    value
+                ), True
+            # wire type 0
+            assert len(value) == 0 or value[-1] < 0x80, "Last byte of Wire type 0 values must be less than 0x80"
+            sub_reader = LittleEndianReader(value)
+            temp = []
+            while sub_reader.tell() < len(value):
+                temp.append(cast_wire_type_0(sub_reader.readVarint(), _type))
+            return temp, True
+        assert False, f"Cannot cast value {value} to type {_type}"
+
+    def cast_wire_type_5(value: int, _type): # i32
         if _type is int or _type is uint or _type is fixed32:
             return value
-        elif _type is sint or _type is int32 or _type is int64 or _type is sfixed32:
+        if _type is sint or _type is int32 or _type is int64 or _type is sfixed32:
             value &= 0xffffffff
             if value & (1 << 31):
                 value -= 1 << 32
             return value
-        elif _type is float or _type is double:
+        if _type is float or _type is double:
             # single float
             return struct.unpack('<f', struct.pack('<I', value))[0]
-        else:
-            assert False, f"Cannot cast value {value} to type {_type}"
+        assert False, f"Cannot cast value {value} to type {_type}"
     
+    is_list, single_type = False, int
     while reader.tell() < total_length:
         # current = reader.tell() # debug
         tag = reader.readVarint()
         field_number, wire_type = tag >> 3, tag & 0x7
         assert field_number >= 1, f"Invalid field number: {field_number}"
         field_number -= 1
-        # print(current, field_number, wire_type)
-        # print(types[field_number])
-        field_type = types[field_number] if field_number < len(values) else ...
-        # typing_origin = get_origin(field_type)
-        is_list = getattr(field_type, "__origin__", None) is list # quick check to avoid get_origin, which is slow
-        if is_list:
-            single_type = get_args(field_type)[0]
-        else:
-            single_type = field_type
-        # print(_type, is_list, single_type)
+        skip = field_number >= len(values)
+        if not skip:
+            is_list, single_type = is_list_single_type[field_number]
         is_repeated = False # wire type 2 multiple entries
         if wire_type == 0:  # varint
-            value = cast_wire_type_0(reader.readVarint(), single_type)
+            value = reader.readVarint()
+            if skip:
+                continue
+            value = cast_wire_type_0(value, single_type)
         elif wire_type == 1:  # i64
-            value = cast_wire_type_1(reader.readULong(), single_type)
+            value = reader.readULong()
+            if skip:
+                continue
+            value = cast_wire_type_1(value, single_type)
         elif wire_type == 2:  # len
             size = reader.readVarint() & 0xffffffff # int32 varint
             size -= (size & 0x80000000) << 1
             assert reader.tell() + size <= total_length
             value = reader.readBytes(size)
-            if single_type is bytes:
-                pass
-            elif single_type is str:
-                value = value.decode('utf-8', 'surrogateescape')
-            elif is_dataclass(single_type):
-                value = deserialize(single_type, value)
-            elif is_list and not (
-                single_type is bytes or
-                single_type is str or
-                is_dataclass(single_type)
-            ):
-                # packed repeated fields
-                is_repeated = True
-                if (
-                    single_type is fixed64 or
-                    single_type is sfixed64 or
-                    single_type is double
-                ):
-                    # wire type 1
-                    assert size & 7 == 0, "Wire type 1 size must be a multiple of 8"
-                    value = struct.unpack(
-                        '<' + (
-                            'Q' if single_type is fixed64 else 'q' if single_type is sfixed64 else 'd'
-                        ) * (size >> 3),
-                        value
-                    )
-                elif (
-                    single_type is fixed32 or
-                    single_type is sfixed32 or
-                    single_type is float
-                ):
-                    # wire type 5
-                    assert size & 3 == 0, "Wire type 5 size must be a multiple of 4"
-                    value = struct.unpack(
-                        '<' + (
-                            'I' if single_type is fixed64 else 'i' if single_type is sfixed32 else 'f'
-                        ) * (size >> 2),
-                        value
-                    )
-                else:
-                    # wire type 0
-                    assert len(value) == 0 or value[-1] < 0x80, "Last byte of Wire type 0 values must be less than 0x80"
-                    sub_reader = LittleEndianReader(value)
-                    temp = []
-                    while sub_reader.tell() < len(value):
-                        temp.append(cast_wire_type_0(sub_reader.readVarint(), single_type))
-                    value = temp
-            else:
-                assert False, f"Cannot cast value {value} to type {single_type}"
+            if skip:
+                continue
+            value, is_repeated = cast_wire_type_2(value, single_type, is_list)
         elif wire_type == 5:  # i32
-            value = cast_wire_type_5(reader.readUInt(), single_type)
+            value = reader.readUInt()
+            if skip:
+                continue
+            value = cast_wire_type_5(value, single_type)
         else:
             assert False, f"Wire type {wire_type} is not supported"
-        if field_number < len(values):
-            if is_list:
+        if is_list:
+            if len(values[field_number]) == 0: # by this we don't need to deep copy the default list
+                if is_repeated:
+                    values[field_number] = value
+                else:
+                    values[field_number] = [value]
+            else:
                 if is_repeated:
                     values[field_number].extend(value)
                 else:
                     values[field_number].append(value)
-            else:
-                values[field_number] = value
         else:
-            # Skip assigning value
-            pass
+            values[field_number] = value
     return _type(*values)
 
 def serialize(instance) -> bytes:

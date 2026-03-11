@@ -20,11 +20,11 @@ def unpack(data: bytes) -> list:
         return decompress(src, uncompressed_size=size)
 
     def ext_hook(code, data):
-        if code == 99:
+        if code == 99: # Lz4Block
             unpacker = Unpacker(None, max_buffer_size=0, strict_map_key=False) # integer may be used as key
             unpacker.feed(data)
             return unpackb(LZ4_decompress(unpacker.unpack(), data[unpacker.tell():]), strict_map_key=False) # make sure to call unpack before tell
-        elif code == 98: # list of integers specifying lengths of each part
+        elif code == 98: # Lz4BlockArray, list of integers specifying lengths of each part
             unpacker = Unpacker(None, max_buffer_size=0)
             unpacker.feed(data)
             return tuple(unpacker)
@@ -43,3 +43,33 @@ def unpack(data: bytes) -> list:
 def master_memory_raw(data: bytes) -> Dict[str, list]:
     content = unpack(data)
     return {key: content[index + 1] for index, (key, (offset, length)) in enumerate(content[0].items())}
+
+if __name__ == "__main__":
+    # test type 99
+
+    def LZ4_compress(src: bytes) -> bytes:
+        from lz4.block import compress
+        return compress(src, store_size=False)
+    
+    def compressed_pack(entry) -> bytes:
+        from msgpack import packb, ExtType
+        packed = packb(entry)
+        ext99 = LZ4_compress(packed)
+        to_serialize = ExtType(99, packb(len(packed)) + ext99)
+        return packb(to_serialize)
+    
+    payload = [
+        [1, 2, 3], # the objects values (w/o keys (attribute name))
+        [4, 5, 6],
+    ]
+    
+    # serialization without compression
+    from msgpack import packb
+    result1 = b"".join(packb(entry) for entry in payload)
+    print(result1)
+    print(unpack(result1))
+
+    # serialization with compression
+    result2 = b"".join(compressed_pack(entry) for entry in payload)
+    print(result2)
+    print(unpack(result2))

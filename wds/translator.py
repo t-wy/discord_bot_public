@@ -1190,7 +1190,7 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko_Kore": "{timing}[:param{1}] 프린시펄 게이지 上限 上昇",
     },
     r"(?P<timing>センス発動後、)付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
-        "en": "{timing}Increase Principal Gauge Cap by {1} (+{2} at Most)",
+        "en": "{timing}For each Life Guard in Possession, Increase Principal Gauge Cap by {1} (+{2} at Most)",
         "zh_TW": "{timing}每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {1}（最多 +{2}）",
         "zh_CN": "{timing}每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {1}（最多 +{2}）",
         "th": "{timing}Principal gauge สูงสุดเพิ่มขึ้น ต่อ Life Guard 1 ครั้ง {1} (สูงสุด {2})",
@@ -1198,12 +1198,20 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko_Kore": "{timing}追加되어 있는 라이프 가드 1個當 {1} 프린시펄 게이지 上限 上昇 (最大 +{2})",
     },
     r"(?P<timing>センス発動後、)付与されているライフガード1回につきプリンシパルゲージを(\d+)獲得（最大\+(\d+)）": {
-        "en": "{timing}Gain {1} Principal Gauge (+{2} at Most)",
+        "en": "{timing}For each Life Guard in Possession, Gain {1} Principal Gauge (+{2} at Most)",
         "zh_TW": "{timing}每持有 1 次 Life Guard，獲得 {1} Principal Gauge（最多 +{2}）",
         "zh_CN": "{timing}每持有 1 次 Life Guard，獲得 {1} Principal Gauge（最多 +{2}）",
         "th": "{timing}รับ Principal gauge เพิ่มขึ้น {1} ต่อ Life Guard 1 ครั้ง (สูงสุด {2})",
         "ko"     : "{timing}추가되어 있는 라이프 가드 1개당 {1} 프린시펄 게이지 획득 (최대 +{2})",
         "ko_Kore": "{timing}追加되어 있는 라이프 가드 1個當 {1} 프린시펄 게이지 獲得 (最大 +{2})",
+    },
+    r"(?P<timing>センス発動後、)付与されているライフガード1回につきライフを(\d+)回復\(最大(\d+)回復\)": {
+        "en": "{timing}For each Life Guard in Possession, Life Value Recovers by {1} ({2} at Most)",
+        "zh_TW": "{timing}每持有 1 次 Life Guard，生命值回復 {1}（最多回復 {2}）",
+        "zh_CN": "{timing}每持有 1 次 Life Guard，生命值回复 {1}（最多回復 {2}）",
+        "th": "{timing}ฟื้นฟูเลือดเพิ่ม {1} ต่อ Life Guard 1 ครั้ง (สูงสุด {2})",
+        "ko"     : "{timing}추가되어 있는 라이프 가드 1개당 라이프 {1} 회복 (최대 {2} 회복)",
+        "ko_Kore": "{timing}追加되어 있는 라이프 가드 1個當 라이프 {1} 回復 (最大 {2} 回復)",
     },
     r"(?P<timing>センス発動後、)編成されている(?P<companies>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を消費するライフガードの数\(最大(\d+)回\)×(\d+)%上昇させる\(この効果は重複する\)": {
         "en": "{timing}the {status} and {status2} of each {companies} Actor in the Unit Increases by the Number of Life Guards Spent (At most {4} pcs.) × {5}% (This Effect can be Stacked)",
@@ -1240,6 +1248,8 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "en": "When {actor} is placed in an Adjacent Slot and Activates Sense, this Sense also Activates (Sense Light will not be Gained)",
         "zh_TW": "當{actor}編成在相鄰位置並發動 Sense 時，自己也會發動 Sense (無法獲得 Sense 光)",
         "zh_CN": "当{actor}编成在相邻位置并发动 Sense 时，自己也会发动 Sense (无法获得 Sense 光)",
+        "ko"     : "{actor} 옆에 편성 시, {actor}가 센스 발동 시, 자기도 센스 발동",
+        "ko_Kore": "{actor} 옆에 編成 時, {actor}가 센스 發動 時, 自己도 센스 發動",
     },
     r"ライフが多いほど(?P<actor>.+)のスコア獲得量UP(?:効果)?（最大＋(\d+)％）": {
         "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
@@ -1825,9 +1835,9 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
         "th": "{timing}รับดาว SP สีไหนก็ [:param1] ดวง",
     },
     r"(?P<timing>センス発動時、)SP光を追加で\[:param1\]個付与": {
-        "en": '{timing}Gain [:param11] Additional SP Light(s)',
-        "zh_TW": "{timing}額外獲得 [:param11] 個 SP 光",
-        "zh_CN": "{timing}额外获得 [:param11] 个 SP 光",
+        "en": '{timing}Gain [:param1] Additional SP Light(s)',
+        "zh_TW": "{timing}額外獲得 [:param1] 個 SP 光",
+        "zh_CN": "{timing}额外获得 [:param1] 个 SP 光",
     },
     r"自身の(?P<status>.+?)が?\[:param1\]上昇": {
         "en": "One's {status} Increases by [:param1]",
