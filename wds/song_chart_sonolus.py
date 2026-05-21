@@ -76,7 +76,7 @@ def fromSirius(text: str, chartOffset: float, bgmOffset: float = 0) -> str:
             x.gimmickType = 1 # "JumpScratch"
         elif s == "OneDirection":
             x.gimmickType = 2 # "OneDirection"
-        elif all(c in "0123456789" for c in s):
+        elif s and all(c in "0123456789" for c in s):
             x.gimmickType = int(s)
         else:
             x.gimmickType = 0

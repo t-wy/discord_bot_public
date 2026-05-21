@@ -211,6 +211,8 @@ song_alias_list: Dict[int, List[str]] = {
     73: [ # フタリノスタルジア
         "フタリNostalgia",
         "Futari Nostalgia", # JASRAC Database
+        '二人ノスタルジア',
+        '二人 Nostalgia',
     ],
     74: [ # Get to Act Life♡
         "ゲット・トゥ・アクト・ライフ♡", # JASRAC Database
@@ -453,6 +455,10 @@ song_alias_list: Dict[int, List[str]] = {
         '1 2 粉絲俱樂部',
         '一二粉絲俱樂部',
     ],
+    177: [ # おちゃめ機能
+        '天真爛漫機能',
+        '天真爛漫功能',
+    ],
     179: [ # ヱテルナ・ガラクシア
         "Eterna Galaxia", # JASRAC Database
     ],
@@ -607,6 +613,12 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     249: [ # Stellarium Collection Vol.1
         "ステラリウム・コレクション・ボリューム・ワン",
+    ],
+    252: [ # 劇団電姫すいっちおん！
+        '劇団電姫 Switch On!',
+    ],
+    262: [ # エクストラ・エキストラ！ -Extra Extra-
+        'Extra Extra',
     ],
 }
 

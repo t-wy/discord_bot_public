@@ -165,7 +165,7 @@ def expand_internal_id(internal_id_prefixes: List[str], v: str):
         return v
     next_hash = v.rfind("#")
     prefix_index, remaining = v[:next_hash], v[next_hash + 1:]
-    if not all(c in "0123456789" for c in prefix_index):
+    if not prefix_index or not all(c in "0123456789" for c in prefix_index):
         return v
     return internal_id_prefixes[int(prefix_index)] + remaining
 
@@ -349,7 +349,7 @@ def resolve_fast(catalog: dict) -> List[CompactLocation]:
             data = readObject(extra_data_reader)
         internal_id = catalog["m_InternalIds"][internal_id_index]
         parts = internal_id.split("#")
-        if len(parts) == 2 and all(c in "0123456789" for c in parts[0]):
+        if len(parts) == 2 and parts[0] and all(c in "0123456789" for c in parts[0]):
             internal_id = catalog["m_InternalIdPrefixes"][int(parts[0])] + parts[1]
         locations.append(CompactLocation(
             internal_id,

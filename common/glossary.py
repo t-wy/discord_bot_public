@@ -74,26 +74,32 @@ class CardGlossary:
     using_items_to_unlock_levels = _("Using Items to Unlock Levels", ja="アイテムを使用して上限解放", zh="使用物品解放上限")
 
 class CharacterGlossary:
-    age = _("Age", ja="年齢", zh_TW="年齡", zh_CN="年龄")
-    birthplace = _("Birthplace", ja="出身地", zh="出生地") # Notice the meaning between 出生地 (place of birth) vs 出身地 (hometown) in Japanese
-    blood_type = _("Blood Type", ja="血液型", zh="血型")
-    dislikes = _("Dislikes", ja="苦手", zh_TW="不擅長、害怕", zh_CN="不擅长、害怕", ko="싫어하는 것")
-    dominant_hand = _("Dominant Hand", ja="利き手", zh_TW="慣用手", zh_CN="惯用手") # aka. Handedness
-    dob = _("DOB", ja="誕生日", zh="生日", ko="생일")
+    age = _("Age", ja="年齢", zh_TW="年齡", zh_CN="年龄", ko="나이") # aks 연령 (年齡)
+    birthday = _("Birthday", ja="誕生日", zh="生日", ko="생일", ko_Kore="生日") # differ from "DOB"
+    birthplace = _("Birthplace", ja="出身地", zh="出生地", ko="출신지", ko_Kore="出生地") # Notice the meaning between 出生地 (place of birth) vs 出身地 (hometown) in Japanese
+    blood_type = _("Blood Type", ja="血液型", zh="血型", ko="혈액형", ko_Kore="血液型")
+    body_measurements = _("Body Measurements", ja="スリーサイズ", zh_TW="三圍", zh_CN="三围", ko="신체 사이즈") # 쓰리 사이즈
+    cv = _("VA", ja="CV", zh="CV", ko="CV") # 配音員 / 성우 (聲優) / 담당 성우 (擔當 聲優)
+    dislikes = _("Dislikes", ja="苦手", zh_TW="不擅長、害怕", zh_CN="不擅长、害怕", ko="싫어하는 것") # aks Disliking
+    dominant_hand = _("Dominant Hand", ja="利き手", zh_TW="慣用手", zh_CN="惯用手", ko="잘 쓰는 손") # aka. Handedness / 우세손 (優勢手)
+    dob = _("DOB", ja="誕生日", zh="生日", ko="생일", ko_Kore="生日") # differ from "birthday"
     favorite_food = _("Favorite Food", en_GB = "Favourite Food", ja="好きな食べ物", zh_TW="喜歡的食物", zh="喜欢的食物", ko="좋아하는 음식")
-    height = _("Height", ja="身長", zh="身高", ko="키")
-    hobbies = _("Hobbies", ja="趣味", zh_TW="興趣", zh_CN="兴趣", ko="취미")
-    introduction = _("Introduction", ja="紹介", zh_TW="介紹", zh_CN="介绍", ko="소개")
+    height = _("Height", ja="身長", zh="身高", ko="키") # aks 신장 (身長)
+    hobbies = _("Hobbies", ja="趣味", zh_TW="興趣", zh_CN="兴趣", ko="취미", ko_Kore="趣味")
+    introduction = _("Introduction", ja="紹介", zh_TW="介紹", zh_CN="介绍", ko="소개", ko_Kore="紹介")
+    image_color = _("Image Color", ja="イメージカラー", zh="代表色", ko="소개")
     least_favorite_food = _("Least Favorite Food", en_GB = "Least Favourite Food", ja="嫌いな食べ物", zh_TW="討厭的食物", zh_CN="讨厌的食物", ko="싫어하는 음식")
+    likes = _("Likes", ja="好きなもの", zh_TW="喜歡的東西", zh="喜欢的东西", ko="좋아하는 것") # aks Liking / 기호 (嗜好)
     profiles = _("Profiles", ja = "プロフィール", zh_TW = "角色個人資料", zh_CN = "角色个人资料", ko = "캐릭터 프로필")
     pronunciation = _("Pronunciation", ja="読み方", zh_TW="讀法", zh_CN="读法")
     school = _("School", ja="学校", zh_TW="學校", zh_CN="学校", ko="학교")
     school_year = _("School Year", ja="学年", zh_TW="年級", zh_CN="年级", ko="학년")
-    speciality = _("Speciality", ja="特技", zh="特技", ko="특기")
+    speciality = _("Speciality", ja="特技", zh="特技", ko="특기", ko_Kore="特技")
+    three_sizes = body_measurements
     unit = _("Unit", ja = "ユニット")
-    va = _("VA", ja="CV", zh="CV", ko="CV")
+    va = cv
     weight = _("Weight", ja="体重", zh_TW="體重", zh_CN="体重", ko="체중")
-    zodiac_sign = _("Zodiac Sign", ja="星座", zh="星座")
+    zodiac_sign = _("Zodiac Sign", ja="星座", zh="星座", ko="별자리")
 
 class EventGlossary:
     aggregate_period = _("Aggregate Period", ja="集計期間", zh_TW="結算時間", zh_CN="结算时间")

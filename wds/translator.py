@@ -91,6 +91,14 @@ def regex_lookup_translator(
                                 elif mode == "infocard":
                                     temp_dict["sense_emoji"] = f'[{sense_to_key[temp_dict["sense_type"]].lower()}]' if temp_dict["sense_type"] in sense_to_key else "❓"
                             temp_dict["sense_type"] = sense_type_translator(temp_dict["sense_type"], locales)
+                        if "sense_type2" in temp_dict:
+                            # handle emoji before translating text
+                            if "{sense_emoji2}" in translator:
+                                if mode == "discord":
+                                    temp_dict["sense_emoji2"] = sense_name_emote.get(sense_to_key.get(temp_dict["sense_type2"]), "❓")
+                                elif mode == "infocard":
+                                    temp_dict["sense_emoji2"] = f'[{sense_to_key[temp_dict["sense_type2"]].lower()}]' if temp_dict["sense_type2"] in sense_to_key else "❓"
+                            temp_dict["sense_type2"] = sense_type_translator(temp_dict["sense_type2"], locales)
                         if "attribute" in temp_dict:
                             # handle emoji before translating text
                             if "{attribute_emoji}" in translator:
@@ -951,18 +959,18 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "ko"     : "{timing}[:param1{1}] 프린시펄 게이지 상한 상승",
         "ko_Kore": "{timing}[:param1{1}] 프린시펄 게이지 上限 上昇",
     },
-    r"(?P<timing>スターアクト発動後、)現在のプリンシパルゲージ上限の\[:param11\]%分のプリンシパルゲージを獲得する": {
-        "en": "{timing}Gain Principal Gauge of [:param11]% of the Current Principal Gauge Cap",
-        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
-        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+    r"(?P<timing>スターアクト発動後、)現在のプリンシパルゲージ上限の\[:param(\d\d)\]%分のプリンシパルゲージを獲得する": {
+        "en": "{timing}Gain Principal Gauge of [:param{1}]% of the Current Principal Gauge Cap",
+        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param{1}]% 份量的 Principal Gauge",
+        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param{1}]% 份量的 Principal Gauge",
     },
-    r"(?P<timing>スターアクト発動直後、)その時のスコアの\[:param11\]％のスコアを獲得": {
-        "en": "{timing}Gain a Score of [:param11]% of the Score at That Moment",
-        "zh_TW": "{timing}獲得當時分數 [:param11]% 的分數",
-        "zh_CN": "{timing}获得当时分数 [:param11]% 的分数",
-        "th": "{timing}รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
-        "ko"     : "{timing}그때의 스코어의 [:param11]% 스코어 획득",
-        "ko_Kore": "{timing}그때의 스코어의 [:param11]% 스코어 獲得",
+    r"(?P<timing>スターアクト発動直後、)その時のスコアの\[:param(\d\d)\]％のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param{1}]% of the Score at That Moment",
+        "zh_TW": "{timing}獲得當時分數 [:param{1}]% 的分數",
+        "zh_CN": "{timing}获得当时分数 [:param{1}]% 的分数",
+        "th": "{timing}รับคะแนน [:param{1}]% ของคะแนนในขณะนั้น",
+        "ko"     : "{timing}그때의 스코어의 [:param{1}]% 스코어 획득",
+        "ko_Kore": "{timing}그때의 스코어의 [:param{1}]% 스코어 獲得",
     },
     r"ライフが多いほどスコア獲得量UP効果（最大＋ (\d+)%）": {
         "en": "The More the Life Value is, the More Score Gain UP is Resulted in from so (+{0}% at Most)",
@@ -1022,6 +1030,13 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "zh_CN": "每储藏 1 个{sense_type}系光「{sense_emoji}」，额外获得总演技力 [:param11] 倍的分数 (最多 {1} 个)",
         "th": "รับคะแนนเพิ่มเติม [:param11] เท่าของความสามารถการแสดงของ{sense_type} ({sense_emoji}) แต่ละดวงสูงสุด {1} ดวง",
     },
+    r"プリンシパルゲージの上限を\[:param(\d\d)\]上昇させる": {
+        "en": 'Principal Gauge Cap Increases by [:param{0}]',
+        "zh_TW": "Principal Gauge 的上限值提升 [:param{0}]",
+        "zh_CN": "Principal Gauge 的上限值提升 [:param{0}]",
+        "ko"     : "프린시펄 게이지 상한을 [:param{0}] 상승",
+        "ko_Kore": "프린시펄 게이지 上限을 [:param{0}] 上昇",
+    },
     r"プリンシパルゲージの上限を編成されている(?P<company>.+)アクターの人数×\[:param11\]上昇させる": {
         "en": 'Principal Gauge Cap Increases by the Number of {company} Actors in Unit × [:param11]',
         "zh_TW": "Principal Gauge 的上限值提升隊伍內{company}演員人數 × [:param11]",
@@ -1046,6 +1061,20 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "en": "For every {0} Time(s) Sense Activated During the Performance, Score Gain Increases by {1}% (+{2}% at Most)",
         "zh_TW": "公演期間每發動過 {0} 次 Sense，分數獲得量增加{1}%（最多 +{2}%）",
         "zh_CN": "公演期間每发动过 {0} 次 Sense，分数获得量增加{1}%（最多 +{2}%）",
+    },
+    r"付与されているライフガードが(\d+)回以下の時スコア獲得量が(\d+)％上昇、スターアクト発動後、プリンシパルゲージの上限値が(\d+)上昇": {
+        "en": "When there are {0} or Fewer Life Guard Attached, Score Gain Increases by {1}%; After the Star Act is Activated, Increase Principal Gauge Cap by {2}",
+        "zh_TW": "當 Life Guard 持有量為 {0} 次或以下時，分數獲得量增加 {1} %，Star Act 發動後，Principal Gauge 的上限值提升 {2}",
+        "zh_CN": "当 Life Guard 持有量为 {0} 次或以下时，分数获得量增加 {1} %，Star Act 发动后，Principal Gauge 的上限值提升 {2}",
+        "ko"     : "추가되어 있는 라이프 가드가 {0} 이하일 시 스코어 획득률 {1}% 상승, SA발동 후, 프린시펄 게이지 상한 {2} 상승",
+        "ko_Kore": "追加되어 있는 라이프 가드가 {0} 以下일 時 스코어 獲得률 {1}% 上昇, SA發動 後, 프린시펄 게이지 上限 {2} 上昇",
+    },
+    r"付与されているライフガードが(\d+)回以上の時スコア獲得量が(\d+)％上昇、その時のスコアの(\d+)％のスコアを獲得": {
+        "en": "When there are {0} or More Life Guard Attached, Score Gain Increases by {1}% and Gain a Score of {2}% of the Score at That Moment",
+        "zh_TW": "當 Life Guard 持有量為 {0} 次或以上時，分數獲得量增加 {1} %，並獲得當時分數 {2}% 的分數",
+        "zh_CN": "当 Life Guard 持有量为 {0} 次或以上时，分数获得量增加 {1} %，并获得当时分数 {2}% 的分数",
+        "ko"     : "추가되어 있는 라이프 가드 {0} 이상일 시 스코어 획득률 {1}% 상승, 그 때의 스코어의 {2}% 스코어 획득",
+        "ko_Kore": "追加되어 있는 라이프 가드 {0} 以上일 時 스코어 獲得률 {1}% 上昇, 그 때의 스코어의 {2}% 스코어 獲得",
     },
 })
 
@@ -1110,6 +1139,20 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko_Kore": "라이프가 많을수록 스코어 獲得量 UP (最大 +[:pre1]%)",
     },
 }, {
+    r"ライフガードを(\d+)回付与する": {
+        "en": "Attach {0} Life Guard(s)",
+        "zh_TW": "給予 {0} 次 Life Guard",
+        "zh_CN": "给予 {0} 次 Life Guard",
+        "th": "Life Guard {0} ครั้ง",
+    },
+    r"(?P<timing>センス発動時に)ライフガードを\[:param11\]個獲得": {
+        "en": "{timing}Gain [:param11] Life Guard(s)",
+        "zh_TW": "{timing}獲得 [:param11] 個 Life Guard",
+        "zh_CN": "{timing}获得 [:param11] 个 Life Guard",
+        "th": "{timing}ได้รับ [:param11] Life Guard",
+        "ko"     : "{timing}라이프 가드 [:param11]개 획득",
+        "ko_Kore": "{timing}라이프 가드 [:param11]個 獲得",
+    },
     r"(?P<timing>センス発動時、)(?P<company>.+)アクターの人数×(\d+)のプリンシパルゲージを獲得": {
         "en": "{timing}Gain {2} Principal Gauge for each {company} Actor",
         "zh_TW": "{timing}獲得總數為{company}演員人數 × {2} 的 Principal Gauge",
@@ -1131,10 +1174,10 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko"     : "{timing}{company} 또는 {company2} 액터의 인원수 ×[:param1{3}]초, 편성되어 있는 액터의 CT를 단축",
         "ko_Kore": "{timing}{company} 또는 {company2} 액터의 人員數 ×[:param1{3}]秒, 編成되어 있는 액터의 CT를 단축",
     },
-    r"(?P<timing>センス発動時、)編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\2アクターの人数×(\d+)%上昇させる\(この効果は重複する\)": {
-        "en": "{timing}the {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {4}% (This Effect can be Stacked)",
-        "zh_TW": "{timing}{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {4}% (此效果可疊加)",
-        "zh_CN": "{timing}{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {4}% (此效果可叠加)",
+    r"(?P<timing>センス発動時、)編成されている(?P<company>.+)アクターの(?P<status>.+?)と(?P<status2>.+?)を、編成されている\2アクターの人数×(\d+%?|\[\:param(\d{1,2})\])上昇させる\(この効果は重複する\)": {
+        "en": "{timing}the {status} and {status2} of each {company} Actor in the Unit Increases by the Number of {company} Actors in Unit × {4} (This Effect can be Stacked)",
+        "zh_TW": "{timing}{company}演員的 {status} 及 {status2} 提升隊伍內{company}演員人數 × {4} (此效果可疊加)",
+        "zh_CN": "{timing}{company}演员的 {status} 及 {status2} 提升队伍内{company}演员人数 × {4} (此效果可叠加)",
     },
     r"(?P<timing>センス発動時、)追加で「ライフガード」を獲得する（レベル1：(\d+)個／レベル2：(\d+)個／レベル3：(\d+)個／レベル4：(\d+)個／レベル5：(\d+)個\)": {
         "en": '{timing}Gain Additional Life Guard(s) (Lv.1: {1} pcs / Lv.2: {2} pcs / Lv.3: {3} pcs / Lv.4: {4} pcs / Lv.5: {5} pcs)',
@@ -1150,6 +1193,13 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko"     : "{timing}추가로 ‘라이프 가드’ [:param11]개 획득한다",
         "ko_Kore": "{timing}追加로 ‘라이프 가드’ [:param11]個 獲得한다",
     },
+    r"(?P<timing>センス発動時に?、)追加で「SP光」を(\d+)個獲得する": {
+        "en": '{timing}Gain {1} Additional "SP Light(s)"',
+        "zh_TW": "{timing}額外獲得 {1} 個「SP 光」",
+        "zh_CN": "{timing}额外获得 {1} 个「SP 光」",
+        "ko"     : "{timing}추가로 ‘SP빛’ {1}개 획득한다",
+        "ko_Kore": "{timing}追加로 ‘SP빛’ {1}個 獲得한다",
+    },
     r"(?P<timing>センス発動時に?、)追加で「(?P<sense_type>.{2})の光」を(\d+)個獲得する": {
         "ja": "{timing}追加で「{sense_type}の光{sense_emoji}」を{2}個獲得する",
         "en": '{timing}Gain {2} Additional "{sense_type} Light(s){sense_emoji}"',
@@ -1157,6 +1207,14 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_CN": "{timing}额外获得 {2} 个「{sense_type}系光{sense_emoji}」",
         "ko"     : "{timing}추가로 ‘{sense_type}의 빛{sense_emoji}’ {2}개 획득한다",
         "ko_Kore": "{timing}追加로 ‘{sense_type}의 빛{sense_emoji}’ {2}個 獲得한다",
+    },
+    r"(?P<timing>センス発動時に?、)追加で「(?P<sense_type>.{2})の光」・「(?P<sense_type2>.{2})の光」を(\d+)個獲得する": {
+        "ja": "{timing}追加で「{sense_type}の光{sense_emoji}」・「{sense_type2}の光{sense_emoji2}」を{3}個獲得する",
+        "en": '{timing}Gain {3} Additional "{sense_type} Light(s){sense_emoji}" and  "{sense_type2} Light(s){sense_emoji2}"',
+        "zh_TW": "{timing}額外獲得 {3} 個「{sense_type}系光{sense_emoji}」、「{sense_type2}系光{sense_emoji2}」",
+        "zh_CN": "{timing}额外获得 {3} 个「{sense_type}系光{sense_emoji}」、「{sense_type2}系光{sense_emoji2}」",
+        "ko"     : "{timing}추가로 ‘{sense_type}의 빛{sense_emoji}’・‘{sense_type2}의 빛{sense_emoji2}’ {3}개 획득한다",
+        "ko_Kore": "{timing}追加로 ‘{sense_type}의 빛{sense_emoji}’・‘{sense_type2}의 빛{sense_emoji2}’ {3}個 獲得한다",
     },
     r"(?P<timing>センス発動後、)追加で獲得しているプリンシパルゲージ\[:param11\]%を獲得": {
         "en": "{timing}Additionally Gain [:param11]% of the Amount of Gained Principal Gauge",
@@ -1181,7 +1239,7 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko"     : "{timing}추가로 [:param{1}] 프린시펄 게이지 획득",
         "ko_Kore": "{timing}追加로 [:param{1}] 프린시펄 게이지 獲得",
     },
-    r"(?P<timing>センス発動後、)プリンシパルゲージの上限値が\[:param(\d\d)\]上昇": {
+    r"(?P<timing>センス発動[時後]、)プリンシパルゲージの上限値が\[:param(\d\d)\]上昇": {
         "en": "{timing}Increase Principal Gauge Cap by [:param{1}]",
         "zh_TW": "{timing}Principal Gauge 的上限值提升 [:param{1}]",
         "zh_CN": "{timing}Principal Gauge 的上限值提升 [:param{1}]",
@@ -1189,7 +1247,7 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko"     : "{timing}[:param{1}] 프린시펄 게이지 상한 상승",
         "ko_Kore": "{timing}[:param{1}] 프린시펄 게이지 上限 上昇",
     },
-    r"(?P<timing>センス発動後、)付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
+    r"(?P<timing>センス発動[時後]、)付与されているライフガード1回につきプリンシパルゲージの上限値が(\d+)上昇（最大\+(\d+)）": {
         "en": "{timing}For each Life Guard in Possession, Increase Principal Gauge Cap by {1} (+{2} at Most)",
         "zh_TW": "{timing}每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {1}（最多 +{2}）",
         "zh_CN": "{timing}每持有 1 次 Life Guard，Principal Gauge 的上限值提升 {1}（最多 +{2}）",
@@ -1220,13 +1278,13 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko"     : "{timing}편성되어 있는 {companies} {status}과 {status2}을 소비하는 라이프 가드 수 (최대 {4})×{5}% 상승 (중첩 가능)",
         "ko_Kore": "{timing}編成되어 있는 {companies} {status}과 {status2}을 消費하는 라이프 가드 數 (最大 {4})×{5}% 上昇 (重疊 可能)",
     },
-    r"(?P<timing>センス発動直後、)その時のスコアの\[:param11\]％のスコアを獲得": {
-        "en": "{timing}Gain a Score of [:param11]% of the Score at That Moment",
-        "zh_TW": "{timing}獲得當時分數 [:param11]% 的分數",
-        "zh_CN": "{timing}获得当时分数 [:param11]% 的分数",
-        "th": "{timing}รับคะแนน [:param11]% ของคะแนนในขณะนั้น",
-        "ko"     : "{timing}그때의 스코어의 [:param11]% 스코어 획득",
-        "ko_Kore": "{timing}그때의 스코어의 [:param11]% 스코어 獲得",
+    r"(?P<timing>センス発動直後、)その時のスコアの\[:param(\d+)\]％のスコアを獲得": {
+        "en": "{timing}Gain a Score of [:param{1}]% of the Score at That Moment",
+        "zh_TW": "{timing}獲得當時分數 [:param{1}]% 的分數",
+        "zh_CN": "{timing}获得当时分数 [:param{1}]% 的分数",
+        "th": "{timing}รับคะแนน [:param{1}]% ของคะแนนในขณะนั้น",
+        "ko"     : "{timing}그때의 스코어의 [:param{1}]% 스코어 획득",
+        "ko_Kore": "{timing}그때의 스코어의 [:param{1}]% 스코어 獲得",
     },
     r"(?P<timing>センス発動直後、)自身の(?P<status>.+?)の\[:param1(\d+)\]倍のスコアを獲得": {
         "en": "{timing}Gain a Score of [:param1{2}] Times one's own {status}",
@@ -1244,12 +1302,19 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "ko"     : "{actor} 편성 시, {actor}가 대신 센스를 발동해, {actor}의 스코어 획득량 [:pre1]% UP",
         "ko_Kore": "{actor} 編成 時, {actor}가 代身 센스를 發動해, {actor}의 스코어 獲得量 [:pre1]% UP",
     },
-    r"(?P<actor>.+)が隣に編成された状態でセンスを発動したとき、自身もセンスを発動する\(センスの光は獲得出来ない\)": {
-        "en": "When {actor} is placed in an Adjacent Slot and Activates Sense, this Sense also Activates (Sense Light will not be Gained)",
-        "zh_TW": "當{actor}編成在相鄰位置並發動 Sense 時，自己也會發動 Sense (無法獲得 Sense 光)",
-        "zh_CN": "当{actor}编成在相邻位置并发动 Sense 时，自己也会发动 Sense (无法获得 Sense 光)",
-        "ko"     : "{actor} 옆에 편성 시, {actor}가 센스 발동 시, 자기도 센스 발동",
-        "ko_Kore": "{actor} 옆에 編成 時, {actor}가 센스 發動 時, 自己도 센스 發動",
+    r"(?P<actors>.+)が隣に編成された状態でセンスを発動したとき、自身もセンスを発動する\(センスの光は獲得出来ない\)": {
+        "en": "When {actors} is placed in an Adjacent Slot and Activates Sense, this Sense also Activates (Sense Light will not be Gained)",
+        "zh_TW": "當{actors}編成在相鄰位置並發動 Sense 時，自己也會發動 Sense (無法獲得 Sense 光)",
+        "zh_CN": "当{actors}编成在相邻位置并发动 Sense 时，自己也会发动 Sense (无法获得 Sense 光)",
+        "ko"     : "{actors}가 옆에 편성되어 있을 때 센스 발동 시, 자기도 센스 발동",
+        "ko_Kore": "{actors}가 옆에 編成되어 있을 때 센스 發動 時, 自己도 센스 發動",
+    },
+    r"(?P<actors>.+)が(\d+)つ隣までに編成された状態でセンスを発動したとき、自身もセンスを発動する\(センスの光は獲得出来ない\)": {
+        "en": "When {actors} is placed within {1} Slots Away and Activates Sense, this Sense also Activates (Sense Light will not be Gained)",
+        "zh_TW": "當{actors}編成在相隔 {1} 位置以內並發動 Sense 時，自己也會發動 Sense (無法獲得 Sense 光)",
+        "zh_CN": "当{actors}编成在相隔 {1} 位置以内并发动 Sense 时，自己也会发动 Sense (无法获得 Sense 光)",
+        "ko"     : "{actors}가 {1}칸 옆까지 편성되어 있을 때 센스 발동 시, 자기도 센스 발동",
+        "ko_Kore": "{actors}가 {1}間 옆까지 編成되어 있을 때 센스 發動 時, 自己도 센스 發動",
     },
     r"ライフが多いほど(?P<actor>.+)のスコア獲得量UP(?:効果)?（最大＋(\d+)％）": {
         "en": "The More the Life value is, {actor} Gains More Score Gain UP from so (+{1}% at Most)",
@@ -1317,8 +1382,8 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
     },
     r"編成されている属性1種類につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Attribute there is in the Unit, Score Gain Increases by {0}% (+{1}% at Most)",
-        "zh_TW": "每 1 個編成的屬性能使分數獲得量增加{0}%（最多 +{1}%）",
-        "zh_CN": "每 1 个编成的属性能使分数获得量增加{0}%（最多 +{1}%）",
+        "zh_TW": "每 1 個編成的屬性能使分數獲得量增加 {0}%（最多 +{1}%）",
+        "zh_CN": "每 1 个编成的属性能使分数获得量增加 {0}%（最多 +{1}%）",
         "th": "รับคะแนนเพิ่มขึ้น {0}% ต่อคุณสมบัติของนักแสดงที่แตกต่างกัน (สูงสุด {1}%)",
         "ko"     : "편성되어 있는 속성 1종류당 스코어 {0}% 상승 (최대 {1}%)",
         "ko_Kore": "編成되어 있는 屬性 1種類當 스코어 {0}% 上昇 (最大 {1}%)",
@@ -1477,6 +1542,13 @@ bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {}, {
         "ko"     : "초기 프린시펄 게이지 {} 상승",
         "ko_Kore": "初期 프린시펄 게이지 {} 上昇",
     },
+    r"プリンシパルゲージの上限が(\d+)上昇": {
+        "en": "Principal Gauge Cap Increases by {}",
+        "zh": "Principal Gauge 的上限值提升 {}",
+        "th": "เพิ่มขีดจำกัดของ Principal gauge เพิ่มขึ้น {}",
+        "ko"     : "프린시펄 게이지 상한 {} 상승",
+        "ko_Kore": "프린시펄 게이지 上限 {} 上昇",
+    },
     r"公演での報酬量が(\d+)％上昇": {
         "en": "Live Rewards Increases by {}%",
         "zh_TW": "公演報酬量提升 {}%",
@@ -1493,6 +1565,12 @@ bloom_translator = regex_lookup_translator_wrapper("bloom_translator", {}, {
         "th": "จำนวน{sense_type} ({sense_emoji}) ที่ใช้ในการเปิด Star Act ลดลง {1} ดวง",
         "ko"     : "스타 액트 발동에 필요한 {sense_type}의 빛({sense_emoji})의 갯수가 {1}개 감소",
         "ko_Kore": "스타 액트 發動에 必要한 {sense_type}의 빛({sense_emoji})의 갯數가 {1}個 減少",
+    },
+    r"SP光追加": {
+        "en": "Additional SP Light",
+        "zh": "追加SP光",
+        "ko"     : "SP빛 추가",
+        "ko_Kore": "SP빛 追加",
     },
     r"(?P<sense_type>.{2})の光追加": {
         "ja": "{sense_type}の光「{sense_emoji}」追加",
