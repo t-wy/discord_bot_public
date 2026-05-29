@@ -1,5 +1,3 @@
-
-
 from typing import Dict, List
 
 def build_beats_lookup(beat_table: Dict[int, float]) -> List[float]:
