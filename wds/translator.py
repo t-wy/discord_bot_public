@@ -63,7 +63,7 @@ def regex_lookup_translator(
     else:
         import re
         from .const import sense_name_emote, sense_to_key
-        from .const import type_emotes, type_names, type_names_romaji
+        from .const import type_emotes, type_names, type_colors, type_names_romaji
         for regex in regex_lookup_dict:
             match = re.fullmatch(regex, target)
             if match:
@@ -102,11 +102,17 @@ def regex_lookup_translator(
                         if "attribute" in temp_dict:
                             # handle emoji before translating text
                             if "{attribute_emoji}" in translator:
+                                type_index = type_names.index(temp_dict["attribute"])
                                 if mode == "discord":
-                                    temp_dict["attribute_emoji"] = type_emotes[type_names.index(temp_dict["attribute"])] if temp_dict["attribute"] in type_names else "❓"
+                                    temp_dict["attribute_emoji"] = type_emotes[type_index] if temp_dict["attribute"] in type_names else "❓"
                                 elif mode == "infocard":
-                                    temp_dict["attribute_emoji"] = f'[{type_names_romaji[type_names.index(temp_dict["attribute"])]}]' if temp_dict["attribute"] in type_names else "❓"
-                            temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
+                                    temp_dict["attribute_emoji"] = f'[{type_names_romaji[type_index]}]' if temp_dict["attribute"] in type_names else "❓"
+                            if mode == "discord":
+                                temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
+                            elif mode == "infocard":
+                                type_index = type_names.index(temp_dict["attribute"])
+                                type_color = hex(type_colors[type_index])[2:].zfill(6)
+                                temp_dict["attribute"] = f"[#{type_color}]" + attribute_translator(temp_dict["attribute"], locales) + "[#]"
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locales)
                         if "status2" in temp_dict:
@@ -799,7 +805,7 @@ unlock_text_translator = regex_lookup_translator_wrapper("unlock_text_translator
     },
 })
 
-trophy_description_translator = regex_lookup_translator_wrapper("trophy_description_translator", {
+trophy_description_translator_inner = regex_lookup_translator_wrapper("trophy_description_translator", {
     "スコアの下３桁が「７７７」で公演をクリアしよう": {
         "en": "Clear a Performance with \"777\" as the last 3 digits of the score",
         "zh": "以末 3 位為「777」的分數完成公演",
@@ -914,6 +920,16 @@ trophy_description_translator = regex_lookup_translator_wrapper("trophy_descript
         "zh": "閱畢 {company} 主線劇情第 {1} 章",
     },
 })
+
+def trophy_description_translator(description: str, message: MsgInt) -> str:
+    # remove size tag
+    import re
+    description = re.sub(
+        r"<size=\d+[%％]?>(.+?)<\/size>",
+        r"\1",
+        description
+    )
+    return trophy_description_translator_inner(description, message)
 
 single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_translator", {
     "総演技力の[:score]倍のスコアを獲得": {
@@ -1960,13 +1976,59 @@ accessory_effect_translator = regex_lookup_translator_wrapper("accessory_effect_
 def full_poster_ability_translator(description: str, message: MsgInt) -> str:
     if "◆発動条件：" in description:
         effect_text, condition_text = description.split("◆発動条件：")
-        return poster_ability_translator(effect_text.rstrip("　"), message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
+        description = effect_text.rstrip("　")
+        condition_suffix = "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
     else:
-        return poster_ability_translator(description, message)
+        condition_suffix = ""
+    return fallback_translator(poster_ability_translator(description, message)) + condition_suffix
 
 def full_accessory_effect_translator(description: str, message: MsgInt) -> str:
     if "◆発動条件：" in description:
         effect_text, condition_text = description.split("◆発動条件：")
-        return accessory_effect_translator(effect_text.rstrip("　"), message) + "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
+        description = effect_text.rstrip("　")
+        condition_suffix = "　◆" + condition_text_translator("発動条件：", message) + condition_translator(condition_text, message)
     else:
-        return accessory_effect_translator(description, message)
+        condition_suffix = ""
+    return fallback_translator(accessory_effect_translator(description, message)) + condition_suffix
+
+def fallback_translator(description: str, mode: str = "discord") -> str:
+    # in case the entry does not get translated
+    import re
+    from .const import type_emotes, sense_name_emote
+    colors_match = re.findall(r"<color=#(.{6})>(.+?)<\/color>", description)
+    for params in colors_match:
+        key = f"<color=#{params[0]}>{params[1]}</color>"
+        if key in description:
+            color, content = params
+            color = color.lower()
+            if content == "*":
+                if mode == "discord":
+                    content = {
+                        "228b22": sense_name_emote["Support"],
+                        "ff0000": sense_name_emote["Control"],
+                        "ffd700": sense_name_emote["Amplification"],
+                        "0000ff": sense_name_emote["Special"],
+                    }.get(color, "✦")
+                elif mode == "infocard":
+                    content = {
+                        "228b22": "[support]",
+                        "ff0000": "[control]",
+                        "ffd700": "[amplification]",
+                        "0000ff": "[special]",
+                    }.get(color, "✦")
+                else:
+                    content = "✦"
+            elif "属性" in content:
+                if mode == "discord":
+                    content = {
+                        "ff679d": type_emotes[0] + " ",
+                        "33b4df": type_emotes[1] + " ",
+                        "7ac940": type_emotes[2] + " ",
+                        "ff9314": type_emotes[3] + " ",
+                    }.get(color, "") + content
+                elif mode == "infocard":
+                    content = f"[#{color}]" + content + "[#]"
+                else:
+                    pass # just take the content
+            description = description.replace(key, content)
+    return description

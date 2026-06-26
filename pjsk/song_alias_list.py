@@ -900,6 +900,7 @@ song_alias_list: Dict[int, List[str]] = {
     353: [ # キティ
         '吉蒂', # Hello Kitty?
         '凱蒂', # Hello Kitty?
+        'kitti',
     ],
     354: [ # セツナトリップ
         "刹那トリップ",
@@ -1667,6 +1668,7 @@ song_alias_list: Dict[int, List[str]] = {
         "這個愚蠢而美好的世界是為我準備的", # https://www.bilibili.com/video/av456264266/
         "這可笑又美妙的世界、為我而存在", # Unofficial
         "This Silly Wonderful World Exists For Me",
+        '為了我而存在的荒謬世界',
     ],
     626: [ # フィッシュアンドTips
         "Fish and Tips",
@@ -1852,12 +1854,26 @@ song_alias_list: Dict[int, List[str]] = {
         '魔法少女與巧克力',
         '魔法少女と Chocolate',
     ],
+    702: [ # ラムネ
+        '彈珠汽水',
+        '波子汽水',
+    ],
     703: [ # バイオレンストリガー
         'Violence Trigger',
         '暴力扳機',
     ],
+    705: [ # ラズベリー＊モンスター
+        'Raspberry＊monster',
+    ],
     707: [ # さいたま2000
         '埼玉2000',
+        'Saitama 2000',
+    ],
+    708: [ # 幽玄ノ乱
+        '幽玄之亂',
+    ],
+    709: [ # 初音ミクの消失−劇場版−
+        '初音未來的消失−劇場版−',
     ],
     710: [ # ヘッジホッグ
         'Hedgehog',
@@ -1874,6 +1890,10 @@ song_alias_list: Dict[int, List[str]] = {
         '旅行願望',
         '放浪願望',
         '旅心',
+    ],
+    714: [ # フロイライン＝オジョウサマ
+        'Fräulein=Ojousama',
+        'フロイライン＝お嬢様',
     ],
     717: [ # Ribbon
         '絲帶',
@@ -1912,9 +1932,22 @@ song_alias_list: Dict[int, List[str]] = {
     732: [ # 天藍のアイスヘヴン
         '天藍の Ice Heaven',
     ],
+    734: [ # プロポーズ
+        'Propose',
+    ],
     735: [ # 傀儡のうつつ
         '傀儡の現',
         '傀儡の打棄つ',
+    ],
+    738: [ # ストラタでまちあわせ
+        'Rendezvous on the Strata',
+        'Strata でまちあわせ',
+        'ストラタで待ち合わせ',
+        'Strata で待ち合わせ',
+    ],
+    743: [ # ドリーマーズビート
+        "Dreamer's Beat",
+        "Dreamers' Beat",
     ],
     10001: [ # 장산범
         '萇山虎',

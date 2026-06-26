@@ -367,8 +367,8 @@ class UserNotFoundException(CustomException):
     """
     The specified user is not found.
     """
-    def __init__(self):
-        super().__init__("The specified user is not found.")
+    def __init__(self, category: str="user"):
+        super().__init__(f"The specified {category.lower()} is not found.")
 
 class VersionHashNotFoundException(CustomException):
     """

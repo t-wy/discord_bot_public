@@ -70,7 +70,7 @@ class CardGlossary:
     pronunciation = _("Pronunciation", ja="読み方", zh_TW="讀法", zh_CN="读法")
     """check also SongGlossary.pronunciation"""
     rarity = _("Rarity", ja="レア度", zh="稀有度")
-    unlock_at_level = _("(🔒 Unlock at Lv. {})\n", ja="（🔒 レベル{}で解放）\n", zh_TW="（🔒 於 Lv. {} 解鎖）\n", zh_CN="（🔒 于 Lv. {} 解锁）\n")
+    unlock_at_level = _("Unlock at Lv. {}", ja="レベル{}で解放", zh_TW="於 Lv. {} 解鎖", zh_CN="于 Lv. {} 解锁")
     using_items_to_unlock_levels = _("Using Items to Unlock Levels", ja="アイテムを使用して上限解放", zh="使用物品解放上限")
 
 class CharacterGlossary:
@@ -130,6 +130,7 @@ class EventGlossary:
 class PlayerGlossary:
     basic_info = _("Basic Info", ja="基本情報", zh_CN="基本情报")
     comment = _("Comment", ja="コメント", zh="留言")
+    introduction = _("Introduction", ja="紹介文", zh_TW="介紹文", zh_CN="介绍文")
     last_login = _("Last Login", ja="最終ログイン", zh="最近登入")
     player_search = _("Player Search", ja="プレーヤー検索", zh_TW="玩家搜尋", zh_CN="玩家搜索")
     rank = _("Rank", ja="ランク", zh_TW="等級", zh_CN="等级")
