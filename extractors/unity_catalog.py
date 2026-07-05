@@ -432,7 +432,6 @@ def handle_catalog(resolved_catalog: List[CompactLocation], prefix: str = "", su
     from common.asset_list import Asset, AssetList
     assets = []
     for location in resolved_catalog:
-        # print(location)
         path = match_path(location.internal_id, prefix = prefix, suffix = suffix)
         if path is None:
             continue
@@ -440,7 +439,6 @@ def handle_catalog(resolved_catalog: List[CompactLocation], prefix: str = "", su
     return AssetList(assets, version)
 
 def parse_json(catalog: dict, version: Union[int, str] = None, full: bool = False, prefix: str = "", suffix: str = "") -> AssetList:
-    from common.asset_list import Asset, AssetList
     resolved_catalog = (resolve if full else resolve_fast)(catalog)
     return handle_catalog(resolved_catalog, prefix = prefix, suffix = suffix, version = version)
 

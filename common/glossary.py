@@ -1,5 +1,3 @@
-import discord
-
 # This module is used for building localized outputs to interactions
 
 from locale_str import locale_str_ex as _
@@ -16,6 +14,7 @@ class GameNameGlossary:
     Used for game name in outputs
     For command group name, check command_text.gamename
     """
+    BDON = _("BDON", ja="アワーノーツ")
     CG = _("Mobamas", zh="cg走路工", ja="モバマス")
     CGSS = _("CGSS", ja="デレステ")
     MLTD = _("MLTD", ja="ミリシタ")
@@ -29,6 +28,7 @@ class GameNameGlossary:
     WDS = _("WDS", ja="ユメステ")
 
 class GameColor:
+    BDON = 0xac96c6 # gradient from 0x413e70 to 0xac96c6
     CG = 0x848ac4
     CGSS = 0x848ac4
     MLTD = 0xffc20b

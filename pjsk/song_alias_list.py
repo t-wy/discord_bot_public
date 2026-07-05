@@ -1921,6 +1921,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     724: [ # ハオ
         '好',
+        '八才',
     ],
     726: [ # アルカリレットウセイ
         'Alkali Rettousei',

@@ -284,6 +284,7 @@ class gamename:
     Used for command group name
     For game name in outputs, check GameNameGlossary
     """
+    bdon = _("bdon", ja="アワーノーツ")
     cgss = _("cgss", zh="cgss", ja="デレステ")
     mltd = _("mltd", zh="mltd", ja="ミリシタ")
     mobamas = _("mobamas", zh="cg走路工", ja="デレマス")

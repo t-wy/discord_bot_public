@@ -109,10 +109,22 @@ def regex_lookup_translator(
                                     temp_dict["attribute_emoji"] = f'[{type_names_romaji[type_index]}]' if temp_dict["attribute"] in type_names else "❓"
                             if mode == "discord":
                                 temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
+                                if "{attribute_start}" in translator:
+                                    temp_dict["attribute_start"] = ""
+                                if "{attribute_end}" in translator:
+                                    temp_dict["attribute_end"] = ""
                             elif mode == "infocard":
                                 type_index = type_names.index(temp_dict["attribute"])
                                 type_color = hex(type_colors[type_index])[2:].zfill(6)
-                                temp_dict["attribute"] = f"[#{type_color}]" + attribute_translator(temp_dict["attribute"], locales) + "[#]"
+                                temp_dict["attribute"] = attribute_translator(temp_dict["attribute"], locales)
+                                if "{attribute_start}" in translator:
+                                    temp_dict["attribute_start"] = f"[#{type_color}]"
+                                else:
+                                    temp_dict["attribute"] = f"[#{type_color}]" + temp_dict["attribute"]
+                                if "{attribute_end}" in translator:
+                                    temp_dict["attribute_end"] = f"[#]"
+                                else:
+                                    temp_dict["attribute"] += f"[#]"
                         if "status" in temp_dict:
                             temp_dict["status"] = status_translator(temp_dict["status"], locales)
                         if "status2" in temp_dict:
@@ -1237,15 +1249,15 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "zh_TW": "{timing}額外獲得已獲得的 Principal Gauge 的 [:param11]%",
         "zh_CN": "{timing}额外获得已获得的 Principal Gauge 的 [:param11]%",
     },
-    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ\[:param11\]%分のプリンシパルゲージを追加で獲得する": {
-        "en": "{timing}gain additional Principal Gauge of [:param11]% of the current Principal Gauge",
-        "zh_TW": "{timing}額外獲得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
-        "zh_CN": "{timing}额外获得目前 Principal Gauge 的 [:param11]% 份量的 Principal Gauge",
+    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ\[:param(\d+)\]%分のプリンシパルゲージを追加で獲得する": {
+        "en": "{timing}gain additional Principal Gauge of [:param{1}]% of the current Principal Gauge",
+        "zh_TW": "{timing}額外獲得目前 Principal Gauge 的 [:param{1}]% 份量的 Principal Gauge",
+        "zh_CN": "{timing}额外获得目前 Principal Gauge 的 [:param{1}]% 份量的 Principal Gauge",
     },
-    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ上限の\[:param11\]%分のプリンシパルゲージを獲得する。?": {
-        "en": "{timing}gain Principal Gauge of [:param11]% of the current Principal Gauge Cap",
-        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
-        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param11]% 份量的 Principal Gauge",
+    r"(?P<timing>センス発動後、)現在のプリンシパルゲージ上限の\[:param(\d+)\]%分のプリンシパルゲージを獲得する。?": {
+        "en": "{timing}gain Principal Gauge of [:param{1}]% of the current Principal Gauge Cap",
+        "zh_TW": "{timing}獲得目前 Principal Gauge 上限的 [:param{1}]% 份量的 Principal Gauge",
+        "zh_CN": "{timing}获得目前 Principal Gauge 上限的 [:param{1}]% 份量的 Principal Gauge",
     },
     r"(?P<timing>センス発動後、)追加で\[:param(\d\d)\]のプリンシパルゲージを獲得": {
         "en": "{timing}gain additional [:param{1}] Principal Gauge",
@@ -1371,6 +1383,22 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "th": "CT ของ {company} ลดลง {1} วินาที",
         "ko"     : "{company} 액터 CT {1}초 단축",
         "ko_Kore": "{company} 액터 CT {1}秒 短縮",
+    },
+    r"編成されているアクターのCTを\[:param(\d+)\]秒CTを短縮": { # strange grammar
+        "en": "CT of each Actors in the Unit reduces by [:param{0}]s for the next Sense",
+        "zh_TW": "隊伍內演員的 CT 縮短 [:param{0}] 秒",
+        "zh_CN": "队伍内演员的 CT 缩短 [:param{0}] 秒",
+        "th": "CT ของนักแสดงทุกคนลดลง [:param{0}] วินาที",
+        "ko"     : "편성되어 있는 액터의 CT [:param{0}]초 단축",
+        "ko_Kore": "編成되어 있는 액터의 CT [:param{0}]秒 短縮",
+    },
+    r"編成されているアクターのCTを\[:param(\d+)\]秒短縮": {
+        "en": "CT of each Actors in the Unit reduces by [:param{0}]s for the next Sense",
+        "zh_TW": "隊伍內演員的 CT 縮短 [:param{0}] 秒",
+        "zh_CN": "队伍内演员的 CT 缩短 [:param{0}] 秒",
+        "th": "CT ของนักแสดงทุกคนลดลง [:param{0}] วินาที",
+        "ko"     : "편성되어 있는 액터의 CT [:param{0}]초 단축",
+        "ko_Kore": "編成되어 있는 액터의 CT [:param{0}]秒 短縮",
     },
     r"付与されているライフガード1回につきスコア獲得量(\d+)％上昇（最大＋(\d+)％）": {
         "en": "For each Life Guard in possession, score gain increases by {0}% (+{1}% at most)",
@@ -1614,25 +1642,25 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
         "th": "นักแสดง {companies} เท่านั้น",
     },
     r"<color=#(.{6})>(?P<attribute>.)属性<\/color>のアクターが装備": {
-        "ja": "{attribute_emoji} {attribute}属性のアクターが装備",
-        "en": "Equipped by an Actor of {attribute_emoji} {attribute} attribute",
-        "zh_TW": "由 {attribute_emoji} {attribute}屬性演員裝備",
-        "zh_CN": "由 {attribute_emoji} {attribute}属性演员装备",
-        "th": "นักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เท่านั้น",
+        "ja": "{attribute_emoji} {attribute}属性{attribute_end}のアクターが装備",
+        "en": "Equipped by an Actor of {attribute_emoji} {attribute} attribute{attribute_end}",
+        "zh_TW": "由 {attribute_emoji} {attribute}屬性{attribute_end}演員裝備",
+        "zh_CN": "由 {attribute_emoji} {attribute}属性{attribute_end}演员装备",
+        "th": "นักแสดงที่มี {attribute_emoji} {attribute_start}คุณสมบัติ {attribute} เท่านั้น",
     },
     "(?P<attribute>.)属性のアクターが装備": {
         "ja": "{attribute_emoji} {attribute}属性のアクターが装備",
-        "en": "Equipped by an Actor of {attribute_emoji} {attribute} attribute",
-        "zh_TW": "由 {attribute_emoji} {attribute}屬性演員裝備",
-        "zh_CN": "由 {attribute_emoji} {attribute}属性演员装备",
-        "th": "นักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เท่านั้น",
+        "en": "Equipped by an Actor of {attribute_emoji} {attribute} attribute{attribute_end}",
+        "zh_TW": "由 {attribute_emoji} {attribute}屬性{attribute_end}演員裝備",
+        "zh_CN": "由 {attribute_emoji} {attribute}属性{attribute_end}演员装备",
+        "th": "นักแสดงที่มี {attribute_emoji} {attribute_start}คุณสมบัติ {attribute} เท่านั้น",
     },
     r"<color=#(.{6})>(?P<attribute>.)属性<\/color>の(?P<actor>.+)が装備": {
-        "ja": "{attribute_emoji} {attribute}属性の{actor}が装備",
-        "en": "Equipped by {actor} of {attribute_emoji} {attribute} attribute",
-        "zh_TW": "由 {attribute_emoji} {attribute}屬性{actor}裝備",
-        "zh_CN": "由 {attribute_emoji} {attribute}属性{actor}装备",
-        "th": "การ์ด {actor} ที่มีคุณสมบัติ {attribute_emoji} {attribute} เท่านั้น",
+        "ja": "{attribute_emoji} {attribute}属性{attribute_end}の{actor}が装備",
+        "en": "Equipped by {actor} of {attribute_emoji} {attribute} attribute{attribute_end}",
+        "zh_TW": "由 {attribute_emoji} {attribute}屬性{attribute_end}{actor}裝備",
+        "zh_CN": "由 {attribute_emoji} {attribute}属性{attribute_end}{actor}装备",
+        "th": "การ์ด {actor} ที่มี {attribute_emoji} {attribute_start}คุณสมบัติ {attribute} เท่านั้น",
     },
     "(?P<actors>.+)が装備": {
         "en": "Equipped by {actors}",
@@ -1805,11 +1833,11 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "th": "{timing}รับ P. Gauge [:param11]",
     },
     r"<color=#.{6}>(?P<attribute>.)属性<\/color>のアクターの演技力が\[:param11\]([%％])上昇": {
-        "ja": "{attribute_emoji} {attribute}属性のアクターの演技力が[:param11]{1}上昇",
-        "en": "Total Statuses of Actors with {attribute_emoji} {attribute} attribute increase by [:param11]%",
-        "zh_TW": "{attribute_emoji} {attribute}屬性演員的演技力提升[:param11]%",
-        "zh_CN": "{attribute_emoji} {attribute}属性演员的演技力提升[:param11]%",
-        "th": "การแสดงของนักแสดงที่มีคุณสมบัติ {attribute_emoji} {attribute} เพิ่มขึ้น [:param11] %",
+        "ja": "{attribute_emoji} {attribute}属性{attribute_end}のアクターの演技力が[:param11]{1}上昇",
+        "en": "Total Statuses of Actors with {attribute_emoji} {attribute} attribute{attribute_end} increase by [:param11]%",
+        "zh_TW": "{attribute_emoji} {attribute}屬性{attribute_end}演員的演技力提升[:param11]%",
+        "zh_CN": "{attribute_emoji} {attribute}属性{attribute_end}演员的演技力提升[:param11]%",
+        "th": "การแสดงของนักแสดงที่มี {attribute_emoji} {attribute_start}คุณสมบัติ {attribute} เพิ่มขึ้น [:param11] %",
     },
     r"(?P<company>.+)または(?P<company2>.+)に所属するアクターの(?P<status>.+?)が\[:param11\][%％]上昇": {
         "en": "{status} of {company} or {company2} Actors increase by [:param11]%",
