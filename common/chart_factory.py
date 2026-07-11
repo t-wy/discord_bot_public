@@ -679,20 +679,29 @@ class Chart:
         show_distance: bool = False,
         seconds_per_column: int = 10,
         lane_style: LaneStyle = LaneStyle.BOUNDARY,
-        main_lane: int = 1,
+        major_lane: int = 1,
+        minor_lane: int = 1,
         progress_callback: Optional[Callable[[str, Tuple[int, int]], Coroutine[Any, Any, None]]] = None,
     ) -> Image.Image:
         """
         bar_mode: True means bar# marker, False means per-second marker, None means no horizontal lines
-        main_lane: spaces between highlighted white vertical lines (1 means all vertical lines are highlighted)
+        major_lane: spaces between highlighted white vertical lines (1 means all vertical lines are highlighted, 0 means no vertical lines are highlighted)
+        minor_lane: spaces between highlighted gray vertical lines when it's not white (1 means all vertical lines are highlighted, 0 means no vertical lines are highlighted)
         """
         if not self.finalized:
             self.finalize()
-        if main_lane > 0:
+        if major_lane > 0:
             if lane_style == Chart.LaneStyle.CENTER:
-                assert (self.num_lanes - 1) % main_lane == 0
+                assert (self.num_lanes - 1) % major_lane == 0
             elif lane_style == Chart.LaneStyle.BOUNDARY:
-                assert self.num_lanes % main_lane == 0
+                assert self.num_lanes % major_lane == 0
+        if minor_lane > 0:
+            assert major_lane > 0
+            assert major_lane % minor_lane == 0
+            if lane_style == Chart.LaneStyle.CENTER:
+                assert (self.num_lanes - 1) % minor_lane == 0
+            elif lane_style == Chart.LaneStyle.BOUNDARY:
+                assert self.num_lanes % minor_lane == 0
         from PIL import Image, ImageFont, ImageDraw
         import common.graphics as ImageDraw
         from image_composition import alpha_composition, BlendMode
@@ -832,13 +841,46 @@ class Chart:
         
         if lane_style == Chart.LaneStyle.CENTER:
             for lane in range(self.num_lanes):
-                x = (get_x(self.lane_offset + lane) + get_x(self.lane_offset + lane + 1)) // 2
-                temp_graphics.line([(x, 0), (x, img_height)], white if main_lane > 0 and lane % main_lane == 0 else gray, 1)
+                if minor_lane != 0: # major_lane != 0
+                    if lane % minor_lane != 0:
+                        continue
+                elif major_lane != 0:
+                    if lane % major_lane != 0:
+                        continue
+                elif lane != 0 and lane != self.num_lanes - 1: # both major_lane and minor_lane == 0
+                    continue
+                x = (
+                    get_x(self.lane_offset + lane) +
+                    get_x(self.lane_offset + lane + 1)
+                ) // 2
+                temp_graphics.line(
+                    [(x, 0), (x, img_height)],
+                    white if (
+                        (major_lane > 0 and lane % major_lane == 0) or
+                        lane == 0 or lane == self.num_lanes - 1
+                    ) else gray,
+                    1
+                )
                 await asyncio.sleep(0)
         elif lane_style == Chart.LaneStyle.BOUNDARY:
             for lane in range(self.num_lanes + 1):
+                if minor_lane != 0: # major_lane != 0
+                    if lane % minor_lane != 0:
+                        continue
+                elif major_lane != 0:
+                    if lane % major_lane != 0:
+                        continue
+                elif lane != 0 and lane != self.num_lanes - 1: # both major_lane and minor_lane == 0
+                    continue
                 x = get_x(self.lane_offset + lane)
-                temp_graphics.line([(x, 0), (x, img_height)], white if main_lane > 0 and lane % main_lane == 0 else gray, 1)
+                temp_graphics.line(
+                    [(x, 0), (x, img_height)],
+                    white if (
+                        (major_lane > 0 and lane % major_lane == 0) or
+                        lane == 0 or lane == self.num_lanes
+                    ) else gray,
+                    1
+                )
                 await asyncio.sleep(0)
 
         if bar_mode == True:
