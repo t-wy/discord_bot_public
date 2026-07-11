@@ -1,4 +1,7 @@
-from typing import Dict, List
+from typing import *
+
+if TYPE_CHECKING:
+    from common.chart_factory import BPM
 
 def build_beats_lookup(beat_table: Dict[int, float]) -> List[float]:
     """
@@ -499,9 +502,9 @@ def simplify_chart(chart):
     return notes_2, extra_data
 
 
-def convert_bpm_events(bpm_events: List[dict]):
+def convert_bpm_events(bpm_events: List[dict]) -> List[Tuple["BPM", Tuple[int, int]]]:
     from common.chart_factory import BPM
-    result = []
+    result: List[Tuple[BPM, Tuple[int, int]]] = []
     for entry in bpm_events:
         result.append(
             (
