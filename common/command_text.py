@@ -122,6 +122,7 @@ class description:
     @staticmethod
     def score_range(max: int):
         return _(f'Target score (0 ~ {max})', zh=f"目標積分 (0 至 {max})", ja="目標スコア (0 ～ {})".format(max))
+    season = _('Season', zh="季度", ja="シーズン")
     search = _("Search game assets", zh="搜尋遊戲資源")
     secsep = _('No. of seconds per column (Default: 10)', zh="每行顯示秒數 (預設: 10)")
     speed = _('Note fall speed', zh="譜面下落速度")
@@ -250,6 +251,7 @@ class locale:
     score = _('score', zh_TW="分數", zh_CN="分数", ja="スコア")
     score_approx = _('approx_score', zh_TW="預測分數", zh_CN="预测分数", ja="想定スコア")
     search = _('search', zh_TW="搜尋", zh_CN="搜索", ja="検索")
+    season = _('season', zh="季度", ja="シーズン")
     secsep = _('secsep', zh_TW="秒數分隔", zh_CN="秒数分隔")
     size = _("size", zh_TW="尺寸", zh_CN="尺寸", ja="サイズ")
     show_character = _("show_character", zh_TW="顯示角色", zh_CN="显示角色")
