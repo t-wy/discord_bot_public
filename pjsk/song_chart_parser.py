@@ -18,7 +18,7 @@ def build_beats_lookup(beat_table: Dict[int, float]) -> List[float]:
     return beats
 
 
-def parse_chart(content: str): #, min_num_measures: int = 0):
+def parse_chart(content: str) -> Dict[str, Any]: #, min_num_measures: int = 0):
     import re
     def process_data(data):
         data = data.replace(" ", "")
@@ -500,19 +500,6 @@ def simplify_chart(chart):
         })
     extra_data["bpm_events"] = bpm_events
     return notes_2, extra_data
-
-
-def convert_bpm_events(bpm_events: List[dict]) -> List[Tuple["BPM", Tuple[int, int]]]:
-    from common.chart_factory import BPM
-    result: List[Tuple[BPM, Tuple[int, int]]] = []
-    for entry in bpm_events:
-        result.append(
-            (
-                BPM(entry["bpm"], entry["time"]),
-                entry["beats"],
-            )
-        )
-    return result
 
 
 def get_skill_notes(notes):

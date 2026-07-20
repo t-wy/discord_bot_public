@@ -1000,7 +1000,7 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "ko"     : "{timing}그때의 스코어의 [:param{1}]% 스코어 획득",
         "ko_Kore": "{timing}그때의 스코어의 [:param{1}]% 스코어 獲得",
     },
-    r"ライフが多いほどスコア獲得量UP効果（最大＋ (\d+)%）": {
+    r"ライフが多いほどスコア獲得量UP効果（最大＋ ?(\d+)%）": {
         "en": "The more the Life Value is, the more score gain UP is resulted in from so (+{0}% at most)",
         "zh_TW" : "生命值愈多，分數獲得量 UP 效果愈強（最多 +{0}%）",
         "zh_CN" : "生命值愈多，分数获得量 UP 效果愈强（最多 +{0}%）",
@@ -1079,11 +1079,11 @@ single_star_act_translator = regex_lookup_translator_wrapper("single_star_act_tr
         "ko"     : "편성되어 있는 {company} 액터의 {status}과 {status2}을, 편성되어 있는 {company} 액터의 인원수 ×{3}% 증가 (중첩 가능)",
         "ko_Kore": "編成되어 있는 {company} 액터의 {status}과 {status2}을, 編成되어 있는 {company} 액터의 人員數 ×{3}% 增加 (重疊 可能)",
     },
-    r"編成されている(?P<company>.+)・(?P<company2>.+)アクター1人につきその時のスコアの(\d+)％のスコアを獲得": {
-        "en": "For each {company} or {company2} Actor in the Unit, gain a score of {2}% of the score at that moment",
-        "zh_TW": "根據隊伍內{company}及{company2}演員人數，各演員獲得當時分數 {2}% 的分數",
-        "zh_CN": "根据队伍内{company}及{company2}演员人数，各演员获得当时分数 {2}% 的分数",
-        "th": "ต่อหนึ่งนักแสดงจาก {company} หรือ {company2} ที่อยู่ในทีม รับคะแนน {2}% ของคะแนนในขณะนั้น",
+    r"編成されている(?P<companies>.+)アクター1人につきその時のスコアの(\d+)％のスコアを獲得": {
+        "en": "For each {companies} Actor in the Unit, gain a score of {1}% of the score at that moment",
+        "zh_TW": "根據隊伍內{companies}演員人數，各演員獲得當時分數 {1}% 的分數",
+        "zh_CN": "根据队伍内{companies}演员人数，各演员获得当时分数 {1}% 的分数",
+        "th": "ต่อหนึ่งนักแสดงจาก {companies} ที่อยู่ในทีม รับคะแนน {1}% ของคะแนนในขณะนั้น",
     },
     r"公演中のセンス発動回数(\d+)回につきスコア獲得量(\d+)[%％]上昇（最大＋(\d+)[%％]）": {
         "en": "For every {0} time(s) Sense activated during the Performance, score gain increases by {1}% (+{2}% at most)",
@@ -1329,6 +1329,14 @@ single_sense_translator = regex_lookup_translator_wrapper("single_sense_translat
         "th": "เมื่อ{actor}อยู่ในทีม {actor}เปิดใช้งานเซนส์แทนและคะแนนเพิ่มขึ้น [:pre1]%",
         "ko"     : "{actor} 편성 시, {actor}가 대신 센스를 발동해, {actor}의 스코어 획득량 [:pre1]% UP",
         "ko_Kore": "{actor} 編成 時, {actor}가 代身 센스를 發動해, {actor}의 스코어 獲得量 [:pre1]% UP",
+    },
+    r"(?P<actor>.+)が代わりにセンスを発動し、(?P=actor)のスコア獲得量\[:pre1\]％UP": {
+        "en": "Sense is activated by {actor} instead, and {actor} gains [:pre1]% UP score from so",
+        "zh_TW": "{actor}代為發動 Sense，且{actor}獲得的分數 [:pre1]% UP",
+        "zh_CN": "{actor}代为发动 Sense，且{actor}获得的分数 [:pre1]% UP",
+        "th": "{actor}เปิดใช้งานเซนส์แทนและคะแนนเพิ่มขึ้น [:pre1]%",
+        "ko"     : "{actor}가 대신 센스를 발동해, {actor}의 스코어 획득량 [:pre1]% UP",
+        "ko_Kore": "{actor}가 代身 센스를 發動해, {actor}의 스코어 獲得量 [:pre1]% UP",
     },
     r"(?P<actors>.+)が隣に編成された状態でセンスを発動したとき、自身もセンスを発動する\(センスの光は獲得出来ない\)": {
         "en": "When {actors} is placed in an Adjacent Slot and activates Sense, this Sense also activates (Sense Light will not be gained)",

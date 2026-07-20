@@ -1946,9 +1946,27 @@ song_alias_list: Dict[int, List[str]] = {
         'ストラタで待ち合わせ',
         'Strata で待ち合わせ',
     ],
+    741: [ # アイ・メイカー！
+        'I Maker!',
+    ],
     743: [ # ドリーマーズビート
         "Dreamer's Beat",
         "Dreamers' Beat",
+    ],
+    758: [ # ラプス
+        'lapse',
+    ],
+    759: [ # ハナタバ
+        '花束',
+    ],
+    760: [ # オールイン・ワン
+        'All in one',
+    ],
+    791: [ # シティライツ
+        'City Lights',
+    ],
+    792: [ # アストロノーツ
+        'Astronauts',
     ],
     10001: [ # 장산범
         '萇山虎',
