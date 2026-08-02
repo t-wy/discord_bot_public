@@ -492,6 +492,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     194: [ # 妄想感傷代償連盟
         "Delusion Sentiment Compensation Federation", # Only DSCF in EN Server
+        'MKDR',
     ],
     195: [ # PaⅢ.SENSATION
         'passionate three dot sensation',

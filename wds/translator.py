@@ -1688,6 +1688,11 @@ condition_translator = regex_lookup_translator_wrapper("condition_translator", {
         "zh_CN": "由{actor}装备且队伍由至少 {2} 名{company}所属演员组成",
         "th": "ใส่โดย {actor} และมีนักแสดงจาก {company} อย่างน้อย {2} คนในทีม",
     },
+    r"(?P<actor>.+)が装備し、編成されてる全てのアクターの所属劇団に(?P<company>.+)が含まれているとき": {
+        "en": "Equipped by {actor}, and all Actors in the Unit include {company} members",
+        "zh_TW": "由{actor}裝備且組成隊伍的全部演員的所屬劇團均包含{company}",
+        "zh_CN": "由{actor}装备且组成队伍的全部演员的所属剧团均包含{company}",
+    },
 })
 
 poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_translator", {
@@ -1871,6 +1876,11 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_CN": "当队伍由至少 {1} 名{company}所属演员组成时，全部演员的 {status} 额外提升[:param11]%",
         "th": "หากจัดทีมด้วย {company} อย่างน้อย {1} คนในทีม {status}ทุกคนเพิ่มขึ้น [:param11]%",
     },
+    r"編成されている全てのアクターの所属劇団に(?P<company>.+)が含まれている場合、追加で全アクターの(?P<status>.+?)が\[:param11\]％上昇": {
+        "en": "When all Actors in the Unit include {company} members, {status} Values of all Actors increase additionally by [:param11]%",
+        "zh_TW": "當組成隊伍的全部演員的所屬劇團均包含{company}時，全部演員的 {status} 額外提升[:param11]%",
+        "zh_CN": "当组成队伍的全部演员的所属剧团均包含{company}时，全部演员的 {status} 额外提升[:param11]%",
+    },
     r"(?P<company>.+)に所属しているアクターのみで編成している場合、追加で(?P<status>.+?)が\[:param11\]％上昇": {
         "en": "When the Unit only consists of {company} Actors, {status} Values increase additionally by [:param11]%",
         "zh_TW": "當隊伍只由{company}所屬演員組成時，{status} 額外提升[:param11]%",
@@ -1882,6 +1892,11 @@ poster_ability_translator = regex_lookup_translator_wrapper("poster_ability_tran
         "zh_TW": "當隊伍由至少 {1} 名{company}所屬演員組成時，{status} 額外提升[:param11]%",
         "zh_CN": "当队伍由至少 {1} 名{company}所属演员组成时，{status} 额外提升[:param11]%",
         "th": "หากจัดทีมด้วย {company} อย่างน้อย {1} คนในทีม {status}เพิ่มขึ้น [:param11]%",
+    },
+    r"編成されている全てのアクターの所属劇団に(?P<company>.+)が含まれている場合、追加で(?P<status>.+?)が\[:param11\]％上昇": {
+        "en": "When all Actors in the Unit include {company} members, {status} Values increase additionally by [:param11]%",
+        "zh_TW": "當組成隊伍的全部演員的所屬劇團均包含{company}時，{status} 額外提升[:param11]%",
+        "zh_CN": "当组成队伍的全部演员的所属剧团均包含{company}时，{status} 额外提升[:param11]%",
     },
     r"全アクターの(?P<status>.+?)が\[:param11\][%％]上昇": {
         "en": "{status} of Each Actor increases by [:param11]%",

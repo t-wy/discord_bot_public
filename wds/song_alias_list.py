@@ -25,17 +25,26 @@ song_alias_list: Dict[int, List[str]] = {
     1: [ # ワナビスタ！
         "Wanna Be Star!", # as in song name, JASRAC Database
         "Wanna Be a Star!", # in lyrics
+        'OPENING THEME',
     ],
     2: [ # トゥ・オブ・アス
         "Two of Us",
+        'ENDING THEME',
+    ],
+    4: [ # 夢見月夜
+        'YUMEMI TUKIYO', # On Jacket
     ],
     6: [ # ダイヤモンドの誓い
         "Diamondの誓い",
         "Diamond no Chikai", # JASRAC Database
+        'Oath of Diamonds', # On Jacket
+        'Diamond的誓約',
+        '鑽石的誓約',
     ],
     7: [ # 魔法のラストノート
         "魔法のLast Note",
         "Maho no Last Note", # JASRAC Database
+        'Magic Last Note', # On Jacket
     ],
     8: [ # New Nostalgic Friend
         "ニュー・ノスタルジック・フレンド",
@@ -96,6 +105,9 @@ song_alias_list: Dict[int, List[str]] = {
         "Play My Favorite!!", # JASRAC Database
         "Play My Favourite!!",
     ],
+    31: [ # 心という名の不可解
+        'KokoroToIuNaNoFukakai',
+    ],
     33: [ # Snow halation
         "スノー・ハレーション",
         "スノーハレーション",
@@ -132,6 +144,10 @@ song_alias_list: Dict[int, List[str]] = {
         'A Nameless Monster',
         'The Nameless Monster',
     ],
+    44: [ # アタシのアシタはアタシがキメル
+        'あたしの明日はあたしが決める',
+        '私の明日は私が決める',
+    ],
     45: [ # Blondie Revenge Tragedy
         "ブロンディ・リベンジ・トラジェディー", # JASRAC Database
         "ブロンディー・リベンジ・トラジェディー",
@@ -156,6 +172,7 @@ song_alias_list: Dict[int, List[str]] = {
     54: [ # ひとりの夜のフィルモグラフィー
         "ひとりの夜のFilmography",
         "Hitori no yoru no Filmography", # JASRAC Database
+        'HITORINO YORUNO FILMOGRAPHY', # On Jacket
     ],
     55: [ # ANIMA
         "アニマ",
@@ -186,6 +203,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     65: [ # adrenaline!!!
         "アドレナリン!!!",
+        '腎上腺素！！！',
     ],
     66: [ # Forbidden Fruit Addiction
         "フォービドゥン・フルーツ・アディクション", # JASRAC Database
@@ -217,6 +235,7 @@ song_alias_list: Dict[int, List[str]] = {
     74: [ # Get to Act Life♡
         "ゲット・トゥ・アクト・ライフ♡", # JASRAC Database
         "ゲット・トゥー・アクト・ライフ♡",
+        'GAL',
     ],
     76: [ # 不可逆的運命ディストピア
         "不可逆的運命Dystopia",
@@ -262,6 +281,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     91: [ # ミックス・アップ・インタレスト！
         "Mix Up Interest!", # JASRAC Database
+        'mix up interest', # On Jacket
     ],
     92: [ # Crystal Bell
         "クリスタル・ベル",
@@ -294,8 +314,12 @@ song_alias_list: Dict[int, List[str]] = {
     102: [ # Friends Per Second
         "フレンズ・パー・セカンド", # JASRAC Database
     ],
+    103: [ # 眩しい朝日に照らされて
+        'In the light of the dazzling morning sun', # On Jacket
+    ],
     106: [ # アクト・レゾナンス
         "Act Resonance",
+        'ACT/RESONANCE', # On Jacket
     ],
     108: [ # Thirsty Soul
         "サースティ・ソウル", # JASRAC Database
@@ -306,13 +330,16 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     110: [ # ワンダフル・フラワー・ガーデン！
         "Wonderful Flower Garden!",
+        'WFG',
     ],
     111: [ # リアルタイム・リプライ！
         "Real Time Reply!", # as seen on jacket
+        'RTR',
     ],
     112: [ # マン・ハン・チュエンシー!!
         "満漢全席!!",
         "MAN HAN QUAN XI!!", # JASRAC Database
+        'MHQX',
     ],
     115: [ # 惑う星達のダンスホール
         "惑う星達のDance Hall",
@@ -342,6 +369,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     123: [ # ヴァンパイア
         "Vampire",
+        'The vampire', # On Jacket
     ],
     124: [ # エジソン
         "Edison",
@@ -391,6 +419,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     150: [ # 粛聖!!ロリ神レクイエム☆
         "粛聖!!ロリ神Requiem☆",
+        'Shukusei!! Loli Kami Requiem☆',
+        'Shukusei!! Loli Gami Requiem☆',
+        "Divine Purge!! Loli-God's Requiem☆",
+        'Divine Purge! Requiem of the Loli God☆',
     ],
     152: [ # シャルル (Check PJSK 19 Also)
         "Charles",
@@ -409,6 +441,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     162: [ # Neustart
         "ノイシュタルト", # German
+        'New Start',
     ],
     163: [ # Original Scene
         "オリジナル・シーン", # JASRAC Database
@@ -553,6 +586,10 @@ song_alias_list: Dict[int, List[str]] = {
     212: [ # ファンサ
         "Fanservice", # Full form of Fansa
     ],
+    213: [ # Bling-Bang-Bang-Born
+        'ブリン・バン・バン・ボーン',
+        'BBBB',
+    ],
     215: [ # Invitation
         "インビテーション",
     ],
@@ -585,8 +622,17 @@ song_alias_list: Dict[int, List[str]] = {
     226: [ # ナツのキオクのナイショのホンネ！
         '夏の記憶の内緒の本音',
     ],
+    228: [ # Gazing Dialogue Play
+        'ゲイジング ダイアログ プレイ',
+    ],
+    230: [ # STARRY STORY！
+        'スターリー ストーリー！',
+    ],
     231: [ # ハロー・マイ・ロケット
         'Hello My Rocket',
+    ],
+    233: [ # Aschenputtel
+        'アシェンプテル',
     ],
     236: [ # カルペ・ディエム
         "Carpe diem",
@@ -595,9 +641,15 @@ song_alias_list: Dict[int, List[str]] = {
         '誰が為の定め',
         '誰が為の運命', # 当て字
     ],
+    238: [ # Vivid-day Happy-day Boost!
+        'ビビッドデイ ハッピーデイ ブースト！',
+    ],
     239: [ # ヴィヴァラヰタ
         'Viva la Vita', # original song title
         'VivaRaWita', # Original Romaji
+    ],
+    240: [ # This game
+        'ディス ゲーム',
     ],
     241: [ # テアトルム・アストラーレ
         'Theatrum Astrale',
@@ -608,6 +660,9 @@ song_alias_list: Dict[int, List[str]] = {
     245: [ # 未来への前奏曲-Prelude-
         'Mirai e no Prelude',
     ],
+    246: [ # Astral×Relation
+        'アストラル リレーション',
+    ],
     247: [ # 空っぽのギフトボックス
         '空っぽの Gift Box',
     ],
@@ -617,8 +672,53 @@ song_alias_list: Dict[int, List[str]] = {
     252: [ # 劇団電姫すいっちおん！
         '劇団電姫 Switch On!',
     ],
+    253: [ # FUN×FUN☆SEEKER!!
+        'ファンファンスターシーカー!!',
+    ],
+    254: [ # The other side of the mirror
+        'ジ・アザー・サイド・オブ・ザ・ミラー',
+    ],
+    256: [ # Besties' Place!
+        'ベスティーズ・プレース',
+        'ベスティーズ・プレイス',
+    ],
+    257: [ # ふろうてぃんぐ・ていすてぃ
+        'Floating Tasty',
+    ],
+    258: [ # 非対称性のダンス
+        '非対称性の Dance',
+        'dance of asymmetry', # On Jacket
+    ],
+    259: [ # Fly to the WORLD
+        'フライ・トゥ・ザ・ワールド',
+    ],
+    261: [ # Make New Testament
+        'メイク・ニュー・テスタメント',
+        'メーク・ニュー・テスタメント',
+    ],
     262: [ # エクストラ・エキストラ！ -Extra Extra-
         'Extra Extra',
+    ],
+    263: [ # LIVE OUR STAR
+        'ライブ・アワー・スター',
+        'リヴ・アワー・スター',
+        'ライヴ・アワー・スター',
+        'リブ・アワー・スター',
+    ],
+    264: [ # LIFE IS BEAUTIFUL STAGE
+        'ライフ・イズ・ビューティフル・ステージ',
+    ],
+    265: [ # ワールドダイスター！
+        'World Dai Star!',
+    ],
+    902: [ # Beyond the Truth
+        'ビヨンド・ザ・トゥルース',
+    ],
+    903: [ # ネビュラ・プレミエール
+        'Nebula Premiere',
+    ],
+    904: [ # でん☆げき《もあ》ぶーーーーーすと！！！！！
+        'den☆ki "more" booooost!!!!!',
     ],
 }
 
