@@ -40,178 +40,359 @@ class InvalidGlobalMetadataException(CustomException):
 
 class ReprClass:
     def __repr__(self):
+        if hasattr(self, "__slots__"):
+            return "{}({})".format(
+                self.__class__.__name__,
+                ", ".join("{}={}".format(k, getattr(self, k)) for k in self.__slots__)
+            )
         return "{}({})".format(
             self.__class__.__name__,
             ", ".join("{}={}".format(k, v) for k, v in self.__dict__.items())
         )
 
+def read_index(reader: LittleEndianReader, size: int) -> int:
+    if size == 1:
+        temp, value = 255, reader.readByte()
+    elif size == 2:
+        temp, value = 65535, reader.readUShort()
+    elif size == 4:
+        temp, value = 4294967295, reader.readUInt()
+    else:
+        assert False, f"Unsupported index size: {size}"
+    if value == temp:
+        return -1
+    return value
+        
 class GlobalMetadata(ReprClass):
+    class Il2CppSectionMetadata(ReprClass):
+        __slots__ = (
+            "offset",
+            "size",
+            "count",
+        )
+        def __init__(self, reader: LittleEndianReader, version: float, min_version: float = 0, max_version: float = 5e9):
+            # introduced since 39.0 (should be 38.0+, not confirmed)
+            if min_version <= version <= max_version:
+                if version >= 38.0:
+                    self.offset = reader.readInt()
+                    self.size = reader.readInt()
+                    self.count = reader.readInt()
+                else:
+                    self.offset = reader.readUInt()
+                    self.size = reader.readInt()
+                    self.count: int = ...
+            else:
+                self.offset: int = ...
+                self.size: int = ...
+                self.count: int = ...
+
     class Il2CppGlobalMetadataHeader(ReprClass):
         __slots__ = (
             "sanity",
             "version",
-            "stringLiteralOffset",
-            "stringLiteralSize",
-            "stringLiteralDataOffset",
-            "stringLiteralDataSize",
-            "stringOffset",
-            "stringSize",
-            "eventsOffset",
-            "eventsSize",
-            "propertiesOffset",
-            "propertiesSize",
-            "methodsOffset",
-            "methodsSize",
-            "parameterDefaultValuesOffset",
-            "parameterDefaultValuesSize",
-            "fieldDefaultValuesOffset",
-            "fieldDefaultValuesSize",
-            "fieldAndParameterDefaultValueDataOffset",
-            "fieldAndParameterDefaultValueDataSize",
-            "fieldMarshaledSizesOffset",
-            "fieldMarshaledSizesSize",
-            "parametersOffset",
-            "parametersSize",
-            "fieldsOffset",
-            "fieldsSize",
-            "genericParametersOffset",
-            "genericParametersSize",
-            "genericParameterConstraintsOffset",
-            "genericParameterConstraintsSize",
-            "genericContainersOffset",
-            "genericContainersSize",
-            "nestedTypesOffset",
-            "nestedTypesSize",
-            "interfacesOffset",
-            "interfacesSize",
-            "vtableMethodsOffset",
-            "vtableMethodsSize",
-            "interfaceOffsetsOffset",
-            "interfaceOffsetsSize",
-            "typeDefinitionsOffset",
-            "typeDefinitionsSize",
-            "rgctxEntriesOffset",
-            "rgctxEntriesCount",
-            "imagesOffset",
-            "imagesSize",
-            "assembliesOffset",
-            "assembliesSize",
-            "metadataUsageListsOffset",
-            "metadataUsageListsCount",
-            "metadataUsagePairsOffset",
-            "metadataUsagePairsCount",
-            "fieldRefsOffset",
-            "fieldRefsSize",
-            "referencedAssembliesOffset",
-            "referencedAssembliesSize",
-            "attributesInfoOffset",
-            "attributesInfoCount",
-            "attributeTypesOffset",
-            "attributeTypesCount",
-            "attributeDataOffset",
-            "attributeDataSize",
-            "attributeDataRangeOffset",
-            "attributeDataRangeSize",
-            "unresolvedVirtualCallParameterTypesOffset",
-            "unresolvedVirtualCallParameterTypesSize",
-            "unresolvedVirtualCallParameterRangesOffset",
-            "unresolvedVirtualCallParameterRangesSize",
-            "windowsRuntimeTypeNamesOffset",
-            "windowsRuntimeTypeNamesSize",
-            "windowsRuntimeStringsOffset",
-            "windowsRuntimeStringsSize",
-            "exportedTypeDefinitionsOffset",
-            "exportedTypeDefinitionsSize",
+            "stringLiterals",
+            "stringLiteralData",
+            "strings",
+            "events",
+            "properties",
+            "methods",
+            "parameterDefaultValues",
+            "fieldDefaultValues",
+            "fieldAndParameterDefaultValueData",
+            "fieldMarshaledSizes",
+            "parameters",
+            "fields",
+            "genericParameters",
+            "genericParameterConstraints",
+            "genericContainers",
+            "nestedTypes",
+            "interfaces",
+            "vtableMethods",
+            "interfaceOffsets",
+            "typeDefinitions",
+            "rgctxEntries",
+            "images",
+            "assemblies",
+            "metadataUsageLists",
+            "metadataUsagePairs",
+            "fieldRefs",
+            "referencedAssemblies",
+            "attributesInfo",
+            "attributeTypes",
+            "attributeData",
+            "attributeDataRange",
+            "unresolvedVirtualCallParameterTypes",
+            "unresolvedVirtualCallParameterRanges",
+            "windowsRuntimeTypeNames",
+            "windowsRuntimeStrings",
+            "exportedTypeDefinitions",
         )
         def __init__(self, reader: LittleEndianReader, version: float = ...):
-            (
-                self.sanity,
-                self.version,
-                self.stringLiteralOffset, # string data for managed code
-                self.stringLiteralSize,
-                self.stringLiteralDataOffset,
-                self.stringLiteralDataSize,
-                self.stringOffset, # string data for metadata
-                self.stringSize,
-                self.eventsOffset, # Il2CppEventDefinition
-                self.eventsSize,
-                self.propertiesOffset, # Il2CppPropertyDefinition
-                self.propertiesSize,
-                self.methodsOffset, # Il2CppMethodDefinition
-                self.methodsSize,
-                self.parameterDefaultValuesOffset, # Il2CppParameterDefaultValue
-                self.parameterDefaultValuesSize,
-                self.fieldDefaultValuesOffset, # Il2CppFieldDefaultValue
-                self.fieldDefaultValuesSize,
-                self.fieldAndParameterDefaultValueDataOffset, # uint8_t
-                self.fieldAndParameterDefaultValueDataSize,
-                self.fieldMarshaledSizesOffset, # Il2CppFieldMarshaledSize
-                self.fieldMarshaledSizesSize,
-                self.parametersOffset, # Il2CppParameterDefinition
-                self.parametersSize,
-                self.fieldsOffset, # Il2CppFieldDefinition
-                self.fieldsSize,
-                self.genericParametersOffset, # Il2CppGenericParameter
-                self.genericParametersSize,
-                self.genericParameterConstraintsOffset, # TypeIndex
-                self.genericParameterConstraintsSize,
-                self.genericContainersOffset, # Il2CppGenericContainer
-                self.genericContainersSize,
-                self.nestedTypesOffset, # TypeDefinitionIndex
-                self.nestedTypesSize,
-                self.interfacesOffset, # TypeIndex
-                self.interfacesSize,
-                self.vtableMethodsOffset, # EncodedMethodIndex
-                self.vtableMethodsSize,
-                self.interfaceOffsetsOffset, # Il2CppInterfaceOffsetPair
-                self.interfaceOffsetsSize,
-                self.typeDefinitionsOffset, # Il2CppTypeDefinition
-                self.typeDefinitionsSize,
-            ) = struct.unpack("<" + "Ii" * 10 + "ii" + "Ii" * 8 + "ii" + "Ii", reader.read(168)) # I: uint32_t, i: int32_t
+            self.sanity = reader.readUInt()
+            self.version = reader.readInt()
+            # override version if specified
             if version is not ...:
                 self.version = version
-            if self.version <= 24.1:
-                self.rgctxEntriesOffset = reader.readUInt() # Il2CppRGCTXDefinition
-                self.rgctxEntriesCount = reader.readInt()
-            self.imagesOffset = reader.readUInt() # Il2CppImageDefinition
-            self.imagesSize = reader.readInt()
-            self.assembliesOffset = reader.readUInt() # Il2CppAssemblyDefinition
-            self.assembliesSize = reader.readInt()
-            if 19 <= self.version <= 24.5:
-                self.metadataUsageListsOffset = reader.readUInt() # Il2CppMetadataUsageList
-                self.metadataUsageListsCount = reader.readInt()
-                self.metadataUsagePairsOffset = reader.readUInt() # Il2CppMetadataUsagePair
-                self.metadataUsagePairsCount = reader.readInt()
-            if 19 <= self.version:
-                self.fieldRefsOffset = reader.readUInt() # Il2CppFieldRef
-                self.fieldRefsSize = reader.readInt()
-            if 20 <= self.version:
-                self.referencedAssembliesOffset = reader.readInt() # int32_t
-                self.referencedAssembliesSize = reader.readInt()
-            if 21 <= self.version <= 27.2:
-                self.attributesInfoOffset = reader.readUInt() # Il2CppCustomAttributeTypeRange
-                self.attributesInfoCount = reader.readInt()
-                self.attributeTypesOffset = reader.readUInt() # TypeIndex
-                self.attributeTypesCount = reader.readInt()
-            if 29 <= self.version:
-                self.attributeDataOffset = reader.readUInt()
-                self.attributeDataSize = reader.readInt()
-                self.attributeDataRangeOffset = reader.readUInt()
-                self.attributeDataRangeSize = reader.readInt()
-            if 22 <= self.version:
-                self.unresolvedVirtualCallParameterTypesOffset = reader.readInt() # TypeIndex
-                self.unresolvedVirtualCallParameterTypesSize = reader.readInt()
-                self.unresolvedVirtualCallParameterRangesOffset = reader.readInt() # Il2CppRange
-                self.unresolvedVirtualCallParameterRangesSize = reader.readInt()
-            if 23 <= self.version:
-                self.windowsRuntimeTypeNamesOffset = reader.readInt() # Il2CppWindowsRuntimeTypeNamePair
-                self.windowsRuntimeTypeNamesSize = reader.readInt()
-            if 27 <= self.version:
-                self.windowsRuntimeStringsOffset = reader.readInt() # const char*
-                self.windowsRuntimeStringsSize = reader.readInt()
-            if 24 <= self.version:
-                self.exportedTypeDefinitionsOffset = reader.readInt() # TypeDefinitionIndex
-                self.exportedTypeDefinitionsSize = reader.readInt()
+            (
+                self.stringLiterals, # string data for managed code
+                self.stringLiteralData,
+                self.strings, # string data for metadat
+                self.events, # Il2CppEventDefinition
+                self.properties, # Il2CppPropertyDefinition
+                self.methods, # Il2CppMethodDefinition
+                self.parameterDefaultValues, # Il2CppParameterDefaultValue
+                self.fieldDefaultValues, # Il2CppFieldDefaultValue
+                self.fieldAndParameterDefaultValueData,
+                self.fieldMarshaledSizes, # Il2CppFieldMarshaledSize, int, int actually
+                self.parameters, # Il2CppParameterDefinition
+                self.fields, # Il2CppFieldDefinition
+                self.genericParameters, # Il2CppGenericParameter
+                self.genericParameterConstraints, # TypeIndex
+                self.genericContainers, # Il2CppGenericContainer
+                self.nestedTypes, # Il2CppTypeDefinitionIndex
+                self.interfaces, # TypeIndex
+                self.vtableMethods, # EncodedMethodIndex
+                self.interfaceOffsets, # Il2CppInterfaceOffsetPair, int, int actually
+                self.typeDefinitions,
+            ) = [
+                GlobalMetadata.Il2CppSectionMetadata(reader, self.version)
+                for _ in range(20)
+            ]
+            self.rgctxEntries = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, max_version = 24.1) # Il2CppRGCTXDefinition
+            self.images = GlobalMetadata.Il2CppSectionMetadata(reader, self.version) # Il2CppImageDefinition
+            self.assemblies = GlobalMetadata.Il2CppSectionMetadata(reader, self.version) # Il2CppAssemblyDefinition
+            self.metadataUsageLists = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 19, max_version = 24.5) # Il2CppMetadataUsageList
+            self.metadataUsagePairs = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 19, max_version = 24.5) # Il2CppMetadataUsagePair
+            self.fieldRefs = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 19) # Il2CppFieldRef
+            self.referencedAssemblies = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 20) # int32_t
+            self.attributesInfo = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 21, max_version = 27.2) # Il2CppCustomAttributeTypeRange
+            self.attributeTypes = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 21, max_version = 27.2) # TypeIndex
+            self.attributeData = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 29)
+            self.attributeDataRange = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 29)
+            self.unresolvedVirtualCallParameterTypes = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 22) # TypeIndex
+            self.unresolvedVirtualCallParameterRanges = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 22) # Il2CppRange
+            self.windowsRuntimeTypeNames = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 23) # Il2CppWindowsRuntimeTypeNamePair
+            self.windowsRuntimeStrings = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 27) # const char*
+            self.exportedTypeDefinitions = GlobalMetadata.Il2CppSectionMetadata(reader, self.version, min_version = 24)
+        
+        # backward-compatible
+        @property
+        def stringLiteralOffset(self):
+            return self.stringLiterals.offset
+        @property
+        def stringLiteralSize(self):
+            return self.stringLiterals.size
+        @property
+        def stringLiteralDataOffset(self):
+            return self.stringLiteralData.offset
+        @property
+        def stringLiteralDataSize(self):
+            return self.stringLiteralData.size
+        @property
+        def stringOffset(self):
+            return self.strings.offset
+        @property
+        def stringSize(self):
+            return self.strings.size
+        @property
+        def eventsOffset(self):
+            return self.events.offset
+        @property
+        def eventsSize(self):
+            return self.events.size
+        @property
+        def propertiesOffset(self):
+            return self.properties.offset
+        @property
+        def propertiesSize(self):
+            return self.properties.size
+        @property
+        def methodsOffset(self):
+            return self.methods.offset
+        @property
+        def methodsSize(self):
+            return self.methods.size
+        @property
+        def parameterDefaultValuesOffset(self):
+            return self.parameterDefaultValues.offset
+        @property
+        def parameterDefaultValuesSize(self):
+            return self.parameterDefaultValues.size
+        @property
+        def fieldDefaultValuesOffset(self):
+            return self.fieldDefaultValues.offset
+        @property
+        def fieldDefaultValuesSize(self):
+            return self.fieldDefaultValues.size
+        @property
+        def fieldAndParameterDefaultValueDataOffset(self):
+            return self.fieldAndParameterDefaultValueData.offset
+        @property
+        def fieldAndParameterDefaultValueDataSize(self):
+            return self.fieldAndParameterDefaultValueData.size
+        @property
+        def fieldMarshaledSizesOffset(self):
+            return self.fieldMarshaledSizes.offset
+        @property
+        def fieldMarshaledSizesSize(self):
+            return self.fieldMarshaledSizes.size
+        @property
+        def parametersOffset(self):
+            return self.parameters.offset
+        @property
+        def parametersSize(self):                        
+            return self.parameters.size
+        @property
+        def fieldsOffset(self):
+            return self.fields.offset
+        @property
+        def fieldsSize(self):
+            return self.fields.size
+        @property
+        def genericParametersOffset(self):
+            return self.genericParameters.offset
+        @property
+        def genericParametersSize(self):
+            return self.genericParameters.size
+        @property
+        def genericParameterConstraintsOffset(self):
+            return self.genericParameterConstraints.offset
+        @property
+        def genericParameterConstraintsSize(self):
+            return self.genericParameterConstraints.size
+        @property
+        def genericContainersOffset(self):
+            return self.genericContainers.offset
+        @property
+        def genericContainersSize(self):
+            return self.genericContainers.size
+        @property
+        def nestedTypesOffset(self):
+            return self.nestedTypes.offset
+        @property
+        def nestedTypesSize(self):
+            return self.nestedTypes.size
+        @property
+        def interfacesOffset(self):
+            return self.interfaces.offset
+        @property
+        def interfacesSize(self):
+            return self.interfaces.size
+        @property
+        def vtableMethodsOffset(self):
+            return self.vtableMethods.offset
+        @property
+        def vtableMethodsSize(self):
+            return self.vtableMethods.size
+        @property
+        def interfaceOffsetsOffset(self):
+            return self.interfaceOffsets.offset
+        @property
+        def interfaceOffsetsSize(self):
+            return self.interfaceOffsets.size
+        @property
+        def typeDefinitionsOffset(self):
+            return self.typeDefinitions.offset
+        @property
+        def typeDefinitionsSize(self):
+            return self.typeDefinitions.size
+        @property
+        def rgctxEntriesOffset(self):
+            return self.rgctxEntries.offset
+        @property
+        def rgctxEntriesCount(self):
+            return self.rgctxEntries.size
+        @property
+        def imagesOffset(self):
+            return self.images.offset
+        @property
+        def imagesSize(self):
+            return self.images.size
+        @property
+        def assembliesOffset(self):
+            return self.assemblies.offset
+        @property
+        def assembliesSize(self):
+            return self.assemblies.size
+        @property
+        def metadataUsageListsOffset(self):
+            return self.metadataUsageLists.offset
+        @property
+        def metadataUsageListsCount(self):
+            return self.metadataUsageLists.size
+        @property
+        def metadataUsagePairsOffset(self):
+            return self.metadataUsagePairs.offset
+        @property
+        def metadataUsagePairsCount(self):
+            return self.metadataUsagePairs.size
+        @property
+        def fieldRefsOffset(self):
+            return self.fieldRefs.offset
+        @property
+        def fieldRefsSize(self):
+            return self.fieldRefs.size
+        @property
+        def referencedAssembliesOffset(self):
+            return self.referencedAssemblies.offset
+        @property
+        def referencedAssembliesSize(self):
+            return self.referencedAssemblies.size
+        @property
+        def attributesInfoOffset(self):
+            return self.attributesInfo.offset
+        @property
+        def attributesInfoCount(self):
+            return self.attributesInfo.size
+        @property
+        def attributeTypesOffset(self):
+            return self.attributeTypes.offset
+        @property
+        def attributeTypesCount(self):
+            return self.attributeTypes.size
+        @property
+        def attributeDataOffset(self):
+            return self.attributeData.offset
+        @property
+        def attributeDataSize(self):
+            return self.attributeData.size
+        @property
+        def attributeDataRangeOffset(self):
+            return self.attributeDataRange.offset
+        @property
+        def attributeDataRangeSize(self):
+            return self.attributeDataRange.size
+        @property
+        def unresolvedVirtualCallParameterTypesOffset(self):
+            return self.unresolvedVirtualCallParameterTypes.offset
+        @property
+        def unresolvedVirtualCallParameterTypesSize(self):
+            return self.unresolvedVirtualCallParameterTypes.size
+        @property
+        def unresolvedVirtualCallParameterRangesOffset(self):
+            return self.unresolvedVirtualCallParameterRanges.offset
+        @property
+        def unresolvedVirtualCallParameterRangesSize(self):
+            return self.unresolvedVirtualCallParameterRanges.size
+        @property
+        def windowsRuntimeTypeNamesOffset(self):
+            return self.windowsRuntimeTypeNames.offset
+        @property
+        def windowsRuntimeTypeNamesSize(self):
+            return self.windowsRuntimeTypeNames.size
+        @property
+        def windowsRuntimeStringsOffset(self):
+            return self.windowsRuntimeStrings.offset
+        @property
+        def windowsRuntimeStringsSize(self):
+            return self.windowsRuntimeStrings.size
+        @property
+        def exportedTypeDefinitionsOffset(self):
+            return self.exportedTypeDefinitions.offset
+        @property
+        def exportedTypeDefinitionsSize(self):
+            return self.exportedTypeDefinitions.size
+        
 
     class Il2CppAssemblyDefinition(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
@@ -222,6 +403,8 @@ class GlobalMetadata(ReprClass):
                 self.customAttributeIndex = reader.readInt()
             else:
                 self.customAttributeIndex = 0
+            if parent.header.version >= 38.0:
+                self.moduleToken = reader.readUInt()
             if 20 <= parent.header.version:
                 self.referencedAssemblyStart = reader.readInt()
             if 20 <= parent.header.version:
@@ -250,19 +433,25 @@ class GlobalMetadata(ReprClass):
             self.name: str = ...
             self.nameIndex = reader.readUInt()
             self.assemblyIndex = reader.readInt()
-
-            self.typeStart = reader.readInt()
+            
+            if parent.header.version >= 38.0:
+                self.typeStart = read_index(reader, parent.sizes["type_definition_index"])
+            else:
+                self.typeStart = reader.readInt()
             self.typeCount = reader.readUInt()
 
-            if 24 <= parent.header.version:
+            if parent.header.version >= 38.0:
+                self.exportedTypeStart = read_index(reader, parent.sizes["type_definition_index"])
+                self.exportedTypeCount = reader.readUInt()
+            elif parent.header.version >= 24.0:
                 self.exportedTypeStart = reader.readInt()
                 self.exportedTypeCount = reader.readUInt()
 
             self.entryPointIndex = reader.readInt()
-            if 19 <= parent.header.version:
+            if parent.header.version >= 19.0:
                 self.token = reader.readUInt()
 
-            if 24.1 <= parent.header.version:
+            if parent.header.version >= 24.1:
                 self.customAttributeStart = reader.readInt()
                 self.customAttributeCount = reader.readUInt()
 
@@ -276,20 +465,35 @@ class GlobalMetadata(ReprClass):
                 self.customAttributeIndex = reader.readInt()
             else:
                 self.customAttributeIndex = 0
-            self.byvalTypeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.byvalTypeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.byvalTypeIndex = reader.readInt()
             if parent.header.version <= 24.5:
                 self.byrefTypeIndex = reader.readInt()
+            else:
+                self.byrefTypeIndex = None
 
-            self.declaringTypeIndex = reader.readInt()
-            self.parentIndex = reader.readInt()
-            self.elementTypeIndex = reader.readInt() # we can probably remove this one. Only used for enums
+            if parent.header.version >= 38.0:
+                self.declaringTypeIndex = read_index(reader, parent.sizes["type_index"])
+                self.parentIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.declaringTypeIndex = reader.readInt()
+                self.parentIndex = reader.readInt()
+            if parent.header.version < 38.0:
+                self.elementTypeIndex = reader.readInt() # we can probably remove this one. Only used for enums
+            else:
+                self.elementTypeIndex = None
 
             if parent.header.version <= 24.1:
                 self.rgctxStartIndex = reader.readInt()
             if parent.header.version <= 24.1:
                 self.rgctxCount = reader.readInt()
 
-            self.genericContainerIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.genericContainerIndex = read_index(reader, parent.sizes["generic_definition_index"])
+            else:
+                self.genericContainerIndex = reader.readInt()
 
             if parent.header.version <= 22:
                 self.delegateWrapperFromManagedToNativeIndex = reader.readInt()
@@ -347,16 +551,26 @@ class GlobalMetadata(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
             self.name: str = ...
             self.nameIndex = reader.readUInt()
-            self.declaringType = reader.readInt()
-            self.returnType = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.declaringType = read_index(reader, parent.sizes["type_definition_index"])
+                self.returnType = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.declaringType = reader.readInt()
+                self.returnType = reader.readInt()
             if 31 <= parent.header.version:
                 self.returnParameterToken = reader.readInt()
-            self.parameterStart = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.parameterStart = read_index(reader, parent.sizes["parameter_index"])
+            else:
+                self.parameterStart = reader.readInt()
             if parent.header.version <= 24:
                 self.customAttributeIndex = reader.readInt()
             else:
                 self.customAttributeIndex = 0
-            self.genericContainerIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.genericContainerIndex = read_index(reader, parent.sizes["generic_definition_index"])
+            else:
+                self.genericContainerIndex = reader.readInt()
             if parent.header.version <= 24.1:
                 self.methodIndex = reader.readInt()
             if parent.header.version <= 24.1:
@@ -382,13 +596,19 @@ class GlobalMetadata(ReprClass):
                 self.customAttributeIndex = reader.readInt()
             else:
                 self.customAttributeIndex = 0
-            self.typeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.typeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.typeIndex = reader.readInt()
 
     class Il2CppFieldDefinition(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
             self.name: str = ...
             self.nameIndex = reader.readUInt()
-            self.typeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.typeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.typeIndex = reader.readInt()
             if parent.header.version <= 24:
                 self.customAttributeIndex = reader.readInt()
             else:
@@ -399,7 +619,10 @@ class GlobalMetadata(ReprClass):
     class Il2CppFieldDefaultValue(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
             self.fieldIndex = reader.readInt()
-            self.typeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.typeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.typeIndex = reader.readInt()
             self.dataIndex = reader.readInt()
 
     class Il2CppPropertyDefinition(ReprClass):
@@ -435,21 +658,28 @@ class GlobalMetadata(ReprClass):
 
     class Il2CppStringLiteral(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
-            self.length = reader.readUInt()
+            if parent.header.version < 38.0:
+                self.length = reader.readUInt()
             self.dataIndex = reader.readInt()
             self.value = ...
 
     class Il2CppParameterDefaultValue(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
             self.parameterIndex = reader.readInt()
-            self.typeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.typeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.typeIndex = reader.readInt()
             self.dataIndex = reader.readInt()
 
     class Il2CppEventDefinition(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
             self.name: str = ...
             self.nameIndex = reader.readUInt()
-            self.typeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.typeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.typeIndex = reader.readInt()
             self.add = reader.readInt()
             self.remove = reader.readInt()
             setattr(self, 'raise', reader.readInt())
@@ -472,12 +702,18 @@ class GlobalMetadata(ReprClass):
 
     class Il2CppFieldRef(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
-            self.typeIndex = reader.readInt()
+            if parent.header.version >= 38.0:
+                self.typeIndex = read_index(reader, parent.sizes["type_index"])
+            else:
+                self.typeIndex = reader.readInt()
             self.fieldIndex = reader.readInt() # local offset into type fields
 
     class Il2CppGenericParameter(ReprClass):
         def __init__(self, reader: LittleEndianReader, parent: 'GlobalMetadata'):
-            self.ownerIndex = reader.readInt() # Type or method this parameter was defined in.
+            if parent.header.version >= 38.0:
+                self.ownerIndex = read_index(reader, parent.sizes["generic_definition_index"])
+            else:
+                self.ownerIndex = reader.readInt() # Type or method this parameter was defined in.
             self.name: str = ...
             self.nameIndex = reader.readUInt()
             self.constraintsStart = reader.readShort()
@@ -514,7 +750,7 @@ class GlobalMetadata(ReprClass):
 
     class Il2CppMetadataUsage(Enum):
         from enum import auto
-        kIl2CppMetadataUsageInvalid = auto()
+        kIl2CppMetadataUsageInvalid = 0
         kIl2CppMetadataUsageTypeInfo = auto()
         kIl2CppMetadataUsageIl2CppType = auto()
         kIl2CppMetadataUsageMethodDef = auto()
@@ -548,13 +784,18 @@ class GlobalMetadata(ReprClass):
         def load_str(offset: int, size: int) -> str:
             reader.seek(offset)
             return reader.read(size).decode()
+        resolved_names: Dict[int, str] = {} # memorize
+        def resolve_name_internal(offset: int):
+            if offset in resolved_names:
+                return resolved_names[offset]
+            reader.seek(self.header.stringOffset + offset)
+            name = reader.readNullString()
+            resolved_names[offset] = name
+            return name
         def resolve_name(cls: Any):
-            # assert hasattr(cls, "nameIndex")
-            reader.seek(self.header.stringOffset + cls.nameIndex)
-            cls.name = reader.readNullString()
+            cls.name = resolve_name_internal(cls.nameIndex)
             if hasattr(cls, "namespaceIndex"):
-                reader.seek(self.header.stringOffset + cls.namespaceIndex)
-                cls.namespace = reader.readNullString()
+                cls.namespace = resolve_name_internal(cls.namespaceIndex)
         def resolve_raw(_from: int, _to: int):
             reader.seek(_from)
             return reader.read(_to - _from)
@@ -563,11 +804,11 @@ class GlobalMetadata(ReprClass):
         self.header = GlobalMetadata.Il2CppGlobalMetadataHeader(reader)
         if self.header.sanity != 0xFAB11BAF: # sanity
             raise InvalidGlobalMetadataException("Magic number not match.")
-        if not (16 <= self.header.version <= 31):
+        if not (16 <= self.header.version <= 39) or self.header.version in [30, 32, 33, 34, 35 ,36 ,37, 38]:
             raise InvalidGlobalMetadataException("Metadata version not supported.")
         # Differentiate version 24
         if self.header.version == 24:
-            if self.header.stringLiteralDataOffset == 264:
+            if self.header.stringLiteralOffset == 264:
                 # exclude rgctxEntries
                 reader.seek(0)
                 self.header = GlobalMetadata.Il2CppGlobalMetadataHeader(reader, 24.2)
@@ -575,6 +816,38 @@ class GlobalMetadata(ReprClass):
                 self.imageDefinitions: List[GlobalMetadata.Il2CppImageDefinition] = load_list(GlobalMetadata.Il2CppImageDefinition, self.header.imagesOffset, self.header.imagesSize)
                 if any(entry.token != 1 for entry in self.imageDefinitions):
                     self.header.version = 24.1
+
+        if self.header.version >= 38.0:
+            def get_index_size(number_of_elements: int) -> int:
+                if number_of_elements < 256:
+                    return 1
+                if number_of_elements < 65536:
+                    return 2
+                return 4
+            
+            self.sizes: Dict[str, int] = {
+                "type_index": ..., # from MetadataRegistration->typesCount
+                "type_definition_index": get_index_size(
+                    self.header.typeDefinitions.count
+                ), # from typeDefinitions.count
+                "generic_definition_index": get_index_size(
+                    self.header.genericContainers.count
+                ), # from genericContainers.count
+                "parameter_index": get_index_size(
+                    self.header.parameters.count
+                ), # from parameters.count
+            }
+
+            # try to determine typeIndexSize
+            if self.header.interfaceOffsets.count > 0:
+                # TypeIndex + int32_t
+                entry_size = self.header.interfaceOffsets.size // self.header.interfaceOffsets.count
+                self.sizes["type_index"] = entry_size - 4
+            else:
+                print("Cannot determine sizes.typeIndex")
+        else:
+            self.sizes: Dict[str, int] = {}
+
         self.imageDefinitions: List[GlobalMetadata.Il2CppImageDefinition] = load_list(GlobalMetadata.Il2CppImageDefinition, self.header.imagesOffset, self.header.imagesSize)
         for temp in self.imageDefinitions:
             resolve_name(temp) # All those *.dll
@@ -586,7 +859,7 @@ class GlobalMetadata(ReprClass):
         self.assemblyDefinitions: List[GlobalMetadata.Il2CppAssemblyDefinition] = load_list(GlobalMetadata.Il2CppAssemblyDefinition,self.header.assembliesOffset, self.header.assembliesSize)
         for temp in self.assemblyDefinitions:
             resolve_name(temp.aname)
-            logging.debug(f"Il2CppAssemblyDefinition {temp.aname.name}")
+            # logging.debug(f"Il2CppAssemblyDefinition {temp.aname.name}")
         if fake_24_4:
             self.header.version = 24.1
         self.typeDefinitions: List[GlobalMetadata.Il2CppTypeDefinition] = load_list(GlobalMetadata.Il2CppTypeDefinition,self.header.typeDefinitionsOffset, self.header.typeDefinitionsSize)
@@ -630,16 +903,31 @@ class GlobalMetadata(ReprClass):
         self.constraintIndices = load_type(reader.readInt, self.header.genericParameterConstraintsOffset, self.header.genericParameterConstraintsSize)
         self.vtableMethods = load_type(reader.readUInt, self.header.vtableMethodsOffset, self.header.vtableMethodsSize)
         self.stringLiterals: List[GlobalMetadata.Il2CppStringLiteral] = load_list(GlobalMetadata.Il2CppStringLiteral, self.header.stringLiteralOffset, self.header.stringLiteralSize)
-        for entry in self.stringLiterals:
-            entry.value = load_str(self.header.stringLiteralDataOffset + entry.dataIndex, entry.length)
+        # resolve stringLiterals
+        if self.header.version >= 38.0:
+            for index in range(len(self.stringLiterals) - 1):
+                string_literal = self.stringLiterals[index]
+                string_literal_next = self.stringLiterals[index + 1]
+                string_literal.value = load_str(
+                    self.header.stringLiteralDataOffset + string_literal.dataIndex,
+                    string_literal_next.dataIndex - string_literal.dataIndex
+                )
+            if len(self.stringLiterals):
+                self.stringLiterals[-1].value = None
+        else:
+            for string_literal in self.stringLiterals:
+                string_literal.value = load_str(
+                    self.header.stringLiteralDataOffset + string_literal.dataIndex,
+                    string_literal.length
+                )
     
-        if 16 <= self.header.version:
+        if self.header.version > 16:
             self.fieldRefs: List[GlobalMetadata.Il2CppFieldRef] = load_list(GlobalMetadata.Il2CppFieldRef,self.header.fieldRefsOffset, self.header.fieldRefsSize)
             if self.header.version < 27:
                 self.metadataUsageLists: List[GlobalMetadata.Il2CppMetadataUsageList] = load_list(GlobalMetadata.Il2CppMetadataUsageList, self.header.metadataUsageListsOffset, self.header.metadataUsageListsCount)
                 self.metadataUsagePairs: List[GlobalMetadata.Il2CppMetadataUsagePair] = load_list(GlobalMetadata.Il2CppMetadataUsagePair, self.header.metadataUsagePairsOffset, self.header.metadataUsagePairsCount)
                 # process_metadata_usage
-                self.metadataUsageDict = {GlobalMetadata.Il2CppMetadataUsage(i): {} for i in range(6)}
+                self.metadataUsageDict = {i: {} for i in GlobalMetadata.Il2CppMetadataUsage}
                 for entry in self.metadataUsageLists:
                     for i in range(entry.count):
                         offset = entry.start + i
@@ -649,7 +937,15 @@ class GlobalMetadata(ReprClass):
                         usage = GlobalMetadata.Il2CppMetadataUsage(((metadataUsagePair.encodedSourceIndex) & 0xE0000000) >> 29)
                         decodedIndex = (metadataUsagePair.encodedSourceIndex & 0x1FFFFFFF) >> (self.header.version >= 27)
                         self.metadataUsageDict[usage][metadataUsagePair.destinationIndex] = decodedIndex
-                self.metadataUsagesCount = max(key for key in self.metadataUsageDict.keys() if len(self.metadataUsageDict[key]) > 0) + 1
+                self.metadataUsagesCount = max(
+                    (
+                        max(
+                            Dict.keys(),
+                            default = 0
+                        ) for Dict in self.metadataUsageDict.values()
+                    ),
+                    default = 0
+                ) + 1
             else:
                 self.metadataUsagesCount = 0
         if 20 < self.header.version < 29:

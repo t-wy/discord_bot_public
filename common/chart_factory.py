@@ -502,7 +502,8 @@ class Chart:
         current_beat: Tuple[int, int] = (4, 4)
         epsilon = 0.002 # considering ms (=0.001s) resolution
         if end_time is None:
-            end_time = max(max(self.notes, key=lambda x: x.time).time if len(self.notes) else 0, bpms[-1][0].time)
+            last_note_time = max(self.object_times, default = 0)
+            end_time = max(last_note_time, bpms[-1][0].time)
         for index, next_entry in enumerate(bpms + [
             (BPM(bpms[-1][0].bpm, end_time), bpms[-1][1])
         ]):
@@ -612,7 +613,7 @@ class Chart:
             self.scroll_speeds.append(ScrollSpeed(1, 0))
         self.notes.sort(key=lambda x: x.time)
         if self.duration is ...:
-            self.duration = self.notes[-1].time if len(self.notes) else 0
+            self.duration = max(self.object_times, default = 0)
             self.auto_duration = True
         # for whole song with the same BPM and measure
         if isinstance(self.beats, AutoBeat):
@@ -663,6 +664,18 @@ class Chart:
     def note_times(self) -> List[float]:
         # get the list of counted times
         return [x.time for x in self.notes + self.ticks if x.counted]
+    
+    @property
+    def object_times(self) -> List[float]:
+        # get the list of all times
+        return [
+            x.time for x in (
+                self.notes +
+                self.ticks +
+                self.labels + 
+                [obj for obj in self.background if isinstance(obj, Note)]
+            )
+        ]
     
     @property
     def note_count(self) -> int:

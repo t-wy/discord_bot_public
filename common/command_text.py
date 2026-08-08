@@ -124,7 +124,8 @@ class description:
     campaign = _(
         "Campaign information", 
         zh_TW = "Campaign 資訊", 
-        zh_CN = "Campaign 资讯"
+        zh_CN = "Campaign 资讯",
+        ja    = "キャンペーン情報"
     )
     character = _(
         'Character Name', 
@@ -620,6 +621,12 @@ class description:
         zh_TW = "每行顯示秒數 (預設: 10)", 
         zh_CN = "每行显示秒数 (预设: 10)"
     )
+    server = _(
+        'Game Server', 
+        zh_TW = "遊戲伺服器", 
+        zh_CN = "游戏伺服器",
+        ja = "ゲームサーバー"
+    )
     speed = _(
         'Note fall speed', 
         zh_TW = "譜面下落速度", 
@@ -730,7 +737,8 @@ class description:
     type_campaign = _(
         'Campaign type', 
         zh_TW = "Campaign 的類型", 
-        zh_CN = "Campaign 的类型"
+        zh_CN = "Campaign 的类型",
+        ja    = "キャンペーンの種類"
     )
     unit_detail = _(
         'Show skill info', 
@@ -844,6 +852,12 @@ class locale:
         zh_TW = "陣營", 
         zh_CN = "阵营", 
         ja    = "陣営"
+    )
+    campaign = _(
+        'campaign', 
+        zh_TW = "campaign", 
+        zh_CN = "campaign",
+        ja    = "キャンペーン"
     )
     card = _(
         'card', 
@@ -1327,6 +1341,12 @@ class locale:
         'secsep', 
         zh_TW = "秒數分隔", 
         zh_CN = "秒数分隔"
+    )
+    server = _(
+        'server', 
+        zh_TW = "伺服器", 
+        zh_CN = "伺服器",
+        ja = "サーバー"
     )
     silhouette = _(
         "silhouette", 
