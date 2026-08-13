@@ -1590,6 +1590,10 @@ class gamename:
         zh_CN = "sfp", 
         ja    = "シャニソン"
     )
+    t7s = _(
+        "t7s", 
+        ja    = "ナナシス"
+    )
     wds = _(
         "wds", 
         zh_TW = "wds", 

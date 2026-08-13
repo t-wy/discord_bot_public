@@ -91,25 +91,30 @@ class GameNameGlossary:
        "SFP",
         ja      = "シャニソン"
     )
+    T7S = _(
+       "T7S",
+        ja      = "ナナシス"
+    )
     WDS = _(
        "WDS",
         ja      = "ユメステ"
     )
 
 class GameColor:
-    BDON   = 0xac96c6 # gradient from 0x413e70 to 0xac96c6
-    CG   = 0x848ac4
-    CGSS   = 0x848ac4
-    MLTD   = 0xffc20b
-    GKMS   = 0xf39800
-    HOLODORI   = 0x27c7ff
-    LLLL   = 0xfce8e6
-    PJSK   = 0x39c5bb
-    RST   = 0xee2288
-    SC   = 0x8adfff
-    SFP   = 0x8adfff
-    WDS   = 0xee5f5f
-    IPR   = 0x1428ff
+    BDON     = 0xac96c6 # gradient from 0x413e70 to 0xac96c6
+    CG       = 0x848ac4
+    CGSS     = 0x848ac4
+    MLTD     = 0xffc20b
+    GKMS     = 0xf39800
+    HOLODORI = 0x27c7ff
+    LLLL     = 0xfce8e6
+    PJSK     = 0x39c5bb
+    RST      = 0xee2288
+    SC       = 0x8adfff
+    SFP      = 0x8adfff
+    T7S      = 0x0aaaf5
+    WDS      = 0xee5f5f
+    IPR      = 0x1428ff
 
 # categorized glossary lists
 

@@ -1,4 +1,7 @@
-from typing import Dict
+from typing import *
+
+if TYPE_CHECKING:
+    from common.dict_lazy import MsgpackDict
 
 def unpack(data: bytes) -> list:
     """
@@ -39,10 +42,25 @@ def unpack(data: bytes) -> list:
     unpacker.feed(data)
     return list(unpacker)
 
+@overload
+def master_memory_raw(data: bytes, compressed: Literal[True] = ...) -> 'MsgpackDict':
+    ...
 
-def master_memory_raw(data: bytes) -> Dict[str, list]:
+@overload
+def master_memory_raw(data: bytes, compressed: Literal[False] = ...) -> Dict[str, list]:
+    ...
+
+def master_memory_raw(data: bytes, compressed: bool = False):
     content = unpack(data)
-    return {key: content[index + 1] for index, (key, (offset, length)) in enumerate(content[0].items())}
+    result = {
+        key: content[index + 1]
+        for index, (key, (offset, length))
+        in enumerate(content[0].items())
+    }
+    if compressed:
+        from common.dict_lazy import MsgpackDict
+        return MsgpackDict(result)
+    return result
 
 if __name__ == "__main__":
     # test type 99
