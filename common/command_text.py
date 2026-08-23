@@ -729,6 +729,20 @@ class description:
         zh_TW = "取得遊戲劇情", 
         zh_CN = "取得游戏剧情"
     )
+    subunit = _(
+        "Sub-unit",
+        zh_TW = "副團體",
+        zh_CN = "副团体",
+        ja    = "サブユニット", 
+        ko    = "서브_유닛"
+    )
+    subunit_group = _(
+        "Sub-group",
+        zh_TW = "副團體",
+        zh_CN = "副团体",
+        ja    = "サブユニット", 
+        ko    = "서브_유닛"
+    )
     table_name = _(
         "Table name", 
         zh_TW = "表格名稱", 
@@ -739,6 +753,20 @@ class description:
         zh_TW = "Campaign 的類型", 
         zh_CN = "Campaign 的类型",
         ja    = "キャンペーンの種類"
+    )
+    unit =_(
+        "Unit",
+        zh_TW = "團體",
+        zh_CN = "团体",
+        ja    = "ユニット",
+        ko    = "유닛"
+    )
+    unit_group =_(
+        "Group",
+        zh_TW = "團體",
+        zh_CN = "团体",
+        ja    = "ユニット",
+        ko    = "유닛"
     )
     unit_detail = _(
         'Show skill info', 
@@ -1469,6 +1497,20 @@ class locale:
         zh_CN = "剧情", 
         ja    = "コミュ"
     ) # story, but using the phrase コミュ
+    subunit = _(
+        "subunit",
+        zh_TW = "副團體",
+        zh_CN = "副团体",
+        ja    = "サブユニット", 
+        ko    = "서브_유닛"
+    )
+    subunit_group = _(
+        "subgroup",
+        zh_TW = "副團體",
+        zh_CN = "副团体",
+        ja    = "サブユニット", 
+        ko    = "서브_유닛"
+    )
     table_name = _(
         "table_name", 
         zh_TW = "表格名稱", 
@@ -1480,6 +1522,20 @@ class locale:
         zh_CN = "种类", 
         ja    = "タイプ"
     ) # e.g. ranking type
+    unit =_(
+        "unit",
+        zh_TW = "團體",
+        zh_CN = "团体",
+        ja    = "ユニット",
+        ko    = "유닛"
+    )
+    unit_group =_(
+        "group",
+        zh_TW = "團體",
+        zh_CN = "团体",
+        ja    = "ユニット",
+        ko    = "유닛"
+    )
     unreleased = _(
         "unreleased", 
         zh_TW = "未公開", 

@@ -574,6 +574,12 @@ class PlayerGlossary:
         zh_TW   = "Rate",
         zh_CN   = "Rate"
     )
+    registration_time = _(
+        "Registration Time",
+        ja      = "登録日時",
+        zh_TW   = "註冊時間",
+        zh_CN   = "注册时间"
+    )
 
 class CircleGlossary:
     circle_comment = _(

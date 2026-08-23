@@ -466,6 +466,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     169: [ # 花と、雪と、ドラムンベース。
         "花と、雪と、Drum'n' Bass.",
+        '花一輪',
     ],
     170: [ # Starry Colors
         "スターリー・カラーズ",
@@ -724,8 +725,6 @@ song_alias_list: Dict[int, List[str]] = {
 
 def setup(client: 'bot_client.BotClient'):
     # reload whatever creates the Song instances
-    # from basic_utility import full_reload
-    # full_reload("wds.song", message_client = client)
     from .game_manager import managers
     from common.song import SongList
     from console_color import color_print

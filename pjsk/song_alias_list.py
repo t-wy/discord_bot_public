@@ -1685,6 +1685,9 @@ song_alias_list: Dict[int, List[str]] = {
         '視奸',
         '監視',
     ],
+    631: [ # 天才ロック
+        '天才Rock',
+    ],
     632: [ # Surges (Check WDS 85 Also)
         '被海放',
     ],
@@ -1694,6 +1697,8 @@ song_alias_list: Dict[int, List[str]] = {
     635: [ # ありのままのストーリーを
         "ありのままの Story を",
         '這本色出演的故事',
+        '有りの侭のストーリーを',
+        '有りの侭のStoryを',
     ],
     636: [ # エクスプロウル
         "Explore",
@@ -1708,6 +1713,9 @@ song_alias_list: Dict[int, List[str]] = {
     639: [ # マリオネットダンサー
         "Marionette Dancer",
         '木偶舞者',
+    ],
+    642: [ # このまんまでいこう
+        'この侭で行こう',
     ],
     643: [ # About me
         '有關我',
@@ -1734,6 +1742,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     649: [ # サヨナラ天国また来て地獄
         '再見天國再臨地獄',
+        'また来て地獄サヨナラ天国',
+        '地獄再會天堂再見',
+        '再臨地獄再見天國',
     ],
     650: [ # あの夏が飽和する。 (Check WDS 118 Also)
         "那个夏日已然饱和。", # https://www.bilibili.com/video/BV1CGdAYoEJJ
@@ -1931,6 +1942,9 @@ song_alias_list: Dict[int, List[str]] = {
         'アルカリ劣等生',
         'Alkali 劣等生',
     ],
+    728: [ # スターダストレイン
+        'Stardust Rain',
+    ],
     732: [ # 天藍のアイスヘヴン
         '天藍の Ice Heaven',
     ],
@@ -1954,6 +1968,30 @@ song_alias_list: Dict[int, List[str]] = {
         "Dreamer's Beat",
         "Dreamers' Beat",
     ],
+    745: [ # ANiMA
+        '靈魂',
+    ],
+    747: [ # SAIRAI
+        '再来',
+    ],
+    748: [ # Saika
+        '彩華',
+    ],
+    750: [ # ロスタイムメモリー
+        'Losstime Memory',
+    ],
+    751: [ # アディショナルメモリー
+        'Additional Memory',
+    ],
+    753: [ # 空想フォレスト
+        '空想Forest',
+    ],
+    755: [ # 初音狂奏曲第01番「彗惺」
+        '初音狂奏曲第01番「彗星」',
+    ],
+    757: [ # ひかりのあつめかた
+        '光の集め方',
+    ],
     758: [ # ラプス
         'lapse',
     ],
@@ -1963,11 +2001,23 @@ song_alias_list: Dict[int, List[str]] = {
     760: [ # オールイン・ワン
         'All in one',
     ],
+    764: [ # オツキミリサイタル
+        'オツキミRecital',
+        'お月見Recital',
+        'お月見リサイタル',
+    ],
     791: [ # シティライツ
         'City Lights',
     ],
     792: [ # アストロノーツ
         'Astronauts',
+    ],
+    794: [ # デロスサントス
+        'De Los Santos',
+        '德勒聖圖',
+        '聖徒之聲',
+        '迪洛斯桑托斯',
+        '德洛斯桑托斯',
     ],
     10001: [ # 장산범
         '萇山虎',
@@ -2001,9 +2051,6 @@ song_alias_list: Dict[int, List[str]] = {
 
 def setup(client: 'bot_client.BotClient'):
     # reload whatever creates the Song instances
-    # from basic_utility import full_reload
-    # full_reload("pjsk.song", message_client = client)
-    # call reload_lookup from all songlist in game_manager instead
     from .game_manager import managers
     from common.song import SongList
     from console_color import color_print
