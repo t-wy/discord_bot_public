@@ -1,4 +1,5 @@
 try:
+    # https://burtleburtle.net/bob/hash/spooky.html
     import cppimport.import_hook
     from .spookyhash_cpp import hash128
 except:

@@ -118,9 +118,13 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     35: [ # チューリングラブ
         "Turing Love",
+        '圖靈之戀',
     ],
     37: [ # Shiny Smily Story
         "シャイニー・スマイリー・ストーリー",
+    ],
+    38: [ # 変わらないもの
+        '不會改變的事物',
     ],
     39: [ # Realize
         "リアライズ",
@@ -370,12 +374,15 @@ song_alias_list: Dict[int, List[str]] = {
     123: [ # ヴァンパイア
         "Vampire",
         'The vampire', # On Jacket
+        '吸血鬼',
     ],
     124: [ # エジソン
         "Edison",
+        '愛迪生',
     ],
     125: [ # 強風オールバック
         "強風All Back",
+        '強風大背頭',
     ],
     128: [ # オドループ
         "Oddloop",

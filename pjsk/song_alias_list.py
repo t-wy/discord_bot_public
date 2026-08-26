@@ -75,6 +75,8 @@ song_alias_list: Dict[int, List[str]] = {
         "脱法 Rock",
         '脱法搖滾',
         '枉法搖滾',
+        '脫髮搖滾', # ???
+        '脫髮 Rock', # ???
     ],
     22: [ # 命に嫌われている
         '被生命厭惡著',
@@ -90,6 +92,12 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     41: [ # スイートマジック
         '甜蜜魔法',
+    ],
+    43: [ # ネクストネスト
+        '下一個巢',
+    ],
+    45: [ # 39みゅーじっく！
+        '39音樂',
     ],
     46: [ # グリーンライツ・セレナーデ
         "綠光小夜曲",
@@ -125,6 +133,9 @@ song_alias_list: Dict[int, List[str]] = {
         '變身馬鈴薯',
         '變身薯仔',
     ],
+    54: [ # Ready Steady
+        'RS',
+    ],
     60: [ # 悔やむと書いてミライ
         "悔やむと書いて未来", # kanji
     ],
@@ -133,9 +144,12 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     66: [ # ハロ／ハワユ
         "哈囉/你好嗎", # direct translation
+        '哈嘍/你好嗎',
+        '你好/你好嗎',
     ],
     68: [ # ダンスロボットダンス
         '跳舞機器人跳舞',
+        '舞蹈機器人舞蹈',
     ],
     69: [ # フラジール
         '易碎',
@@ -174,8 +188,19 @@ song_alias_list: Dict[int, List[str]] = {
         "夜咄 Deceive",
         '夜談欺騙',
     ],
+    83: [ # Gimme×Gimme
+        'GxG',
+        'GimmexGimme',
+        'Gimmex2',
+        'Gimme×2',
+        'Gimme²',
+    ],
     84: [ # ジャンキーナイトタウンオーケストラ
         '癮者之夜城鎮樂隊',
+    ],
+    86: [ # on the rocks
+        '石頭上',
+        '在石上',
     ],
     88: [ # チュルリラ・チュルリラ・ダッダッダ！
         '告老師',
@@ -205,6 +230,10 @@ song_alias_list: Dict[int, List[str]] = {
         '被遺留一人的號哭',
         '最後一名的號哭',
         '失去一人的號哭',
+        'lost one的哭泣',
+        'ロストワンの嚎哭',
+        'ロストワンの號泣',
+        'ロストワンの痛哭',
     ],
     99: [ # モア！ジャンプ！モア！
         '多跳多',
@@ -213,6 +242,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     101: [ # RAD DOGS
         '狗',
+        '紅狗',
+        '酷狗',
     ],
     103: [ # ニジイロストーリーズ
         '虹色故事',
@@ -267,6 +298,11 @@ song_alias_list: Dict[int, List[str]] = {
         '哀滴微笑',
         '愛的微笑',
     ],
+    118: [ # ＊ハロー、プラネット。
+        '＊你好，行星。',
+        '＊哈嘍，行星。',
+        '＊哈囉，行星。',
+    ],
     119: [ # ワールズエンド・ダンスホール
         '舞廳',
     ],
@@ -281,6 +317,7 @@ song_alias_list: Dict[int, List[str]] = {
         'Dancing☆dancing☆Time',
         'パピプペポジティブ☆ダンスタイム',
         'Papipupepo',
+        'pdt', # Positive Dance Time (separating dance and time)
     ],
     123: [ # どりーみんチュチュ
         '啾啾',
@@ -288,6 +325,7 @@ song_alias_list: Dict[int, List[str]] = {
     124: [ # みくみくにしてあげる♪【してやんよ】
         '把你MIKUMIKU掉♪【MIKU掉喔～】',
         '把你給MIKUMIKU掉♪【MIKU掉喔～】',
+        '把你咪哭咪哭掉♪【咪哭掉喔～】',
     ],
     126: [ # シネマ
         "電影",
@@ -325,6 +363,11 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     137: [ # 花を唄う
         '歌頌花束',
+        '花唄',
+        '花貝',
+    ],
+    138: [ # KING
+        '王',
     ],
     139: [ # 夜に駆ける
         '夜仁駆什歹', # ？？？
@@ -379,9 +422,14 @@ song_alias_list: Dict[int, List[str]] = {
         '尺子',
         '開演時刻的支配者',
     ],
+    161: [ # magic number
+        '神奇數字',
+        '魔法數字',
+    ],
     162: [ # エンドマークに希望と涙を添えて
         "End Mark に希望と涙を添えて",
         '希望淚',
+        '希望類',
     ],
     163: [ # the EmpErroR
         '皇帝',
@@ -428,10 +476,24 @@ song_alias_list: Dict[int, List[str]] = {
         "流星的脈動",
         "Meteor Pulse", # compound noun "of" reversal
         '流星Pulse',
+        '星乃一',
     ],
     174: [ # いーあるふぁんくらぶ (Check WDS 176 Also)
         '1 2 粉絲俱樂部',
         '一二粉絲俱樂部',
+        '你好中國',
+        '嗨嗨 China',
+        'ハイハイチャイナ',
+        'Hi Hi China',
+        '周杰倫',
+        '張國榮',
+        'レスリー・チャン',
+        'ジェイ・チョウ',
+        'ワン・リーホン',
+        '王力宏',
+        'Leslie Cheung',
+        'Jay Chou',
+        'Leehom Wang',
     ],
     175: [ # 拝啓ドッペルゲンガー
         "拝啓 Doppelganger",
@@ -454,13 +516,39 @@ song_alias_list: Dict[int, List[str]] = {
     181: [ # 愛して愛して愛して
         '愛我愛我愛我',
         '深愛著深愛著深愛著',
+        '愛して×3',
+        '愛我×3',
+        '深愛著×3',
+        '愛是鐵×3',
+        '愛是鐵愛是鐵愛是鐵',
+    ],
+    182: [ # Flyer!
+        '飛翔者',
+        '飛人',
+        '傳單',
+        '飛兒',
+    ],
+    183: [ # フィクサー
+        '修復者',
     ],
     184: [ # Hello,world!
         '你好，世界！',
         '世界你好！',
+        '哈囉，世界！',
+        '哈嘍，世界！',
+    ],
+    185: [ # しっくおぶはうす！
+        '厭倦居家',
+        '受夠了這個家',
+        '病屋',
+        '病家',
+        'Soh',
+        'soh', # notice みかぼし (star of heaven)
+        '餅屋',
     ],
     186: [ # 初音天地開闢神話
         '開天闢地',
+        '開闢天地',
     ],
     187: [ # ロウワー (Lower)
         "Lower", # EN name: Lower one's eyes (Lost One's Weeping steal the best match)
@@ -496,6 +584,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     195: [ # PaⅢ.SENSATION
         'passionate three dot sensation',
+        'PaIII.SENSATION',
+        'PaⅢ.',
+        'Pa3.SENSATION',
     ],
     196: [ # オーダーメイド
         "Ordermade",
@@ -543,6 +634,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     210: [ # 雨とペトラ
         "雨と Petra",
+        'RnP',
     ],
     211: [ # イフ
         '衣服', # ？
@@ -550,6 +642,7 @@ song_alias_list: Dict[int, List[str]] = {
         '義父', # ？
         '姨夫', # ？
         '伊芙', # ？
+        '如果',
     ],
     212: [ # 星空のメロディー
         "星空の Melody",
@@ -558,6 +651,9 @@ song_alias_list: Dict[int, List[str]] = {
     214: [ # パレットには君がいっぱい
         "Palette には君がいっぱい",
         '調色盤上裝滿了你',
+    ],
+    215: [ # ジウダス
+        '猶大',
     ],
     216: [ # ルカルカ★ナイトフィーバー
         '流歌流歌★晚上發燒',
@@ -583,6 +679,11 @@ song_alias_list: Dict[int, List[str]] = {
         "大臉", # Popular alias
         "你排名掉了", # Popular alias
         '失物招領',
+        'LnF',
+    ],
+    227: [ # ONESELF
+        '一己',
+        '自己',
     ],
     229: [ # 脳漿炸裂ガール
         "脳漿炸裂 Girl",
@@ -600,6 +701,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     233: [ # コスモスパイス
         '宇宙辛香料',
+        '宇宙調味料',
     ],
     234: [ # 徳川カップヌードル禁止令
         "徳川 Cup Noodle 禁止令",
@@ -608,6 +710,7 @@ song_alias_list: Dict[int, List[str]] = {
     235: [ # Journey
         '旅行',
         '旅途',
+        '旅程',
     ],
     237: [ # 君の夜をくれ
         '給我你的夜晚',
@@ -638,9 +741,15 @@ song_alias_list: Dict[int, List[str]] = {
         '契合的節奏',
         '契合的節拍',
         '阿吽的節奏',
+        '阿哞',
     ],
     246: [ # エイリアンエイリアン
         "外星人",
+    ],
+    247: [ # Copycat
+        '拷貝貓',
+        '模仿者',
+        '複製貓',
     ],
     248: [ # バグ
         "故障", # translation
@@ -665,6 +774,7 @@ song_alias_list: Dict[int, List[str]] = {
         '雙重套索踢',
         '雙重套索',
         '轉圈歌',
+        '轉圈圈',
     ],
     257: [ # てらてら
         '熠熠闪光',
@@ -680,6 +790,10 @@ song_alias_list: Dict[int, List[str]] = {
         "星屑 Utopia",
         '星屑烏托邦',
         '星屑下的理想鄉',
+    ],
+    264: [ # パラソルサイダー
+        '遮陽傘西打',
+        '遮陽傘蘇打水',
     ],
     266: [ # YY
         "丫丫",
@@ -720,6 +834,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     280: [ # 虚ろを扇ぐ
         '扇動虛空',
+        '恤衫',
+        '虛善',
     ],
     281: [ # 気まぐれメルシィ
         "気まぐれ Mercy",
@@ -737,6 +853,9 @@ song_alias_list: Dict[int, List[str]] = {
         '星空樂團',
         '星空樂隊',
     ],
+    284: [ # インビジブル
+        '隱形',
+    ],
     285: [ # ÅMARA(大未来電脳)
         "AMARA", # without bracket or character modifiers
         "大未来電脳", # only bracket contents
@@ -744,6 +863,17 @@ song_alias_list: Dict[int, List[str]] = {
         '阿媽啦',
         '阿嬤啦',
         '阿嫲啦',
+    ],
+    286: [ # Hello, Worker
+        '你好，工作者',
+        '哈嘍，工作者',
+        '哈囉，工作者',
+        '你好，工人',
+        '哈嘍，工人',
+        '哈囉，工人',
+        '你好，勞工',
+        '哈嘍，勞工',
+        '哈囉，勞工',
     ],
     290: [ # どんな結末がお望みだい？ (Removed)
         "どんな結末がお望みだい？",
@@ -773,6 +903,10 @@ song_alias_list: Dict[int, List[str]] = {
     298: [ # ネトゲ廃人シュプレヒコール
         "Net Game 廃人 Sprechchor",
         '網路遊戲廢人合唱曲',
+        '網路遊戲廢人',
+        'ネトゲ廃人',
+        '網遊廢人',
+        '網遊廢人合唱曲',
     ],
     299: [ # エゴイスト
         "利己主義", # JP term
@@ -804,6 +938,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     311: [ # 夜明けと蛍
         '黎明與螢火蟲',
+        'DnF',
     ],
     313: [ # FREELY TOMORROW
         '自在明日',
@@ -823,6 +958,9 @@ song_alias_list: Dict[int, List[str]] = {
         '窩操破譜',
         '哇啥破譜',
         '喎啥破譜',
+        'Wassup? Pop!',
+        'Wup? Pop!',
+        '怎麼了？流行音樂！',
     ],
     316: [ # ひつじがいっぴき
         "羊が一匹",
@@ -834,9 +972,18 @@ song_alias_list: Dict[int, List[str]] = {
         '音樂就像魔法一樣！',
         '像是魔法一般的音樂！',
     ],
+    318: [ # Sharing The World
+        '分享世界',
+    ],
     319: [ # Decade
         '十年',
         '年代',
+    ],
+    320: [ # Booo!
+        'Booooooooooooooo', # Many o's
+    ],
+    321: [ # アトラクトライト
+        '吸引光',
     ],
     322: [ # 絶え間なく藍色
         '無盡的藍色',
@@ -867,15 +1014,33 @@ song_alias_list: Dict[int, List[str]] = {
         "Epilog without you",
         '後記里沒有你的身影',
     ],
+    334: [ # Vampire's ∞ pathoS
+        '吸血鬼的 ∞ 悲憫',
+    ],
     335: [ # トラッシュ・アンド・トラッシュ！
         '垃圾',
+        'TnT',
+    ],
+    336: [ # Be The MUSIC!
+        '成為音樂',
+    ],
+    337: [ # METEOR
+        '流星',
+    ],
+    338: [ # Where shall we go?
+        '我們要去哪？',
+        '我們該去哪？',
     ],
     340: [ # とても素敵な六月でした
         "とても素敵な6月でした",
         'June', # 六月
     ],
+    342: [ # Blue Star
+        '藍星',
+    ],
     343: [ # スノーマン
         '雪人',
+        '雪男',
     ],
     344: [ # 脳内革命ガール
         "脳内革命 Girl",
@@ -917,6 +1082,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     358: [ # 心做し
         '心理作用',
+        '心做J',
     ],
     359: [ # 名も無き革命
         '無名革命',
@@ -929,6 +1095,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     361: [ # きゅうくらりん
         '心動不已',
+        '心跳不止',
+        'ちゅうぶらりん',
+        'ぎゅうぐらりん',
+        '宙ぶらりん',
     ],
     363: [ # UNDERWATER
         '水下',
@@ -991,6 +1161,12 @@ song_alias_list: Dict[int, List[str]] = {
     385: [ # 神っぽいな
         '像是神一樣',
     ],
+    387: [ # Hello Builder
+        'Hello建築者',
+        '你好建築者',
+        '哈嘍建築者',
+        '哈囉建築者',
+    ],
     388: [ # 初音ミクの激唱 (FULL) (The Intense Voice of Hatsune Miku (FULL))
         "Hatsune Miku's Intense Voice (FULL)",
     ],
@@ -1005,9 +1181,13 @@ song_alias_list: Dict[int, List[str]] = {
     392: [ # 春嵐
         '春日風暴',
     ],
+    394: [ # ボトルケーキ
+        '瓶子蛋糕',
+    ],
     395: [ # サマータイムレコード
         '夏時記錄',
         '夏令時記錄',
+        '夏日紀錄',
     ],
     396: [ # 東京テディベア
         "東京Teddy Bear",
@@ -1039,6 +1219,11 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     402: [ # エンヴィーベイビー
         "Envy Baby",
+        '嫉妒寶貝',
+        '妒忌寶貝',
+    ],
+    404: [ # blender
+        '攪拌機',
     ],
     405: [ # MOTTO!!!
         '摸頭',
@@ -1100,6 +1285,13 @@ song_alias_list: Dict[int, List[str]] = {
     424: [ # インテグラル
         '積分',
         '缺一不可',
+        '不可或缺的',
+        '∫',
+    ],
+    425: [ # Cool Me Down
+        '冷卻我',
+        '幫我降溫',
+        '讓我冷靜',
     ],
     427: [ # 幽光、1/fのゆらめき
         '幽光，1/f的波動',
@@ -1108,6 +1300,9 @@ song_alias_list: Dict[int, List[str]] = {
         "ときめき Jet Coaster",
         "Tokimeki Jet Coaster",
         '心跳不止的過山車',
+    ],
+    429: [ # はぐ
+        '抱',
     ],
     430: [ # 『んっあっあっ。』
         '嗯啊啊',
@@ -1187,6 +1382,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     461: [ # おどロボ
         '舞蹈機器人',
+        'おど口术',
+        '跳舞機器人',
     ],
     462: [ # レッドランドマーカー
         "Red Land Marker",
@@ -1194,6 +1391,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     463: [ # ハッピーチートデー
         "Happy Cheat Day",
+    ],
+    464: [ # Intergalactic Bound
+        '星空之跃', # ac=43723005
+        '星際之躍',
     ],
     465: [ # 嬢王
         '女王',
@@ -1245,6 +1446,8 @@ song_alias_list: Dict[int, List[str]] = {
         "馬賽克卷 (Reloaded)", # Doesn't seem to be official anyways
         '瑞士捲 (Reloaded)',
         '馬賽克卷（重製版）',
+        '馬賽克角色 (Reloaded)',
+        '馬賽克角色 (重製版)',
     ],
     478: [ # フューエル
         '燃料',
@@ -1258,6 +1461,7 @@ song_alias_list: Dict[int, List[str]] = {
         "打咩人間噠!",
         '駄目人間だ!',
         '無用人類！',
+        '廢物人類！',
     ],
     483: [ # アコトバ
         'ア言葉',
@@ -1281,6 +1485,7 @@ song_alias_list: Dict[int, List[str]] = {
     491: [ # キャットラビング
         "Cat Loving",
         'Cat Rubbing',
+        '愛貓',
     ],
     493: [ # きょうもハレバレ
         '今日もハレバレ',
@@ -1297,6 +1502,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     496: [ # シルバーコレクター
         "Silver Collector",
+        '白銀收藏家',
+        '銀色收藏家',
     ],
     498: [ # はしる! とおく! とどく!
         '奔跑向前!傳達到!遙遠彼方!',
@@ -1305,6 +1512,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     499: [ # 混沌ブギ
         '混沌布吉',
+        '餛飩ブギ',
+        '餛飩布吉',
+        '餛飩不及',
+        '混沌不及',
     ],
     500: [ # 余花にみとれて
         '心醉余花',
@@ -1312,13 +1523,26 @@ song_alias_list: Dict[int, List[str]] = {
     501: [ # Bad Apple!! feat.SEKAI
         '壞蘋果',
         'Bad Apple',
+        '壊林檎',
+        '悪い林檎',
+        '腐ったリンゴ',
+        '悪いりんご',
+    ],
+    502: [ # Help me, ERINNNNNN!!
+        'ERIN',
     ],
     503: [ # 超最終鬼畜妹フランドール・Ｓ
         "超最終鬼畜妹Flandre-S",
         '超最終鬼畜妹芙蘭朵露·S',
     ],
+    504: [ # I know 愛脳.
+        '我知道愛脳。',
+    ],
     505: [ # コールボーイ
         "Call Boy",
+    ],
+    506: [ # QUEEN
+        '后',
     ],
     507: [ # エンパープル
         "Empurple",
@@ -1346,6 +1570,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     515: [ # イガク
         "醫學",
+        'ユ！',
     ],
     516: [ # あちこちデートさん
         "あちこち Date さん",
@@ -1367,10 +1592,12 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     521: [ # オーバーライド
         "Override",
+        '覆寫',
     ],
     523: [ # きみとぼくのレゾナンス
         "きみとぼくのResonance",
         '你我二人的共鳴',
+        '你我之間的共鳴',
     ],
     524: [ # それでも僕らは歌うことをやめない
         '即便如此我们也不会放弃歌唱',
@@ -1386,6 +1613,8 @@ song_alias_list: Dict[int, List[str]] = {
     529: [ # カルチャ
         "Culture",
         '文化',
+        '👌',
+        '🤏',
     ],
     530: [ # キャットフード
         "Cat Food",
@@ -1394,6 +1623,7 @@ song_alias_list: Dict[int, List[str]] = {
         "Mesmeriser",
         "Mesmerizer",
         "催眠者", # unofficial translated
+        '催眠術',
     ],
     532: [ # レイヤーノート
         "Layer Note",
@@ -1453,10 +1683,13 @@ song_alias_list: Dict[int, List[str]] = {
         'ロスト傘',
         'Lost☂️',
         'ロスト☂️',
+        '遺失雨傘',
     ],
     553: [ # パリィ
         "Parry",
         '招架',
+        'パリイ',
+        'パリー',
     ],
     555: [ # フュージョン
         "Fusion",
@@ -1537,6 +1770,8 @@ song_alias_list: Dict[int, List[str]] = {
     578: [ # ハローセカイ
         "Hello Sekai",
         '哈囉世界',
+        '你好世界',
+        '哈嘍世界',
     ],
     580: [ # 三日月ステップ
         "三日月 Step",
@@ -1549,6 +1784,7 @@ song_alias_list: Dict[int, List[str]] = {
         "Antiyou",
         '俺吃魚',
         '俺吃余',
+        '反對你',
     ],
     583: [ # アクセラレイト
         "Accelerate",
@@ -1575,6 +1811,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     588: [ # プラネットヒーロー
         "Planet Hero",
+        '行星英雄',
+        '星球英雄',
     ],
     589: [ # バレリーコ
         '芭蕾舞者',
@@ -1611,11 +1849,19 @@ song_alias_list: Dict[int, List[str]] = {
         "Envy Cat Walk",
         '令人嫉妒的貓步',
     ],
+    596: [ # D/N/A
+        '去氧核醣核酸',
+        '脫氧核糖核酸',
+    ],
     597: [ # その絵の名前は
         '繪名',
         'ena',
         '那幅畫的名字是',
         '其繪名為',
+    ],
+    601: [ # ルマ
+        '嚕馬',
+        '盧媽媽',
     ],
     603: [ # ドレミファロンド
         '音階圓舞曲',
@@ -1638,6 +1884,19 @@ song_alias_list: Dict[int, List[str]] = {
         '星宙憂鬱',
         '星宙抑鬱',
         '星空抑鬱',
+    ],
+    611: [ # 好き！雪！本気マジック
+        '喜歡！雪！本氣',
+    ],
+    617: [ # ぽかぽかの星
+        '暖暖的星',
+        '暖洋洋的星',
+        '暖烘烘的星',
+    ],
+    618: [ # Fondant Step
+        '軟糖步伐',
+        '翻糖步伐',
+        '方旦糖步伐',
     ],
     620: [ # 紗痲
         '紗麻',
@@ -1702,6 +1961,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     636: [ # エクスプロウル
         "Explore",
+        '探索',
+        '探險',
     ],
     637: [ # 笑えたらえーやん！
         '笑了不就好了！',
@@ -1753,6 +2014,8 @@ song_alias_list: Dict[int, List[str]] = {
     651: [ # ホワイトハッピー
         "White Happy",
         '白色幸福',
+        '白色快樂',
+        '白色開心',
     ],
     652: [ # カレシのジュード
         "カレシのJude",
@@ -1778,6 +2041,8 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     656: [ # ブラッドドール
         "Blood Doll",
+        '血腥人偶',
+        '血娃娃',
     ],
     659: [ # あなたの空が泣くのなら
         '若你的天空在哭泣',
@@ -1799,6 +2064,8 @@ song_alias_list: Dict[int, List[str]] = {
     665: [ # ロケットサイダー
         "Rocket Cider",
         '火箭蘇打水',
+        '火箭汽水',
+        '火箭西打',
     ],
     667: [# ㋰責任集合体
         "ム責任集合体",
@@ -1814,6 +2081,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     670: [ # い〜やい〜やい〜や
         'Whatever whatever whatever', # https://www.youtube.com/watch?v=y8-6QPEes1k
+        'い〜や×3',
+        'Whatever×3',
+        'i〜ya×3',
     ],
     671: [ # 怪獣になりたい
         '我想化身為怪獸',
@@ -1834,6 +2104,16 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     678: [ # 金時計
         '金時鐘',
+    ],
+    679: [ # CRASH THE PARTY
+        '闖入派對',
+        '不請自來',
+        '搞砸派對',
+        '破壞派對',
+        '白撞',
+    ],
+    682: [ # あなたしか見えないの
+        '眼中只有你',
     ],
     683: [ # カラフルファンデーション
         'Colorful Foundation',
@@ -1876,6 +2156,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     705: [ # ラズベリー＊モンスター
         'Raspberry＊monster',
+        '樹莓*怪物',
+    ],
+    706: [ # 永遠甚だしい
+        '永遠至極',
     ],
     707: [ # さいたま2000
         '埼玉2000',
@@ -1903,9 +2187,14 @@ song_alias_list: Dict[int, List[str]] = {
         '放浪願望',
         '旅心',
     ],
+    713: [ # Nyanyanyanyanyanyanya!
+        'Nya×7!',
+        'にゃ×7!',
+    ],
     714: [ # フロイライン＝オジョウサマ
         'Fräulein=Ojousama',
         'フロイライン＝お嬢様',
+        '大小姐',
     ],
     717: [ # Ribbon
         '絲帶',
@@ -1913,18 +2202,25 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     718: [ # 幕を下ろそう、パレードへ
         '幕を下ろそう、Parade へ',
+        '謝幕遊行',
     ],
     719: [ # SHIAWASE FOR YOU!
         '幸せ FOR YOU!',
         'しあわせ FOR YOU!',
+        '予你幸福',
     ],
     721: [ # あいしていたのに
         '愛していたのに',
         '曾經深愛著的', # https://home.gamer.com.tw/artwork.php?sn=5764001
+        '明明曾愛著你',
+        '曾經深愛著你',
     ],
     722: [ # ダイダイダイダイダイキライ
         '大大大大大嫌い',
         '超級超級超級超級超級討厭',
+        'ダイ×5キライ',
+        '大×5嫌い',
+        '超級×5討厭',
     ],
     723: [ # ラヴィ
         'lavie',
@@ -1942,6 +2238,11 @@ song_alias_list: Dict[int, List[str]] = {
         'アルカリ劣等生',
         'Alkali 劣等生',
     ],
+    727: [ # T氏の話を信じるな
+        "Don't Believe in T",
+        '別相信T氏所說的話',
+        '不要相信T氏所說的話',
+    ],
     728: [ # スターダストレイン
         'Stardust Rain',
     ],
@@ -1950,6 +2251,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     734: [ # プロポーズ
         'Propose',
+        '求婚',
     ],
     735: [ # 傀儡のうつつ
         '傀儡の現',
@@ -1961,15 +2263,31 @@ song_alias_list: Dict[int, List[str]] = {
         'ストラタで待ち合わせ',
         'Strata で待ち合わせ',
     ],
+    739: [ # 世界の歩き方
+        '世界的走路方式',
+    ],
     741: [ # アイ・メイカー！
         'I Maker!',
+    ],
+    742: [ # 旅に帰る
+        '旅途歸來',
+        '歸旅',
     ],
     743: [ # ドリーマーズビート
         "Dreamer's Beat",
         "Dreamers' Beat",
+        '夢想家的節拍',
     ],
     745: [ # ANiMA
         '靈魂',
+        '阿你媽',
+        '阿里馬',
+        '啊你馬',
+        '啊你媽',
+        '啊你嗎',
+        '阿你嗎',
+        '阿尼瑪',
+        '阿尼馬',
     ],
     747: [ # SAIRAI
         '再来',
@@ -1982,6 +2300,10 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     751: [ # アディショナルメモリー
         'Additional Memory',
+        '額外回憶',
+        '回憶追加',
+        '目の届かない話',
+        '目光傳達不到的故事',
     ],
     753: [ # 空想フォレスト
         '空想Forest',
@@ -1991,6 +2313,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     757: [ # ひかりのあつめかた
         '光の集め方',
+        '光的收集方法',
+        '收集光的方法',
+        '光芒的匯聚之方',
     ],
     758: [ # ラプス
         'lapse',
@@ -2005,6 +2330,9 @@ song_alias_list: Dict[int, List[str]] = {
         'オツキミRecital',
         'お月見Recital',
         'お月見リサイタル',
+        '賞月Recital',
+        '賞月獨奏會',
+        '賞月演奏會',
     ],
     791: [ # シティライツ
         'City Lights',
@@ -2018,6 +2346,8 @@ song_alias_list: Dict[int, List[str]] = {
         '聖徒之聲',
         '迪洛斯桑托斯',
         '德洛斯桑托斯',
+        '棒球',
+        '野球',
     ],
     10001: [ # 장산범
         '萇山虎',

@@ -38,10 +38,22 @@ static PyMethodDef methods[] = {
 
 // Module definition
 static struct PyModuleDef module = {
+#ifdef _MSC_VER
+    PyModuleDef_HEAD_INIT,
+    "spookyhash_cpp",
+    NULL,
+    -1,
+    methods,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+#else
     .m_base = PyModuleDef_HEAD_INIT,
-    .m_name = "spookyhash_cpp",     // Module name
-    .m_size = -1,            // Size of per-interpreter state
+    .m_name = "spookyhash_cpp",
+    .m_size = -1,
     .m_methods = methods
+#endif
 };
 
 // Module initialization
