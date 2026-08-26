@@ -101,6 +101,7 @@ Currently the bot does not maintain a user-submitted song/character alias list.
 
 You may contribute to the file `song_alias_list.py` if a name is an unlisted officially translated title or titles with all the Katakana replaced with the borrowed term (in English or the source language) that is significantly different from the Romaji that makes the bot underestimate the name similarity.
 
+- LLLL ([song_alias_list.py](llll/song_alias_list.py))
 - PJSK ([song_alias_list.py](pjsk/song_alias_list.py))
 - WDS ([song_alias_list.py](wds/song_alias_list.py))
 
@@ -114,6 +115,7 @@ The following games have special status regarding BPM information in their chart
 - PJSK
   - The chart provides full BPM Info.
   - However, they forcefully set all measures to be 4/4, even for 3/4 songs like `去り人達のワルツ`.
+  - **Update:** Since the introduction of the in-game chart editor, the correct measure info is now provided in-game in the TextAsset "info.bytes" of the chart bundle.
 - WDS ([song_chart_known_bpm.py](wds/song_chart_known_bpm.py), [Current Result (Read-only)](https://github.com/t-wy/game-public-data/blob/main/wds/song_bpm.json))
   - The distance between ticks are eighth notes by default. Make sure the BPMs match so.
   - The "Chart BPM Debug" under the song difficulty menu displays the corresponding BPM that may facilitate BPM finding. (The auto BPM-finder also bases on that result.)
