@@ -49,6 +49,9 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     6: [ # ヒバナ -Reloaded-
         '火花',
+        'HIBANA',
+        'ヒバナ',
+        'hiabana', # ?
     ],
     8: [ # タイムマシン
         "時光機", # well known translation
@@ -781,6 +784,7 @@ song_alias_list: Dict[int, List[str]] = {
     ],
     259: [ # the WALL
         '牆',
+        '好牆',
     ],
     260: [ # ラブカ？
         '是愛嗎？',
@@ -2333,6 +2337,13 @@ song_alias_list: Dict[int, List[str]] = {
         '賞月Recital',
         '賞月獨奏會',
         '賞月演奏會',
+    ],
+    788: [ # アンチサイノウ
+        'ANTI-SAINOU',
+        '反才能',
+        'Anti-サイノウ',
+        'アンチ才能',
+        'Anti才能',
     ],
     791: [ # シティライツ
         'City Lights',
