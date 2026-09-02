@@ -1,3 +1,4 @@
+__hotreloadable__ = True
 # Python version implemented by @t-wy: https://github.com/t-wy
 
 """
@@ -24,7 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+# builtin moduies that would not be hot-reloaded
+from dataclasses import is_dataclass
 from typing import *
+from enum import Enum
+import struct
 
 def loads(data: bytes) -> Dict[int, object]:
     # return a JSON dumpable object (i.e. bytes as surrogateescape str)
@@ -52,7 +57,7 @@ def loads(data: bytes) -> Dict[int, object]:
                 size = reader.readVarint() & 0xffffffff
                 size -= (size & 0x80000000) << 1
                 assert reader.tell() + size <= len(data)
-                raw_bytes = reader.readBytes(size)
+                raw_bytes = reader.read(size)
                 try:
                     content = loads(raw_bytes)
                 except:
@@ -105,33 +110,34 @@ def dumps(obj: Dict[int, object]) -> bytes:
 # real protobuf to class instance
 # https://protobuf.dev/programming-guides/encoding/
 
-# by default wire type 0, but can be used in other wire types as fallback
-int32 = Annotated[int, "int32"] # signed but without zigzag
-int64 = Annotated[int, "int64"] # signed but without zigzag
-sint = Annotated[int, "sint"] # zigzag when encounting varint
-sint32 = sint64 = sint
-uint = Annotated[int, "uint"] # same as int
-uint32 = uint64 = uint
+if "NoneType" not in globals(): # Don't overwrite if the module is hot-relaoded
+    # by default wire type 0, but can be used in other wire types as fallback
+    int32 = Annotated[int, "int32"] # signed but without zigzag
+    int64 = Annotated[int, "int64"] # signed but without zigzag
+    sint = Annotated[int, "sint"] # zigzag when encounting varint
+    sint32 = sint64 = sint
+    uint = Annotated[int, "uint"] # same as int
+    uint32 = uint64 = uint
 
-fixed64 = Annotated[int, "fixed64"] # explicitly wire type 1, makes the distinction when parsed in wire type 2 as packed repeated fields
-sfixed64 = Annotated[int, "sfixed64"] # explicitly wire type 1, makes the distinction when parsed in wire type 2 as packed repeated fields
-fixed32 = Annotated[int, "fixed32"] # explicitly wire type 5, makes the distinction when parsed in wire type 2 as packed repeated fields
-sfixed32 = Annotated[int, "sfixed32"] # explicitly wire type 5, makes the distinction when parsed in wire type 2 as packed repeated fields
+    fixed64 = Annotated[int, "fixed64"] # explicitly wire type 1, makes the distinction when parsed in wire type 2 as packed repeated fields
+    sfixed64 = Annotated[int, "sfixed64"] # explicitly wire type 1, makes the distinction when parsed in wire type 2 as packed repeated fields
+    fixed32 = Annotated[int, "fixed32"] # explicitly wire type 5, makes the distinction when parsed in wire type 2 as packed repeated fields
+    sfixed32 = Annotated[int, "sfixed32"] # explicitly wire type 5, makes the distinction when parsed in wire type 2 as packed repeated fields
 
-double = Annotated[float, "double"] # explicitly wire type 1, makes the distinction from float (single) when parsed in wire type 2 as packed repeated fields
+    double = Annotated[float, "double"] # explicitly wire type 1, makes the distinction from float (single) when parsed in wire type 2 as packed repeated fields
 
-AnnotatedAlias = type(double) # used to check type later
+    AnnotatedAlias = type(double) # used to check type later
 
-string = Optional[str] # just an alias
+    string = Optional[str] # just an alias
 
-NoneType = type(None)
+    NoneType = type(None)
 
-class NextField:
-    """
-    Specify the next field number without using lots of None
-    """
-    def __class_getitem__(cls, field_number: int):
-        return Annotated[None, field_number]
+    class NextField:
+        """
+        Specify the next field number without using lots of None
+        """
+        def __class_getitem__(cls, field_number: int):
+            return Annotated[None, field_number]
 
 def deserialize_grpc(_type, content: bytes, preprocess: Optional[Callable[[bytes], bytes]] = None):
     assert content[0] == 0 # not compressed
@@ -142,62 +148,103 @@ def deserialize_grpc(_type, content: bytes, preprocess: Optional[Callable[[bytes
         payload = preprocess(payload)
     return deserialize(_type, payload)
 
+def repeated_varint(content: bytes) -> List[int]:
+    # using bytes is faster than a reader
+    assert len(content) == 0 or content[-1] < 0x80, "Last byte of Wire type 0 values must be less than 0x80"
+    length = len(content)
+    pos = 0
+    results = []
+    while pos < length:
+        result = 0
+        shift = 0
+        while True:
+            b = content[pos]
+            pos += 1
+            result |= (b & 0x7F) << shift
+            if not b & 0x80:
+                break
+            shift += 7
+        results.append(result)
+    return results
+
 def deserialize(_type, content: bytes, _temp = None):
-    from dataclasses import is_dataclass
+    """
+    _temp:
+        { _type : ( values, field_map, is_list_single_type )}
+        { enum : { enum value: enum instance } }
+    """
     assert is_dataclass(_type)
     from .byte_reader import LittleEndianReader
-    from enum import Enum
-    import struct
     if _temp is None:
         _temp = {}
+
     class_temp = _temp
     reader = LittleEndianReader(content)
-    def get_default_value(_type):
-        if _type is None or _type is NoneType: # deprecated fields
-            return None
-        if _type == string: # sometimes Optional[str] is defined elsewhere that does not use the string given here
-            return None
-        if isinstance(_type, type):
-            if issubclass(_type, Enum):
-                return _type(0)
-            if hasattr(_type, '__dataclass_fields__'):
-                return None
-        origin = getattr(_type, "__origin__", None)
-        if origin is list: # quick check to avoid get_origin, which is slow
-            return [] # use tuple to check we are not adding things to this placeholder list
-        if isinstance(_type, AnnotatedAlias) and origin is NoneType: # NextField
-            return None
-        return _type()
-    if _type in class_temp:
-        types, values, field_map, is_list_single_type = class_temp[_type]
-        values = values.copy() # values would be modified in place later
-    else:
-        # types = tuple(_type.__annotations__.values())
-        types = tuple(get_type_hints(_type, include_extras=True).values())
-        if any((
-            isinstance(t, AnnotatedAlias) and t.__origin__ is NoneType
-        ) for t in types): # NextField
+
+    def get_enum(_type: type[Enum], value):
+        """
+        much faster way to get enum than EnumMeta.__call__
+        """
+        if _type in class_temp:
+            lookup = class_temp[_type]
+        else:
+            lookup = { v.value : v for v in _type }
+            class_temp[_type] = lookup
+        return lookup[value]
+
+    def get_dataclass_info(_type: Any):
+        if _type in class_temp:
+            values, field_map, is_list_single_type = class_temp[_type]
+            values = values.copy() # values would be modified in place later
+        else:
+            # types = tuple(_type.__annotations__.values())
+            types = tuple(get_type_hints(_type, include_extras=True).values())
+            # if any((
+            #     isinstance(t, AnnotatedAlias) and t.__origin__ is NoneType
+            # ) for t in types): # NextField
             field_map = {}
             offset = 1
             for i, t in enumerate(types):
+                if t is None:
+                    continue
                 if isinstance(t, AnnotatedAlias) and t.__origin__ is NoneType:
                     next_field = t.__metadata__[0]
                     # so next_field is i + 1
                     offset = next_field - (i + 1)
                     continue
                 field_map[i + offset] = i
-        else:
-            field_map = {i + 1: i for i, t in enumerate(types) if t is not None}
-        values = [get_default_value(t) for t in types] # 1-based
-        is_list_single_type = [
-            (
-                (True, get_args(field_type)[0])
-                if getattr(field_type, "__origin__", None) is list  # quick check to avoid get_origin, which is slow
-                else (False, field_type)
-            )
-            for field_type in types
-        ]
-        class_temp[_type] = (types, values.copy(), field_map, is_list_single_type) # values would be modified in place later
+            # else:
+            #     field_map = {i + 1: i for i, t in enumerate(types) if t is not None}
+            values = [get_default_value(t) for t in types] # 1-based
+            is_list_single_type = [
+                (
+                    (True, get_args(field_type)[0])
+                    if getattr(field_type, "__origin__", None) is list  # quick check to avoid get_origin, which is slow
+                    else (False, field_type)
+                )
+                for field_type in types
+            ]
+            class_temp[_type] = (values.copy(), field_map, is_list_single_type) # values would be modified in place later
+        return values, field_map, is_list_single_type
+
+    def get_default_value(_type):
+        if _type is None or _type is NoneType: # deprecated fields
+            return None
+        if isinstance(_type, type):
+            if issubclass(_type, Enum):
+                return get_enum(_type, 0)
+            if hasattr(_type, '__dataclass_fields__'):
+                return None
+        if _type is string or _type == string: # sometimes Optional[str] is defined elsewhere that does not use the string given here
+            return None
+        origin = getattr(_type, "__origin__", None)
+        if origin is list: # quick check to avoid get_origin, which is slow
+            return [] # use tuple to check we are not adding things to this placeholder list
+        if isinstance(_type, AnnotatedAlias) and origin is NoneType: # NextField
+            return None
+        return _type()
+
+    values, field_map, is_list_single_type = get_dataclass_info(_type)
     total_length = len(reader.getvalue())
 
     def cast_wire_type_0(value, _type): # varint
@@ -224,7 +271,7 @@ def deserialize(_type, content: bytes, _temp = None):
             return value == 1
         if issubclass(_type, Enum):
             try:
-                return _type(value)
+                return get_enum(_type, value)
             except:
                 return value
         assert False, f"Cannot cast value {value} to type {_type}"
@@ -243,9 +290,10 @@ def deserialize(_type, content: bytes, _temp = None):
         assert False, f"Cannot cast value {value} to type {_type}"
 
     def cast_wire_type_2(value: bytes, _type, is_list: bool): # len
+        # these fields are single value as in type 2, so whether or not it is is_list should only return a single value
         if _type is bytes:
             return value, False
-        if _type is str or _type == string:
+        if _type is str or _type is string or _type == string:
             return value.decode('utf-8', 'surrogateescape'), False
         if hasattr(_type, '__dataclass_fields__'): # is_dataclass(_type):
             return deserialize(_type, value, _temp = _temp), False
@@ -278,11 +326,10 @@ def deserialize(_type, content: bytes, _temp = None):
                     value
                 ), True
             # wire type 0
-            assert len(value) == 0 or value[-1] < 0x80, "Last byte of Wire type 0 values must be less than 0x80"
-            sub_reader = LittleEndianReader(value)
-            temp = []
-            while sub_reader.tell() < len(value):
-                temp.append(cast_wire_type_0(sub_reader.readVarint(), _type))
+            temp = [
+                cast_wire_type_0(entry, _type)
+                for entry in repeated_varint(value)
+            ]
             return temp, True
         assert False, f"Cannot cast value {value} to type {_type}"
 
@@ -303,8 +350,9 @@ def deserialize(_type, content: bytes, _temp = None):
     while reader.tell() < total_length:
         # current = reader.tell() # debug
         tag = reader.readVarint()
-        field_number, wire_type = tag >> 3, tag & 0x7
+        field_number = tag >> 3
         assert field_number >= 1, f"Invalid field number: {field_number}"
+        wire_type = tag & 0x7
         # assert field_number in field_map, f"Invalid field number: {field_number}"
         # field_number -= 1
         field_number = field_map.get(field_number)
@@ -326,8 +374,9 @@ def deserialize(_type, content: bytes, _temp = None):
         elif wire_type == 2:  # len
             size = reader.readVarint() & 0xffffffff # int32 varint
             size -= (size & 0x80000000) << 1
-            assert reader.tell() + size <= total_length
-            value = reader.readBytes(size)
+            # assert reader.tell() + size <= total_length
+            value = reader.read(size)
+            assert len(value) == size
             if skip:
                 continue
             value, is_repeated = cast_wire_type_2(value, single_type, is_list)
@@ -339,30 +388,24 @@ def deserialize(_type, content: bytes, _temp = None):
         else:
             assert False, f"Wire type {wire_type} is not supported"
         if is_list:
-            if len(values[field_number]) == 0: # by this we don't need to deep copy the default list
-                if is_repeated:
-                    values[field_number] = value
-                else:
-                    values[field_number] = [value]
-            else:
+            if len(values[field_number]): # by this we don't need to deep copy the default list
                 if is_repeated:
                     values[field_number].extend(value)
                 else:
                     values[field_number].append(value)
+            else:
+                values[field_number] = value if is_repeated else [value]
         else:
             values[field_number] = value
     return _type(*values)
 
 def serialize(instance) -> bytes:
     _type = type(instance)
-    from dataclasses import is_dataclass
     assert is_dataclass(_type)
     # field_types = list(_type.__annotations__.values())
     field_types = list(get_type_hints(_type, include_extras=True).values())
     fields = list(_type.__dataclass_fields__.values())
     from .byte_reader import LittleEndianWriter
-    from enum import Enum
-    import struct
     def write_value(field_number, field_type, value) -> Tuple[int, bytes]:
         # typing_origin = get_origin(field_type)
         is_list = getattr(field_type, "__origin__", None) is list # quick check to avoid get_origin, which is slow
@@ -392,7 +435,7 @@ def serialize(instance) -> bytes:
             writer.writeVarint((field_number << 3) | 2)
             writer.writeVarint(len(value))
             writer.write(value)
-        elif field_type is str or field_type == string:
+        elif field_type is str or field_type is string or field_type == string:
             # wire type 2
             writer.writeVarint((field_number << 3) | 2)
             serialized = value.encode("utf-8", "surrogateescape")

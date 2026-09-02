@@ -1,6 +1,4 @@
-"""
-This file is safe for hot reloading.
-"""
+__hotreloadable__ = True
 
 from msgint import MsgInt
 from typing import *

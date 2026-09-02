@@ -1,3 +1,5 @@
+__hotreloadable__ = True
+
 """
 This file is a common interface for a Chart class for creating chart images.
 Implement subclasses for the note skin in different games

@@ -1,3 +1,5 @@
+__hotreloadable__ = True
+
 """
 Current List of Exceptions. Can be translated.
 """

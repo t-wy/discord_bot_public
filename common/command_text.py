@@ -396,6 +396,14 @@ class description:
         zh_TW = "素材名稱出現的字串（以空格分隔）", 
         zh_CN = "素材名称出现的字串（以空格分隔）"
     )
+    lang_locale = _(
+        'lang', 
+        zh_TW   = "語言", 
+        zh_CN   = "语言",
+        ja      = "言語", 
+        ko      = "언어", 
+        ko_Kore = "言語", 
+    ) # usually for language setting within the same game version
     latest_batch_card = _(
         "Latest card batch", 
         zh_TW = "最新批卡面", 
@@ -1157,6 +1165,14 @@ class locale:
         zh_CN = "关键字", 
         ja    = "キーワード"
     )
+    lang = _(
+        'lang', 
+        zh_TW   = "語言", 
+        zh_CN   = "语言",
+        ja      = "言語", 
+        ko      = "언어", 
+        ko_Kore = "言語", 
+    ) # usually for language setting within the same game version
     latest = _(
         'latest', 
         zh_TW = "最近", 

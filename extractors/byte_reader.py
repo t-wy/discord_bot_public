@@ -1,3 +1,5 @@
+__hotreloadable__ = True
+
 """
 MIT License
 
@@ -33,11 +35,11 @@ class Reader(BytesIO):
         result = 0
         shift = 0
         while True:
-            b = self.readByte()
+            b = self.read(1)[0]
             result |= (b & 0x7F) << shift
-            shift += 7
             if not b & 0x80:
                 break
+            shift += 7
         return result
     def readNullBytes(self) -> bytes:
         pos = self.tell()
