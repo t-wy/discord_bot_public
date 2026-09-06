@@ -99,11 +99,12 @@ Planned to be added:
 
 Currently the bot does not maintain a user-submitted song/character alias list.
 
-You may contribute to the file `song_alias_list.py` if a name is an unlisted officially translated title or titles with all the Katakana replaced with the borrowed term (in English or the source language) that is significantly different from the Romaji that makes the bot underestimate the name similarity.
-
-- LLLL ([song_alias_list.py](llll/song_alias_list.py))
-- PJSK ([song_alias_list.py](pjsk/song_alias_list.py))
-- WDS ([song_alias_list.py](wds/song_alias_list.py))
+The alias list can be viewed via the "Song Alias" button under the song info embed. You may raise a Github issue or suggest in the dedicated discord channel in the support server if a name is:
+- Unlisted officially translated title
+- Titles with all the Katakana replaced with the borrowed term (in English or the source language) (usually different from the Romaji)
+- Well known aliases which are not taken from the song title
+- Some text variant / common typo which may lead to the bot underestimate the name similarity
+- Other aliases that worth to be included (e.g. banner order, out-of-game event, unique terms in the lyrics)
 
 ### Song BPM:
 
