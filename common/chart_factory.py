@@ -718,7 +718,7 @@ class Chart:
             elif lane_style == Chart.LaneStyle.BOUNDARY:
                 assert self.num_lanes % minor_lane == 0
         from PIL import Image, ImageFont, ImageDraw
-        import common.graphics as ImageDraw
+        from common import graphics as ImageDraw
         from image_composition import alpha_composition, BlendMode
         from math import ceil
         import asyncio

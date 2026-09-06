@@ -83,7 +83,7 @@ async def download(
     data: Data,
     _type: Union[Literal["assetbundle"], Literal["resources"]]
 ) -> bytes:
-    import common.arequests as arequests
+    from common import arequests
     response = await arequests.get(build_url(urlFormat, data, _type))
     if response.status != 200:
         from common.exception import AssetDownloadException
