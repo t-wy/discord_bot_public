@@ -133,6 +133,12 @@ class description:
         zh_CN = "角色名称", 
         ja    = "キャラクター名"
     )
+    character_alias = _(
+        "Character Alias", 
+        zh_TW = "角色暱稱", 
+        zh_CN = "角色暱称", 
+        ja    = "キャラクターの略称"
+    )
     character_event_chart = _(
         "Character Event ranking chart", 
         zh_TW = "角色活動排名走勢圖", 
@@ -292,6 +298,19 @@ class description:
         zh_CN = "个别角色活动榜线", 
         ja    = "キャラクター別イベントボーダー"
     )
+    event_highscore = _(
+        "Event highscore rankings.", 
+        zh_TW = "活動高分排名", 
+        zh_CN = "活动高分排名", 
+        ja    = "イベントハイスコアランキング"
+    )
+    event_highscore_borders = _(
+        "Event highscore rankings borders.", 
+        zh_TW = "活動高分排名榜線", 
+        zh_CN = "活动高分排名榜线", 
+        ja    = "イベントハイスコアランキングボーダー"
+    )
+
     event_ranking_predict = _(
         "Event ranking prediction", 
         zh_TW = "活動榜線預測", 
@@ -318,6 +337,7 @@ class description:
         zh_TW = "來自 jiiku831 的角色活動榜線預測",
         zh_CN = "来自 jiiku831 的角色活动榜线预测"
     )
+
     event_song = _(
         'Is Event Song', 
         zh_TW = "活動歌曲", 
@@ -467,11 +487,6 @@ class description:
         zh_TW = "限制其他人使用", 
         zh_CN = "限制其他人使用"
     )
-    order_legacy = _(
-        'Release order (0: All)', 
-        zh_TW = "卡面推出次序（0：全部）", 
-        zh_CN = "卡面推出次序（0：全部）"
-    )
     order_0 = _(
         'The release order of the card batch (0: All unreleased, 1: Latest)', 
         zh_TW = "相關卡面的推出批次（0 為所有未推出，1 為最近）", 
@@ -492,6 +507,16 @@ class description:
         zh_TW = "相關海報的推出批次（1 為最近）", 
         zh_CN = "相关海报的推出批次（1 为最近）"
     )
+    order_legacy = _(
+        'Release order (0: All)', 
+        zh_TW = "卡面推出次序（0：全部）", 
+        zh_CN = "卡面推出次序（0：全部）"
+    )
+    order_legacy_user = _(
+        'Release order', 
+        zh_TW = "卡面推出次序", 
+        zh_CN = "卡面推出次序"
+    )
     ping = _(
         "Test Connectivity", 
         zh_TW = "連通確認", 
@@ -503,6 +528,12 @@ class description:
         zh_TW = "玩家 ID", 
         zh_CN = "玩家 ID", 
         ja    = "プレイヤー ID"
+    )
+    player_id2 = _(
+        'Another player id', 
+        zh_TW = "另一位玩家 ID", 
+        zh_CN = "另一位玩家 ID", 
+        ja    = "もう一人のプレイヤー ID"
     )
     player_info = _(
         "Player information.", 
@@ -583,6 +614,16 @@ class description:
         zh_TW = "重新編碼內容以使其能被傳送及預覽", 
         zh_CN = "重新编码内容以使其能被传送及预览"
     )
+    region = _( # server region
+        "Server region",
+        en      = "Server region",
+        zh_TW   = "伺服器地區",
+        zh_CN   = "服务器地区",
+        ja      = "サーバー地域",
+        ko      = "서버 지역",
+        ko_Kore = "서버 地域",
+        id      = "Wilayah server",
+    )
     reverse_guess = _(
         'Reverse sample', 
         zh_TW = "倒轉提供樣本", 
@@ -644,6 +685,12 @@ class description:
         "Include Spine Files", 
         zh_TW = "包括 Spine 貼圖", 
         zh_CN = "包括 Spine 贴图"
+    )
+    song_alias = _(
+        "Song Alias", 
+        zh_TW = "歌曲暱稱", 
+        zh_CN = "歌曲暱称", 
+        ja    = "楽曲の略称"
     )
     song_chart = _(
         "Chart image", 
@@ -788,7 +835,7 @@ class description:
         ja    = "未公開内容を含む"
     )
     ver_lang = _(
-        'Game Language Version', 
+        'Game Ver.', 
         zh_TW = "語言版本", 
         zh_CN = "语言版本"
     )
@@ -821,6 +868,12 @@ class locale:
         zh_TW = "飾品", 
         zh_CN = "饰品", 
         ja    = "アクセサリー"
+    )
+    alias = _(
+        "alias", 
+        zh_TW = "暱稱", 
+        zh_CN = "暱称", 
+        ja    = "略称"
     )
     all_ticks = _(
         "all_ticks", 
@@ -1045,6 +1098,18 @@ class locale:
         zh_CN = "活动排名图-角色", 
         ja    = "イベントランキング推移-キャラクター"
     )
+    event_highscore = _(
+        "event-highscore", 
+        zh_TW = "活動-高分", 
+        zh_CN = "活动-高分", 
+        ja    = "イベント-ハイスコア"
+    )
+    event_highscore_borders = _(
+        "event_borders-highscore", 
+        zh_TW = "活動榜線-高分", 
+        zh_CN = "活动榜线-高分", 
+        ja    = "イベントボーダー-ハイスコア"
+    )
     event_name = _(
         'event_name', 
         zh_TW = "活動名稱", 
@@ -1173,6 +1238,11 @@ class locale:
         ko      = "언어", 
         ko_Kore = "言語", 
     ) # usually for language setting within the same game version
+    lang_ver = _(
+        'lang', 
+        zh_TW = "版本", 
+        zh_CN = "版本"
+    ) # usually for game version (e.g. en / kr)
     latest = _(
         'latest', 
         zh_TW = "最近", 
@@ -1352,6 +1422,16 @@ class locale:
         zh_TW = "重新編碼", 
         zh_CN = "重新编码"
     )
+    region = _( # server region
+        "region", 
+        en      = "region", 
+        zh_TW   = "地區",
+        zh_CN   = "地区",
+        ja      = "地域",
+        ko      = "지역",
+        ko_Kore = "地域",
+        id      = "wilayah",
+    )
     reverse_song = _(
         'reverse', 
         zh_TW = "倒播", 
@@ -1450,6 +1530,12 @@ class locale:
         zh_TW = "歌曲封面", 
         zh_CN = "歌曲封面"
     ) # for asset command (implying plural)
+    songname = _(
+        "songname", 
+        zh_TW = "歌名", 
+        zh_CN = "歌名", 
+        ja    = "曲名"
+    )
     song_name = _(
         "song_name", 
         zh_TW = "歌名", 

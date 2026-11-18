@@ -55,9 +55,11 @@ def parse_chart(content: str) -> Dict[str, Any]: #, min_num_measures: int = 0):
     beat_table: Dict[int, float] = {}
     bpm_table = {}
     notes = []
+    metadata: Dict[str, str] = {}
     # num_measures = min_num_measures
     speed_cursor = None
     measure_speed_cursor = None
+    measure_base = 0
 
     for ln in lines2:
         ln_type, ln_header, ln_data = ln["type"], ln["header"], ln["data"]
@@ -68,10 +70,14 @@ def parse_chart(content: str) -> Dict[str, Any]: #, min_num_measures: int = 0):
                     ticks_per_beat = int(test[1])
             elif ln_header == "MEASUREHS":
                 measure_speed_cursor = ln['data']
+            elif ln_header == "MEASUREBS":
+                measure_base = int(ln['data'])
             elif ln_header == "HISPEED":
                 speed_cursor = ln['data']
             elif ln_header == "NOSPEED":
                 speed_cursor = None
+            else:
+                metadata[ln_header] = ln_data
 
         elif ln_type == "score":
             if len(ln_header) == 5:
@@ -89,6 +95,7 @@ def parse_chart(content: str) -> Dict[str, Any]: #, min_num_measures: int = 0):
                 continue
             assert len(ln_header) >= 5
             measure_num, lane_type, lane = int(ln_header[:3]), int(ln_header[3]), int(ln_header[4], 36)
+            measure_num += measure_base
             channel = int(ln_header[5], 36) if len(ln_header) > 5 else None
             if lane_type == 0:
                 if lane == 2:
@@ -138,6 +145,7 @@ def parse_chart(content: str) -> Dict[str, Any]: #, min_num_measures: int = 0):
         pos = note["tick"]
         note["tick"] = round(ticks_per_beat * beats[min(note["measure"], max_beat_measure)]) * pos[0] // pos[1]
     return {
+        "metadata": metadata,
         # "measures": num_measures,
         "ticks": ticks_per_beat,
         # "beats": beats,

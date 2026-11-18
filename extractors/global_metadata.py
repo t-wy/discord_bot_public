@@ -1,7 +1,8 @@
 from common.exception import CustomException
 from .byte_reader import LittleEndianReader
-import struct, logging
+import logging
 from typing import *
+from enum import Enum, auto
 
 # References:
 # https://github.com/Perfare/Il2CppDumper/blob/master/Il2CppDumper/Il2Cpp/Metadata.cs
@@ -721,10 +722,8 @@ class GlobalMetadata(ReprClass):
             self.num = reader.readUShort()
             self.flags = reader.readUShort()
 
-    from enum import Enum
     class Il2CppRGCTXDataType(Enum):
-        from enum import auto
-        IL2CPP_RGCTX_DATA_INVALID = auto()
+        IL2CPP_RGCTX_DATA_INVALID = 0
         IL2CPP_RGCTX_DATA_TYPE = auto()
         IL2CPP_RGCTX_DATA_CLASS = auto()
         IL2CPP_RGCTX_DATA_METHOD = auto()
@@ -742,14 +741,15 @@ class GlobalMetadata(ReprClass):
             if parent.header.version <= 27.1:
                 self.type = parent.Il2CppRGCTXDataType(reader.readInt())
             if 29 <= parent.header.version:
-                self.type = parent.Il2CppRGCTXDataType(reader.readULong())
+                self.type = parent.Il2CppRGCTXDataType(reader.readInt())
+                reader.readInt()
             if parent.header.version <= 27.1:
                 self.data = parent.Il2CppRGCTXDefinitionData(reader, parent)
             if 27.2 <= parent.header.version:
-                self._data = reader.readULong()
+                self._data = reader.readInt()
+                reader.readInt()
 
     class Il2CppMetadataUsage(Enum):
-        from enum import auto
         kIl2CppMetadataUsageInvalid = 0
         kIl2CppMetadataUsageTypeInfo = auto()
         kIl2CppMetadataUsageIl2CppType = auto()

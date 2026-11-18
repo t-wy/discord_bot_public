@@ -14,8 +14,25 @@ async def reply_twitter_embed(message, embeds, msg: str):
     msg: platform-compatible message content (allow markdown)
     """
     if embeds is not None and len(embeds):
-        content = "\n".join(e.author.url for e in embeds if e.author.url is not None if e.author.url.startswith("https://twitter.com/"))
-        await message.reply(embeds=embeds, content=content)
+        size = len(embeds)
+        if size > 10:
+            num_pages = (size + 9) // 10
+            per_page = (size + num_pages - 1) // num_pages
+            for index in range(0, size, per_page):
+                entries = embeds[index : index + per_page]
+                content = "\n".join(
+                    e.author.url for e in entries
+                    if e.author.url is not None
+                    if e.author.url.startswith("https://twitter.com/")
+                )
+                await message.reply(embeds=entries, content=content)
+        else:
+            content = "\n".join(
+                e.author.url for e in embeds
+                if e.author.url is not None
+                if e.author.url.startswith("https://twitter.com/")
+            )
+            await message.reply(embeds=embeds, content=content)
     if msg is not None and msg.strip() != "":
         await message.reply(content=msg)
 
@@ -85,7 +102,10 @@ def discord_embeds_from_tweet(tweet, show_stat=True):
     embed_list: List[discord.Embed] = []
     embed = discord.Embed(color=0x1da0f2)
     tweet_url = f'https://twitter.com/{tweet["user"]["screen_name"]}/status/{tweet["id_str"]}'
-    embed.set_author(name=f'{tweet["user"]["name"]} (@{tweet["user"]["screen_name"]})', icon_url=tweet["user"]["profile_image_url_https"], url=tweet_url)
+    embed.set_author(
+        name=f'{tweet["user"]["name"]} (@{tweet["user"]["screen_name"]})',
+        icon_url=tweet["user"]["profile_image_url_https"], url=tweet_url
+    )
     embed.description = tweet.get("full_text", tweet.get("text"))[slice(*tweet['display_text_range'])]
     if "quoted_status_result" in tweet:
         append_tweet = tweet["quoted_status_result"]

@@ -115,7 +115,10 @@ def simplify_chart(chart):
             flick_dict[current_key] = note["note_type"] # flick style
             continue
         if note["lane_type"] == 1:
-            if note["note_type"] not in (1, 2, 4, 5, 6) or current_key in slide_dict:
+            if (
+                note["note_type"] not in (1, 2, 4, 5, 6) or
+                current_key in slide_dict
+            ):
                 # 1: normal, 2: normal critical, 4: skill, 5: friction modifier (can exist separately as green), 6: friction critical modifier (can exist separately as yellow)
                 # this tap note is just a slide modifier
                 continue
@@ -128,6 +131,7 @@ def simplify_chart(chart):
     group_first = {}
     group_path = {}
     group_wait_next = {}
+    group9_first = {}
     group9_path = {}
     slide_channel = {}
 
@@ -137,6 +141,8 @@ def simplify_chart(chart):
         current_key = (note["measure"], note["tick"], note["lane"])
         if note["lane_type"] == 3 and note["note_type"] == 1: # start slide
             slide_channel[current_key] = max(slide_channel.get(current_key, -1), note["channel"])
+    
+    half_tick = chart["ticks"] >> 1
 
     for note in notes_1:
         current_key = (note["measure"], note["tick"], note["lane"])
@@ -169,20 +175,26 @@ def simplify_chart(chart):
                     )
                 elif note["note_type"] in (3, 5):
                     notedata["ignored"] = tap_dict.get(current_key) == 3
+
                 prev_note = group_path[note["channel"]] # should exist
                 # inherit head
                 assert prev_note is not None
-                if prev_note["critical"]: # inherit critical
-                    notedata["critical"] = True
                 notedata["eliminated"] = prev_note["eliminated"] # inherit eliminated
+
+                first_note = group_first[note["channel"]]
+                assert first_note is not None
+                if first_note["critical"]: # inherit critical
+                    notedata["critical"] = True
+
                 if is_path_note(notedata):
                     # add intervals
-                    first_note = group_first[note["channel"]]
                     current_tick = max(
-                        prev_note["tick"] + (-prev_note["tick"]) % (chart["ticks"] >> 1), # ceil
-                        first_note["tick"] - first_note["tick"] % (chart["ticks"] >> 1) + (chart["ticks"] >> 1) # floor + 1
+                        prev_note["tick"] + (-prev_note["tick"]) % half_tick, # ceil
+                        first_note["tick"] - first_note["tick"] % half_tick + half_tick # floor + 1
                     )
-                    for tick in range(current_tick, notedata["tick"], chart["ticks"] >> 1): # 8th note step
+                    for tick in range(
+                        current_tick, notedata["tick"], half_tick
+                    ): # 8th note step
                         hidden_tick_note = {
                             "tick": tick,
                             "lane": notedata["lane"], # not strictly defined
@@ -217,10 +229,17 @@ def simplify_chart(chart):
                 prev_note = group9_path[note["channel"]] # should exist
                 # inherit head
                 assert prev_note is not None
-                if prev_note["critical"]: # inherit critical
-                    notedata["critical"] = True
                 notedata["prev_note"] = prev_note
+
+                first_note = group9_first[note["channel"]]
+                assert first_note is not None
+                if first_note["critical"]: # inherit critical
+                    notedata["critical"] = True
                 group9_path[note["channel"]] = notedata
+            if group9_first.get(note["channel"]) is None:
+                group9_first[note["channel"]] = notedata
+            if notedata["note_type"] == 2: # end slide
+                group9_first[note["channel"]] = None
 
         notes_2.append(notedata)
     notes_2.sort(key=lambda x: x["tick"])

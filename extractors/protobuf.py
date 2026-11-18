@@ -114,10 +114,11 @@ if "NoneType" not in globals(): # Don't overwrite if the module is hot-relaoded
     # by default wire type 0, but can be used in other wire types as fallback
     int32 = Annotated[int, "int32"] # signed but without zigzag
     int64 = Annotated[int, "int64"] # signed but without zigzag
+    long = int64
     sint = Annotated[int, "sint"] # zigzag when encounting varint
     sint32 = sint64 = sint
     uint = Annotated[int, "uint"] # same as int
-    uint32 = uint64 = uint
+    ulong = uint32 = uint64 = uint
 
     fixed64 = Annotated[int, "fixed64"] # explicitly wire type 1, makes the distinction when parsed in wire type 2 as packed repeated fields
     sfixed64 = Annotated[int, "sfixed64"] # explicitly wire type 1, makes the distinction when parsed in wire type 2 as packed repeated fields
@@ -138,6 +139,12 @@ if "NoneType" not in globals(): # Don't overwrite if the module is hot-relaoded
         """
         def __class_getitem__(cls, field_number: int):
             return Annotated[None, field_number]
+
+def serialize_grpc(instance, preprocess: Optional[Callable[[bytes], bytes]] = None) -> bytes:
+    content = serialize(instance)
+    if preprocess is not None:
+        content = preprocess(content)
+    return bytes([0]) + int.to_bytes(len(content), length = 4, byteorder = "big") + content
 
 def deserialize_grpc(_type, content: bytes, preprocess: Optional[Callable[[bytes], bytes]] = None):
     assert content[0] == 0 # not compressed

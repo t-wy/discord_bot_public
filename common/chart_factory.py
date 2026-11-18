@@ -146,14 +146,18 @@ class Connector:
     This may be known as "Note Line".
     Implement get_polygon and get_x_percentage to change the shape.
     """
-    def __init__(self, note1: Label, note2: Label, color: Tuple[int, int, int]=(128, 192, 255), channel: int=1, **extra):
+    def __init__(
+        self, note1: Label, note2: Label, color: Tuple[int, int, int]=(128, 192, 255), color2: Optional[Tuple[int, int, int]]=None, channel: int=1, **extra
+    ):
         """        
         channel: note channel (for layering)
+        color2: Gradient at the end of the conenctor (None if plain color)
         """
         self.note1 = note1
         self.note2 = note2
         self.channel = channel
         self.color = color
+        self.color2 = color2
         self.extra = extra
     
     def get_x_range(self, y_time: float) -> Tuple[float, float]:
@@ -173,9 +177,9 @@ class Connector:
         xp1, xp2, yp = get_x(notep.lane), get_x(notep.lane + notep.width), get_y(notep.time)
         points = [
             (xp1 + 2, yp),
-            (xp2 - 2, yp),
+            (x1 + 2, y),
             (x2 - 2, y),
-            (x1 + 2, y)
+            (xp2 - 2, yp),
         ]
         return points
     
@@ -183,7 +187,55 @@ class Connector:
         """
         Implement this to change the way the polygon is handled
         """
-        canvas.polygon(points, self.color)
+        if self.color2 is None:
+            canvas.polygon(points, self.color)
+            return
+        xs = [pt[0] for pt in points]
+        ys = [pt[1] for pt in points]
+        from math import ceil, floor
+        max_y, min_y = max(ys), min(ys)
+        if max_y == min_y:
+            return
+        max_y_int, min_y_int = ceil(max_y), floor(min_y)
+        height_span = max_y_int - min_y_int + 1
+        max_x, min_x = max(xs), min(xs)
+        if max_x == min_x:
+            return
+        max_x_int, min_x_int = ceil(max_x), floor(min_x)
+        width_span = max_x_int - min_x_int + 1
+        import numpy as np
+        from PIL import Image
+        gradient = np.clip(
+            (
+                np.arange(
+                    min_y_int, max_y_int + 1, dtype=np.float32
+                ) - min_y
+            ) / (max_y - min_y),
+            0.0, 1.0
+        )[:, None, None] # (height_span, 1, 1)
+        top_rgba = np.array(self.color2, dtype=np.float32)
+        bottom_rgba = np.array(self.color, dtype=np.float32)
+        gradient_strip = top_rgba * (1.0 - gradient) + bottom_rgba * gradient
+        gradient_canvas = np.broadcast_to(
+            gradient_strip, (height_span, width_span, 4)
+        ).astype(np.uint8)
+        gradient_canvas[:, :, :] = gradient_strip
+        gradient_img = Image.fromarray(gradient_canvas, mode="RGBA")
+        mask = Image.new("L", (width_span, height_span), 0)
+        from common import graphics as ImageDraw
+        draw_mask = ImageDraw.Draw(mask)
+        draw_mask.polygon([
+            (x - min_x_int, y - min_y_int)
+            for x, y in points
+        ], fill=255)
+        polygon_layer = Image.composite(
+            gradient_img,
+            Image.new("RGBA", (width_span, height_span), (0, 0, 0, 0)),
+            mask
+        )
+        canvas._image.alpha_composite(
+            polygon_layer, (min_x_int, min_y_int)
+        )
     
     async def draw_on(self, canvas: ImageDraw.ImageDraw, get_x: Callable[[int], float], get_y: Callable[[int], float]):
         """
@@ -196,11 +248,18 @@ class EaseInQuadConnector(Connector):
     """
     (x(t), y(t)) = (t^2, t)
     """
-    def __init__(self, note1: Label, note2: Label, color: Tuple[int, int, int]=(128, 192, 255), channel: int=1, **extra):
+    def __init__(self, note1: Label, note2: Label, color: Tuple[int, int, int]=(128, 192, 255), color2: Optional[Tuple[int, int, int]]=None, channel: int=1, **extra):
         """        
         channel: note channel (for layering)
         """
-        super().__init__(note1, note2, color, channel, **extra)
+        super().__init__(
+            note1 = note1,
+            note2 = note2,
+            color = color,
+            color2 = color2,
+            channel = channel,
+            **extra
+        )
     
     def get_x_range(self, y_time: float) -> Tuple[float, float]:
         from common.curve import lerp, unlerp
@@ -224,11 +283,18 @@ class EaseOutQuadConnector(Connector):
     """
     (x(t), y(t)) = (1-(1-t)^2, t)
     """
-    def __init__(self, note1: Label, note2: Label, color: Tuple[int, int, int]=(128, 192, 255), channel: int=1, **extra):
+    def __init__(self, note1: Label, note2: Label, color: Tuple[int, int, int]=(128, 192, 255), color2: Optional[Tuple[int, int, int]]=None, channel: int=1, **extra):
         """        
         channel: note channel (for layering)
         """
-        super().__init__(note1, note2, color, channel, **extra)
+        super().__init__(
+            note1 = note1,
+            note2 = note2,
+            color = color,
+            color2 = color2,
+            channel = channel,
+            **extra
+        )
     
     def get_x_range(self, y_time: float) -> Tuple[float, float]:
         from common.curve import lerp, unlerp
@@ -253,11 +319,18 @@ class QuadraticBezierConnector(Connector):
     A connector with quadratic bezier support 
     """
 
-    def __init__(self, note1: Label, note2: Label, control: Label, color: Tuple[int, int, int]=(128, 192, 255), channel: int=1, **extra):
+    def __init__(self, note1: Label, note2: Label, control: Label, color: Tuple[int, int, int]=(128, 192, 255), color2: Optional[Tuple[int, int, int]]=None, channel: int=1, **extra):
         """        
         channel: note channel (for layering)
         """
-        super().__init__(note1, note2, color, channel, **extra)
+        super().__init__(
+            note1 = note1,
+            note2 = note2,
+            color = color,
+            color2 = color2,
+            channel = channel,
+            **extra
+        )
         self.control = control
     
     def get_x_range(self, y_time: float) -> Tuple[float, float]:
@@ -399,11 +472,16 @@ class ScrollSpeed:
         self.speed = speed
         self.time = time
     def __str__(self):
-        if self.speed % 1 == 0:
-            return str(int(self.speed))
-        if 0 < self.speed < 1:
-            return "{:.3f}".format(self.speed)
-        return "{:.2f}".format(self.speed)
+        value = self.speed
+        if value % 1 == 0:
+            return str(int(value))
+        if 0 < value < 1:
+            temp = f"{value:.3f}"
+        temp = f"{value:.2f}"
+        temp2 = str(value)
+        if len(temp) > len(temp2) and "e" not in temp2:
+            return temp2
+        return temp
 
 class Region:
     def __init__(self, time1: float, time2: float, color: Color):
@@ -717,12 +795,12 @@ class Chart:
                 assert (self.num_lanes - 1) % minor_lane == 0
             elif lane_style == Chart.LaneStyle.BOUNDARY:
                 assert self.num_lanes % minor_lane == 0
-        from PIL import Image, ImageFont, ImageDraw
+        from PIL import Image, ImageFont #, ImageDraw
         from common import graphics as ImageDraw
-        from image_composition import alpha_composition, BlendMode
         from math import ceil
         import asyncio
         import numpy as np
+        from basic_utility import to_aiter
         bpm_text = "???"
         if len(self.bpm_changes) > 0:
             bpms = [self.bpm_changes[0]] + [y for x, y in zip(self.bpm_changes[:-1], self.bpm_changes[1:]) if x.bpm != y.bpm]
@@ -738,6 +816,7 @@ class Chart:
         assert pixels_offsetx + pixels_col * self.num_lanes < pixels_width # overflow prevention
         extra_filling = 60 # extra pixel height shown for each column
         title_height = 60 # height of the header (and footer)
+        from common import font as ImageFont
         fnt = ImageFont.truetype("font/RoNOWStd-GB-Fallback.otf", 20) # font for time marker and note number marker
         fnt_tiny = ImageFont.truetype("font/RoNOWStd-GB-Fallback.otf", 12) # font for marker text
         fnt_title = ImageFont.truetype("font/RoNOWStd-GB-Fallback.otf", 40) # font for header and footer
@@ -776,26 +855,22 @@ class Chart:
         assert get_x(self.lane_offset) == pixels_offsetx
 
         if mirror:
-            for note in self.notes:
+            async for note in to_aiter(self.notes):
                 note.lane = self.lane_offset * 2 + self.num_lanes - note.width - note.lane
                 if isinstance(note, Flick):
                     note.direction = note.direction.mirror()
-                await asyncio.sleep(0)
-            for note in self.background:
+            async for note in to_aiter(self.background):
                 if isinstance(note, Note):
                     note.lane = self.lane_offset * 2 + self.num_lanes - note.width - note.lane
                     if isinstance(note, Flick):
                         note.direction = note.direction.mirror()
-                await asyncio.sleep(0)
-            for note in self.ticks:
+            async for note in to_aiter(self.ticks):
                 if isinstance(note, Tick):
                     note.lane = self.lane_offset * 2 + self.num_lanes - note.width - note.lane
-                await asyncio.sleep(0)
-            for note in self.labels:
+            async for note in to_aiter(self.labels):
                 note.lane = self.lane_offset * 2 + self.num_lanes - note.width - note.lane
-                await asyncio.sleep(0)
-            for note in self.connectors:
-                await asyncio.sleep(0)
+            # async for note in to_aiter(self.connectors):
+            #     pass
 
         black = (0, 0, 0) # background
         gray = (64, 64, 64) # end marker
@@ -808,7 +883,8 @@ class Chart:
         temp_graphics = ImageDraw.Draw(temp_image)
 
         pixels_offsetx2 = pixels_offsetx + pixels_col * self.num_lanes
-        def add_marker(time, text, color, dashed=False):
+        def add_marker(time, text, color): #, dashed=False):
+            dashed = True
             y_coord = get_y(time)
             if dashed:
                 temp_graphics.line(((pixels_offsetx - 2, y_coord), (pixels_offsetx, y_coord)), fill=color)
@@ -827,35 +903,31 @@ class Chart:
         temp_graphics_channels: Dict[ImageDraw.ImageDraw] = {}
         temp_image_channels[(None, None)] = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
         temp_graphics_channels[(None, None)] = ImageDraw.Draw(temp_image_channels[(None, None)])
-        for c in self.channels:
+        async for c in to_aiter(self.channels):
             temp_image_channels[(c, True)] = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
             temp_graphics_channels[(c, True)] = ImageDraw.Draw(temp_image_channels[(c, True)])
-            await asyncio.sleep(0)
-        for c in self.background_channels:
+        async for c in to_aiter(self.background_channels):
             temp_image_channels[(c, False)] = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
             temp_graphics_channels[(c, False)] = ImageDraw.Draw(temp_image_channels[(c, False)])
-            await asyncio.sleep(0)
 
         # after the end of chart
         temp_graphics.rectangle(((pixels_offsetx, 0), (pixels_offsetx2, get_y(self.duration))), gray)
 
-        region_last = []
-        for region in self.regions:
-            chosen = 0
-            while chosen < len(region_last) and region.time1 <= region_last[chosen]:
-                chosen += 1
-            x = get_x(self.lane_offset + self.num_lanes) - chosen * 8
-            temp_graphics.rectangle((
-                (x - 8, get_y(region.time2)),
-                (x, get_y(region.time1))
-            ), region.color)
-            if chosen >= len(region_last):
-                region_last.append(region.time2)
-            else:
-                region_last[chosen] = region.time2
+        # minor beat marker (horizontal, below the lane lines)
+        if bar_mode == True:
+            async for beat in to_aiter(self.beats):
+                if beat.beat_num == 1:
+                    continue
+                time = beat.time
+                bar = beat.measure_num
+                temp_graphics.line([(pixels_offsetx, get_y(time)), (pixels_offsetx2, get_y(time))], gray, 1)
+        elif bar_mode == False:
+            async for time in to_aiter(range(ceil(duration) + 1)):
+                if time + 0.5 < duration:
+                    temp_graphics.line([(pixels_offsetx, get_y(time + 0.5)), (pixels_offsetx2, get_y(time + 0.5))], gray, 1)
         
         if lane_style == Chart.LaneStyle.CENTER:
-            for lane in range(self.num_lanes):
+            async for lane in to_aiter(range(self.num_lanes)):
                 if minor_lane != 0: # major_lane != 0
                     if lane % minor_lane != 0:
                         continue
@@ -876,9 +948,8 @@ class Chart:
                     ) else gray,
                     1
                 )
-                await asyncio.sleep(0)
         elif lane_style == Chart.LaneStyle.BOUNDARY:
-            for lane in range(self.num_lanes + 1):
+            async for lane in to_aiter(range(self.num_lanes + 1)):
                 if minor_lane != 0: # major_lane != 0
                     if lane % minor_lane != 0:
                         continue
@@ -896,17 +967,15 @@ class Chart:
                     ) else gray,
                     1
                 )
-                await asyncio.sleep(0)
 
+        # major beat marker (horizontal, below the lane lines)
         if bar_mode == True:
-            for beat in self.beats:
+            async for beat in to_aiter(self.beats):
                 time = beat.time
                 bar = beat.measure_num
-                if beat.beat_num == 1:
-                    temp_graphics.line([(pixels_offsetx, get_y(time)), (pixels_offsetx2, get_y(time))], white, 1)
-                else:
-                    temp_graphics.line([(pixels_offsetx, get_y(time)), (pixels_offsetx2, get_y(time))], gray, 1)
+                if beat.beat_num != 1:
                     continue
+                temp_graphics.line([(pixels_offsetx, get_y(time)), (pixels_offsetx2, get_y(time))], white, 1)
                 if note_marker:
                     note_count = time_array[time_array <= time + 1e-4].shape[0]
                 else:
@@ -918,12 +987,9 @@ class Chart:
                     temp_graphics.text((pixels_offsetx - 2, get_y(time)), "#" + str(bar), font=fnt, anchor="rm")
                 elif note_marker:
                     temp_graphics.text((pixels_offsetx - 2, get_y(time)), "{}".format(note_count), font=fnt, anchor="rm")
-                await asyncio.sleep(0)
         elif bar_mode == False:
-            for time in range(ceil(duration) + 1):
+            async for time in to_aiter(range(ceil(duration) + 1)):
                 temp_graphics.line([(pixels_offsetx, get_y(time)), (pixels_offsetx2, get_y(time))], white, 1)
-                if time + 0.5 < duration:
-                    temp_graphics.line([(pixels_offsetx, get_y(time + 0.5)), (pixels_offsetx2, get_y(time + 0.5))], gray, 1)
                 if note_marker:
                     note_count = time_array[time_array <= time + 1e-4].shape[0]
                 else:
@@ -935,7 +1001,21 @@ class Chart:
                     temp_graphics.text((pixels_offsetx - 2, get_y(time)), "{}:{:02}".format(time//60, time%60), font=fnt, anchor="rm")
                 elif note_marker:
                     temp_graphics.text((pixels_offsetx - 2, get_y(time)), "{}".format(note_count), font=fnt, anchor="rm")
-                await asyncio.sleep(0)
+
+        region_last = []
+        async for region in to_aiter(self.regions):
+            chosen = 0
+            while chosen < len(region_last) and region.time1 <= region_last[chosen]:
+                chosen += 1
+            x = get_x(self.lane_offset + self.num_lanes) - chosen * 3
+            temp_graphics.rectangle((
+                (x + 1, get_y(region.time2)),
+                (x + 3, get_y(region.time1))
+            ), region.color)
+            if chosen >= len(region_last):
+                region_last.append(region.time2)
+            else:
+                region_last[chosen] = region.time2
         
         # distance markers at bottom
         if show_distance and len(self.bpm_changes) > 0:
@@ -943,7 +1023,9 @@ class Chart:
             timing_points = sorted(set([x.time for x in self.notes] + [x.time for x in self.ticks if x.visible])) # avoid duplicates
             bpm_changes_index_last = 0
             bpm_changes_index_now = 0
-            for a, b in zip(timing_points[:-1], timing_points[1:]):
+            async for a, b in to_aiter(zip(
+                timing_points[:-1], timing_points[1:]
+            )):
                 while bpm_changes_index_now + 1 < len(self.bpm_changes) and self.bpm_changes[bpm_changes_index_now + 1].time < b:
                     bpm_changes_index_now += 1
                 if bpm_changes_index_now == bpm_changes_index_last:
@@ -965,24 +1047,80 @@ class Chart:
                     add_marker(a, "{}/{}".format(
                         "" if dist_frac[0] == dist_frac_gcd else (dist_frac[0] // dist_frac_gcd),
                         dist_frac[1] // dist_frac_gcd
-                    ), yellow, dashed=True)
+                    ), yellow) #, dashed=True)
                 else:
                     if dist < 1:
                         # remove 0 before the decimal point
-                        add_marker(a, "{:.3f}".format(dist)[1:], yellow, dashed=True)
+                        add_marker(a, "{:.3f}".format(dist)[1:], yellow) #, dashed=True)
                     else:
-                        add_marker(a, "{:.3f}".format(dist), yellow, dashed=True)
+                        add_marker(a, "{:.3f}".format(dist), yellow) #, dashed=True)
                 bpm_changes_index_last = bpm_changes_index_now
+
+        # background connectors behind real connectors
+        async for obj in to_aiter(self.background):
+            target_channel = (obj.channel, False) if hasattr(obj, "channel") else (None, None)
+            await obj.draw_on(temp_graphics_channels[target_channel], get_x, get_y)
+
+        async for connector in to_aiter(self.connectors):
+            await connector.draw_on(temp_graphics_channels[(connector.channel, True)], get_x, get_y)
+
+        # check parallel
+        previous_note: Optional[Note] = None
+        async for note in to_aiter(self.notes):
+            if previous_note is not None:
+                if previous_note.time == note.time:
+                    x1 = get_x(previous_note.lane + 0.5)
+                    x2 = get_x(note.lane + 0.5)
+                    y = get_y(note.time)
+                    temp_graphics.line([(x1, y), (x2, y)], white, 3)
+            previous_note = note
+
+        # prevent blocking
+        # from basic_utility import to_async
+        # alpha_composition_async = to_async(alpha_composition)
         
+        # temp_image_channel = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
+        # async for key in to_aiter(temp_image_channels):
+        #     if key[1] == False: # background layers
+        #         temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
+        # async for key in to_aiter(temp_image_channels):
+        #     if key[1] is None: # background notes
+        #         temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
+        # async for key in to_aiter(temp_image_channels):
+        #     if key[1] == True:
+        #         temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
+        # screen operation is fully commutative right?
+        # temp_image_channel = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
+        # async for key in to_aiter(temp_image_channels):
+        #     temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
+        # screen operation is fully commutative right? (2)
+        from PIL import ImageChops
+        temp_image_channel = Image.new('RGBa', temp_size, ((0, 0, 0, 0)))
+        async for key_img in to_aiter(temp_image_channels.values()):
+            temp_image_channel = ImageChops.screen(temp_image_channel, key_img.convert("RGBa"))
+        temp_image.alpha_composite(temp_image_channel.convert("RGBA"))
+
+        # draw all diamonds
+        async for index, tick in to_aiter(enumerate(self.ticks)):
+            if hidden_ticks or tick.visible: # visible point
+                await tick.draw_on(temp_graphics, get_x, get_y)
+                if progress_callback is not None:
+                    await progress_callback("ticks", (index, len(self.ticks)))
+
+        async for index, note in to_aiter(enumerate(self.notes[::-1])):
+            await note.draw_on(temp_graphics, get_x, get_y)
+            if progress_callback is not None:
+                await progress_callback("notes", (index, len(self.notes)))
+        
+        # add non-distance markers on top
         # change in scroll speed
         lime = (0, 255, 0)
         if len(self.scroll_speeds) > 1:
-            for speed in self.scroll_speeds:
+            async for speed in to_aiter(self.scroll_speeds):
                 add_marker(speed.time, f"⇩×{speed}", lime)
-                await asyncio.sleep(0)
         
         # change in note speed
-        for note in self.notes:
+        async for note in to_aiter(self.notes):
             if note.speed != 1:
                 speed_repr = note.speed
                 if speed_repr.is_integer():
@@ -992,93 +1130,24 @@ class Chart:
                 else:
                     speed_repr = f"{speed_repr:.2f}"
                 add_marker(note.time, f"☄×{speed_repr}", lime)
-                await asyncio.sleep(0)
 
         # change in bpm
         red = (255, 0, 0)
         if len(self.bpm_changes) > 1:
-            for bpm in self.bpm_changes:
-                add_marker(bpm.time, f"♩{bpm}", red)
-                await asyncio.sleep(0)
+            async for bpm in to_aiter(self.bpm_changes):
+                add_marker(bpm.time, f"♫{bpm}", red)
 
         # other markers
-        for marker in self.markers:
+        async for marker in to_aiter(self.markers):
             add_marker(marker.time, marker.text, marker.color)
-            await asyncio.sleep(0)
 
-        # background connectors behind real connectors
-        for obj in self.background:
-            target_channel = (obj.channel, False) if hasattr(obj, "channel") else (None, None)
-            await obj.draw_on(temp_graphics_channels[target_channel], get_x, get_y)
-            await asyncio.sleep(0)
-
-        for connector in self.connectors:
-            await connector.draw_on(temp_graphics_channels[(connector.channel, True)], get_x, get_y)
-            await asyncio.sleep(0)
-
-        # check parallel
-        previous_note: Optional[Note] = None
-        for note in self.notes:
-            if previous_note is not None:
-                if previous_note.time == note.time:
-                    x1 = get_x(previous_note.lane + 0.5)
-                    x2 = get_x(note.lane + 0.5)
-                    y = get_y(note.time)
-                    temp_graphics.line([(x1, y), (x2, y)], white, 3)
-            previous_note = note
-            await asyncio.sleep(0)
-
-        # prevent blocking
-        # from basic_utility import to_async
-        # alpha_composition_async = to_async(alpha_composition)
-        
-        # temp_image_channel = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
-        # for key in temp_image_channels:
-        #     if key[1] == False: # background layers
-        #         temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
-        #     await asyncio.sleep(0)
-        # for key in temp_image_channels:
-        #     if key[1] is None: # background notes
-        #         temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
-        #     await asyncio.sleep(0)
-        # for key in temp_image_channels:
-        #     if key[1] == True:
-        #         temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
-        #     await asyncio.sleep(0)
-        # screen operation is fully commutative right?
-        # temp_image_channel = Image.new('RGBA', temp_size, ((255, 255, 255, 0)))
-        # for key in temp_image_channels:
-        #     temp_image_channel = await alpha_composition_async(temp_image_channel, temp_image_channels[key], BlendMode.Screen)
-        #     await asyncio.sleep(0)
-        # screen operation is fully commutative right? (2)
-        from PIL import ImageChops
-        temp_image_channel = Image.new('RGBa', temp_size, ((0, 0, 0, 0)))
-        for key_img in temp_image_channels.values():
-            temp_image_channel = ImageChops.screen(temp_image_channel, key_img.convert("RGBa"))
-            await asyncio.sleep(0)
-        temp_image.alpha_composite(temp_image_channel.convert("RGBA"))
-
-        # draw all diamonds
-        for index, tick in enumerate(self.ticks):
-            if hidden_ticks or tick.visible: # visible point
-                await tick.draw_on(temp_graphics, get_x, get_y)
-                if progress_callback is not None:
-                    await progress_callback("ticks", (index, len(self.ticks)))
-            await asyncio.sleep(0)
-
-        for index, note in enumerate(self.notes[::-1]):
-            await note.draw_on(temp_graphics, get_x, get_y)
-            if progress_callback is not None:
-                await progress_callback("notes", (index, len(self.notes)))
-            await asyncio.sleep(0)
-        
         # convert scroll image to chart image
         new_seconds_per_column = 0 if len(start_sec) <= 1 else max([start_sec[x + 1] - start_sec[x] for x in range(len(start_sec) - 1)])
         result_size = (max(1, len(start_sec) - 1) * pixels_width, ceil(new_seconds_per_column * pixels_per_second) + extra_filling * 2 + offset_y + title_height)
         result_image = Image.new('RGBA', result_size, black)
         result_graphics = ImageDraw.Draw(result_image)
         if temp_size[0] != 0 and temp_size[1] != 0:
-            for x in range(len(start_sec) - 1):
+            async for x in to_aiter(range(len(start_sec) - 1)):
                 start_y = int(get_y(start_sec[x])) + extra_filling
                 cropped_height = start_y - ceil(get_y(start_sec[x + 1])) + extra_filling
                 result_image.alpha_composite(temp_image, (

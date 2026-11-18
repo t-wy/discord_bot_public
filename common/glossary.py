@@ -9,6 +9,12 @@ class GrammarGlossary:
         zh      = "{0}{1}",
         th      = "{0}{1}"
     )
+    connector_str = _(
+       " ",
+        ja      = "",
+        zh      = "",
+        th      = ""
+    )
     colon = _(
        ": ",
         ja      = "：",
@@ -482,6 +488,12 @@ class EventGlossary:
         zh_TW   = "經過時間",
         zh_CN   = "经过时间"
     )
+    event = _(
+       "Event",
+        ja      = "イベント",
+        zh_TW   = "活動",
+        zh_CN   = "活动"
+    )
     event_duration = _(
        "Event Duration",
         ja      = "イベント期間",
@@ -538,6 +550,7 @@ class PlayerGlossary:
     basic_info = _(
        "Basic Info",
         ja      = "基本情報",
+        zh_TW   = "基本情報",
         zh_CN   = "基本情报"
     )
     comment = _(
@@ -602,6 +615,24 @@ class CircleGlossary:
     )
 
 class RankingGlossary:
+    point = _(
+        "Point",
+        zh_TW   = "積分",
+        zh_CN   = "积分",
+        ja      = "ポイント"
+    )
+    ranking = _(
+        "Ranking",
+        zh_TW = "排名", 
+        zh_CN = "排名", 
+        ja    = "ランキング"
+    )
+    score = _(
+        "Score",
+        zh_TW   = "分數",
+        zh_CN   = "分数",
+        ja      = "スコア"
+    )
     unit_details = _(
        "Unit Details",
         ja      = "編成詳細",
@@ -625,11 +656,18 @@ class ReleaseGlossary:
     "公開済み"
     release_time = _(
        "Release Time",
-        ja      = "実装日時",
-        zh_TW   = "實裝時間",
-        zh_CN   = "实装时间"
+        ja      = "追加日時",
+        zh_TW   = "追加時間",
+        zh_CN   = "追加时间"
     )
-    "実装日時"
+    "追加日時"
+    released_since_launch = _(
+       "Since Launch",
+        ja      = "初期実装",
+        zh_TW   = "自推出時",
+        zh_CN   = "自推出时"
+    )
+    "初期実装"
     to_be_released = _(
        "To be released",
         ja      = "公開予定",
