@@ -189,17 +189,29 @@ def get_tweet_html(tweet_id: int):
     matches, records = parse_html(html_content)
     assert len(records)
     content = records[0]
-    assert content["__typename"] == "__Root"
-    tweet_result = next(
-        value
-        for key, value in content.items()
-        if key.startswith(f'tweet_result_by_rest_id(rest_id:"{tweet_id}"')
-        and isinstance(value, dict)
-    )
-    assert tweet_result["__typename"] == "TweetResults"
-    if tweet_result["result"] is None:
-        from .utility import placeholder_404
-        return placeholder_404
+    if "__typename" in content:
+        assert content["__typename"] == "__Root"
+        tweet_result = next(
+            value
+            for key, value in content.items()
+            if key.startswith(f'tweet_result_by_rest_id(rest_id:"{tweet_id}"')
+            and isinstance(value, dict)
+        )
+        assert tweet_result["__typename"] == "TweetResults"
+        if tweet_result["result"] is None:
+            from .utility import placeholder_404
+            return placeholder_404
+    else:
+        tweet_result = content.get("data", {}).get("tweet_result_by_rest_id", {})
+        assert tweet_result.get("rest_id") == str(tweet_id)
+    """
+    {
+        "__typename": "Tweet",
+        "rest_id": "...",
+        "media_entities2": [ ... ],
+        ...
+    }
+    """
     from .utility import conv_tweet_graphql
     return conv_tweet_graphql(tweet_result["result"])
 

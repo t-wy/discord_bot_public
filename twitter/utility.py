@@ -147,7 +147,7 @@ def discord_embeds_from_tweet(tweet, show_stat=True):
         if "extended_entities" in append_tweet:
             extended_entities.append(append_tweet["extended_entities"])
     for extended_entity in extended_entities:
-        for media in extended_entity["media"]:
+        for media in extended_entity.get("media", []):
             if "id_str" not in media:
                 continue
             if media["id_str"] in seen_entities:

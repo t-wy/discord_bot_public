@@ -32,37 +32,55 @@ if TYPE_CHECKING:
     import io
 
 def parse_html(html: str) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
+    import re, io
+    try:
+        from common import myjson
+    except:
+        import json as myjson
+    ROUTER_START = '$_TSR.router=($R=>$R[0]='
+    STREAM_NEXT  = re.compile(r'\$R\[\d+\]\.next\(\$R\[\d+\]=')
+
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(html, 'html.parser')
-    # get #$tsr-stream-barrier
-    # script = soup.find('script', id='$tsr-stream-barrier').decode_contents()
-    # script_start = 'class="$tsr" id="$tsr-stream-barrier">'
-    # assert script_start in html
-    # script = html.split(script_start, 1)[1]
-    matches = []
-    records = []
+    matches: List[Dict[str, Any]] = []
+    records: List[Dict[str, Any]] = []
+    relay_records: List[Dict[str, Any]] = []
+    graphql_messages: List[Dict[str, Any]] = []
+
     for script in soup.find_all('script'):
-        content: str = script.text
-        record_salt = ']={relayRecords:'
-        if record_salt not in content:
+        content: str = script.string or script.get_text()
+        if ROUTER_START in content:
+            router, _ = parse_js_dict(
+                io.StringIO(content.split(ROUTER_START, 1)[1]), {}
+            )
+            matches = router.get('matches', [])
+            dehydrated_data = router.get('dehydratedData', {})
+
+            if 'relayRecords' in dehydrated_data: # old format
+                relay_records.append(dehydrated_data['relayRecords'])
+            graphql_messages.extend(
+                dehydrated_data.get('messagesBeforeDehydration', []) # new format
+            )
             continue
-        if script.get('id') == '$tsr-stream-barrier':
-            router_start = '$_TSR.router=($R=>$R[0]='
-            assert router_start in content
-            router = content.split(router_start, 1)[1]
-            import io
-            reader = io.StringIO(router)
-            content = parse_js_dict(reader)[0]
-            matches = content.get("matches", [])
-            record = hydrate(content.get("dehydratedData", {}).get("relayRecords", {}))
-            records.append(record)
-        else:
-            assert record_salt in content
-            record_content = '{relayRecords:' + content.split(record_salt, 1)[1]
-            import io
-            reader = io.StringIO(record_content)
-            content = parse_js_dict(reader)[0]
-            records.append(hydrate(content.get("relayRecords", {})))
+        m = STREAM_NEXT.search(content)
+        if not m:
+            continue
+        obj, _ = parse_js_dict(io.StringIO(content[m.end():]), {})
+        if 'relayRecords' in obj:
+            relay_records.append(obj['relayRecords'])
+        elif 'kind' in obj:
+            graphql_messages.append(obj)
+    if relay_records:
+        store: Dict[str, Any] = {}
+        for part in relay_records:
+            store.update(part)
+        hydrate(store)
+        records.append(store['client:root'])
+
+    for msg in graphql_messages:
+        if msg.get('kind') == 1 and isinstance(msg.get('result'), dict):
+            # new format: {"kind": "Result.Ok", "value": "<JSON>"}
+            records.append(myjson.loads(msg['result']['value']))
     return matches, records
 
 def peek(reader: "io.StringIO", size: int):
@@ -72,8 +90,10 @@ def peek(reader: "io.StringIO", size: int):
     return temp
 
 def skip_space(reader: "io.StringIO"):
-    while peek(reader, 1) in ' \t\n':
+    c = peek(reader, 1)
+    while c and c in ' \t\n':
         reader.read(1)
+        c = peek(reader, 1)
 
 def hydrate(relayRecords: Dict[str, Any]) -> Dict[str, Any]:
     def hydrate_internal(content: Dict[str, Any]):
@@ -148,11 +168,9 @@ def parse_boolean(reader: "io.StringIO") -> str:
     assert_next_character(reader, '!')
     content = reader.read(1)
     assert content in ['0', '1']
-    if content == "0":
-        return True # !0
-    return False # !1
+    return content == "0" # !0: True, !1: False
 
-def parse_js_object(reader: "io.StringIO", R: Dict[int, Any] = {}):
+def parse_js_object(reader: "io.StringIO", R: Dict[int, Any]):
     c = peek(reader, 1)
     if c == '{':
         return parse_js_dict(reader, R = R)
@@ -171,11 +189,12 @@ def parse_js_object(reader: "io.StringIO", R: Dict[int, Any] = {}):
         c2 = peek(reader, 1)
         if c2 == "=":
             assert_next_character(reader, '=')
-            temp = parse_js_object(reader, R = R)
-            R[idx] = temp
-            return temp
+            value, shutdown = parse_js_object(reader, R = R)
+            R[idx] = value
+            return value, shutdown
         elif c2 in (',', '}', ']'): # ending
             return R[idx], False
+        assert False
     elif c == '"':
         return parse_string(reader), False
     elif c in numbers:
@@ -193,13 +212,15 @@ def assert_next_character(reader: "io.StringIO", expected: str):
     next_c = reader.read(len(expected))
     assert next_c == expected, f"Expected {expected!r}, got {next_c!r} at position {reader.tell() - 1} (After: {reader.read(10)})"
 
-def parse_js_dict(reader: "io.StringIO", R: Dict[int, Any] = {}) -> Tuple[Dict[str, Any], bool]:
+def parse_js_dict(reader: "io.StringIO", R: Optional[Dict[int, Any]] = None) -> Tuple[Dict[str, Any], bool]:
+    if R is None:
+        R = {}
     assert_next_character(reader, '{')
     result = {}
     skip_space(reader)
     if peek(reader, 1) == '}':
         # empty dict
-        assert_next_character(reader, ']')
+        assert_next_character(reader, '}')
         return result, False
     while True:
         key = parse_name_or_string(reader)
@@ -219,7 +240,9 @@ def parse_js_dict(reader: "io.StringIO", R: Dict[int, Any] = {}) -> Tuple[Dict[s
     assert_next_character(reader, '}')
     return result, False
 
-def parse_js_array(reader: "io.StringIO", R: Dict[int, Any] = {}) -> Tuple[list, bool]:
+def parse_js_array(reader: "io.StringIO", R: Optional[Dict[int, Any]] = None) -> Tuple[list, bool]:
+    if R is None:
+        R = {}
     assert_next_character(reader, '[')
     result = []
     skip_space(reader)
@@ -245,9 +268,19 @@ def parse_js_array(reader: "io.StringIO", R: Dict[int, Any] = {}) -> Tuple[list,
 if __name__ == "__main__":
     import sys
     with open("_temp/tweet.html" if len(sys.argv) < 2 else sys.argv[1]) as f:
-        parsed = parse_html(f.read())
-        try:
-            import json
-            print(json.dumps(parsed, indent = 4, ensure_ascii = False))
-        except:
-            print(parsed)
+        with open("_temp/tweet.json" if len(sys.argv) < 2 else sys.argv[1].replace(".html", ".json"), "w") as g:
+            parsed = parse_html(f.read())
+            try:
+                import json
+                g.write(json.dumps(parsed, indent = 4, ensure_ascii = False))
+            except:
+                g.write(parsed)
+    if len(sys.argv) < 2:
+        with open("_temp/tweet2.html") as f:
+            with open("_temp/tweet2.json", "w") as g:
+                parsed = parse_html(f.read())
+                try:
+                    import json
+                    g.write(json.dumps(parsed, indent = 4, ensure_ascii = False))
+                except:
+                    g.write(parsed)

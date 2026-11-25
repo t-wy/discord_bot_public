@@ -1,3 +1,4 @@
+from typing import *
 
 def conv_user_result(user_result):
     """
@@ -159,35 +160,7 @@ def user_iter_html(ac: str):
     html_content = requests.get(url).text
     from extractors.tanstack import parse_html
     matches, records = parse_html(html_content)
-    assert len(records)
-    target_user_key = f'user_result_by_screen_name(safety_level:"UserProfileHeader",screen_name:"{ac}")'
-    match_user_entry = next(
-        (
-            record[target_user_key]
-            for record in records
-            if target_user_key in record
-        ), None
-    )
-    if match_user_entry is None:
-        from common.exception import UserNotFoundException
-        raise UserNotFoundException()
-    target_key = f'user_result_by_screen_name(safety_level:"UserScopedTimeline",screen_name:"{ac}")'
-    # print(list(record.keys() for record in records))
-    match_entry = next(
-        (
-            record[target_key]["result"]["profile_user_originals_timeline"]
-            for record in records
-            if target_key in record
-        ), None
-    )
-    if match_entry is None:
-        return
-    for key, value in match_entry.items():
-        if key.startswith('timeline('):
-            instructions = value["instructions"]
-            break
-    else:
-        return
+    instructions = get_user_instructions(ac, records)
     for instruction in instructions:
         if instruction["__typename"] == "TimelineAddEntries":
             entries = instruction["entries"]
@@ -195,7 +168,7 @@ def user_iter_html(ac: str):
     else:
         return
     for entry in entries:
-        if entry["__typename"] != "TimelineTimelineEntry":
+        if "__typename" in entry and entry["__typename"] != "TimelineTimelineEntry":
             continue
         if entry["content"]["__typename"] != "TimelineTimelineItem":
             continue
@@ -284,6 +257,60 @@ async def post_latest_tweet(message, ac: str, cnt: int = 1):
         from .utility import reply_twitter_embed, discord_embeds_from_tweet
         await reply_twitter_embed(message, *discord_embeds_from_tweet(tweet))
 
+def get_user_instructions(ac: str, records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    assert len(records)
+    if "__typename" in records[0]: # old format
+        target_user_key = f'user_result_by_screen_name(safety_level:"UserProfileHeader",screen_name:"{ac}")'
+        match_user_entry = next(
+            (
+                record[target_user_key]
+                for record in records
+                if target_user_key in record
+            ), None
+        )
+        if match_user_entry is None:
+            from common.exception import UserNotFoundException
+            raise UserNotFoundException()
+        target_key = f'user_result_by_screen_name(safety_level:"UserScopedTimeline",screen_name:"{ac}")'
+        match_entry = next(
+            (
+                record[target_key]["result"]["profile_user_originals_timeline"]
+                for record in records
+                if target_key in record
+            ), None
+        )
+        if match_entry is None:
+            return None
+        for key, value in match_entry.items():
+            if key.startswith('timeline('):
+                return value["instructions"]
+        return []
+    # new format
+    match_user_entry = next(
+        (
+            record["data"]["user_result_by_screen_name"]["result"]
+            for record in records
+            if record.get("data", {}).get("user_result_by_screen_name", {}).get("result", {}).get("core", {}).get("screen_name") == ac
+        ), None
+    )
+    if match_user_entry is None:
+        from common.exception import UserNotFoundException
+        raise UserNotFoundException()
+    match_entry = next(
+        (
+            record["data"]["user_result_by_screen_name"]["result"]["profile_user_originals_timeline"]
+            for record in records
+            if "profile_user_originals_timeline" in record.get("data", {}).get("user_result_by_screen_name", {}).get("result", {})
+        ), None
+    )
+    if match_entry is None:
+        return None
+    return match_entry.get(
+        "timeline", {}
+    ).get(
+        "instructions", []
+    )
+
 
 def get_user_pin_html(ac: str):
     import requests
@@ -291,34 +318,7 @@ def get_user_pin_html(ac: str):
     html_content = requests.get(url).text
     from extractors.tanstack import parse_html
     matches, records = parse_html(html_content)
-    assert len(records)
-    target_user_key = f'user_result_by_screen_name(safety_level:"UserProfileHeader",screen_name:"{ac}")'
-    match_user_entry = next(
-        (
-            record[target_user_key]
-            for record in records
-            if target_user_key in record
-        ), None
-    )
-    if match_user_entry is None:
-        from common.exception import UserNotFoundException
-        raise UserNotFoundException()
-    target_key = f'user_result_by_screen_name(safety_level:"UserScopedTimeline",screen_name:"{ac}")'
-    match_entry = next(
-        (
-            record[target_key]["result"]["profile_user_originals_timeline"]
-            for record in records
-            if target_key in record
-        ), None
-    )
-    if match_entry is None:
-        return None
-    for key, value in match_entry.items():
-        if key.startswith('timeline('):
-            instructions = value["instructions"]
-            break
-    else:
-        return None
+    instructions = get_user_instructions(ac, records)
     for instruction in instructions:
         if instruction["__typename"] == "TimelinePinEntry":
             entry = instruction["entry"]
